@@ -4,25 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SmartCampus для учителей — анализ уроков по подписке</title>
-<meta name="description" content="Анализ ваших уроков без наблюдателя в классе. 3 бесплатных анализа, 30 дней. Подписка от 14 000 ₸/мес, оплата через Kaspi QR.">
+<meta name="description" content="Транскрипт, речевая аналитика и разбор урока по критериям. 3 бесплатных анализа на 30 дней, подписка от 14 000 ₸/мес, оплата через Kaspi QR.">
 <style>
 /* ============================================================
-   ПЕРЕМЕННЫЕ — правьте цвета и размеры здесь
+   ТОКЕНЫ ДИЗАЙН-СИСТЕМЫ SMARTCAMPUS
+   Правьте цвета здесь — они применяются ко всей странице
    ============================================================ */
 :root{
-  --brand:#4F46E5;         /* основной цвет */
-  --brand-dark:#3730A3;
-  --brand-soft:#EEF2FF;
-  --accent:#F59E0B;        /* акцент (бейджи, выгода) */
+  /* фирменные цвета из интерфейса продукта */
+  --navy:#211D52;          /* тёмная навигация, логотип, футер */
+  --navy-deep:#1A1744;
+  --brand:#3B3392;         /* основной индиго: кнопки, активные табы */
+  --brand-hover:#2E2778;
+  --brand-light:#5B52C4;   /* активный пункт меню */
+  --brand-soft:#EDEBFA;    /* светлая подложка чипов и иконок */
+  --green:#00B368;         /* зелёный из логотипа, статусы «готово» */
+  --green-soft:#E3F8EE;
   --kaspi:#F14635;         /* фирменный красный Kaspi */
-  --ink:#0F172A;           /* основной текст */
-  --muted:#5B6478;         /* второстепенный текст */
-  --line:#E4E7EF;          /* границы */
-  --bg:#FFFFFF;
-  --bg-soft:#F7F8FC;
-  --radius:16px;
-  --maxw:1140px;
-  --font:"Segoe UI",-apple-system,BlinkMacSystemFont,"Inter",Roboto,Arial,sans-serif;
+  --kaspi-soft:#FEF1EF;
+  --kaspi-line:#FBD5D0;
+
+  /* нейтральные */
+  --ink:#1A1744;           /* заголовки и основной текст */
+  --muted:#7E7BA0;         /* подписи, второстепенный текст */
+  --line:#E7E7F0;          /* границы карточек */
+  --bg:#F5F6FA;            /* холст страницы */
+  --surface:#FFFFFF;       /* карточки */
+  --shadow:rgba(26,23,68,.07);
+
+  --radius:14px;
+  --radius-sm:10px;
+  --maxw:1180px;
+  --font:"Inter","Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;
+  --mono:"SF Mono",Consolas,"Liberation Mono",monospace;
+}
+
+/* ---------- Тёмная тема ---------- */
+@media (prefers-color-scheme:dark){
+  :root{
+    --navy:#151233;
+    --navy-deep:#100E28;
+    --brand:#8079E8;
+    --brand-hover:#948DF2;
+    --brand-light:#8079E8;
+    --brand-soft:#26224F;
+    --green:#3DD68C;
+    --green-soft:#15321F;
+    --kaspi:#FF8071;
+    --kaspi-soft:#33191A;
+    --kaspi-line:#57292A;
+    --ink:#EAE9F5;
+    --muted:#9E9BC0;
+    --line:#2A2752;
+    --bg:#0E0C21;
+    --surface:#161334;
+    --shadow:rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#151233; --navy-deep:#100E28;
+  --brand:#8079E8; --brand-hover:#948DF2; --brand-light:#8079E8; --brand-soft:#26224F;
+  --green:#3DD68C; --green-soft:#15321F;
+  --kaspi:#FF8071; --kaspi-soft:#33191A; --kaspi-line:#57292A;
+  --ink:#EAE9F5; --muted:#9E9BC0; --line:#2A2752;
+  --bg:#0E0C21; --surface:#161334; --shadow:rgba(0,0,0,.45);
+}
+:root[data-theme="light"]{
+  --navy:#211D52; --navy-deep:#1A1744;
+  --brand:#3B3392; --brand-hover:#2E2778; --brand-light:#5B52C4; --brand-soft:#EDEBFA;
+  --green:#00B368; --green-soft:#E3F8EE;
+  --kaspi:#F14635; --kaspi-soft:#FEF1EF; --kaspi-line:#FBD5D0;
+  --ink:#1A1744; --muted:#7E7BA0; --line:#E7E7F0;
+  --bg:#F5F6FA; --surface:#FFFFFF; --shadow:rgba(26,23,68,.07);
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -33,205 +86,271 @@ body{
 }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
-h1,h2,h3{line-height:1.2;margin:0;letter-spacing:-0.02em}
+h1,h2,h3{line-height:1.22;margin:0;letter-spacing:-0.02em;text-wrap:balance}
 p{margin:0}
+:focus-visible{outline:2px solid var(--brand-light);outline-offset:3px;border-radius:6px}
 
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
-.section{padding:88px 0}
-.section--soft{background:var(--bg-soft)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.section{padding:92px 0}
+.section--plain{background:var(--surface)}
 
 .eyebrow{
-  font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--brand);margin-bottom:14px;
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brand-light);margin-bottom:14px;
 }
-.h2{font-size:clamp(28px,4vw,40px);font-weight:800}
-.lead{color:var(--muted);font-size:18px;margin-top:14px;max-width:640px}
+.h2{font-size:clamp(27px,3.6vw,38px);font-weight:750}
+.lead{color:var(--muted);font-size:17px;margin-top:14px;max-width:620px}
 .center{text-align:center}
 .center .lead{margin-left:auto;margin-right:auto}
 
-/* ---------- Кнопки ---------- */
+/* ---------- Кнопки в стиле продукта ---------- */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:14px 26px;border-radius:12px;font-weight:600;font-size:16px;
-  border:1px solid transparent;cursor:pointer;transition:.18s ease;white-space:nowrap;
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px 24px;border-radius:var(--radius-sm);font-weight:600;font-size:15px;
+  border:1px solid transparent;cursor:pointer;transition:.16s ease;white-space:nowrap;
+  font-family:inherit;
 }
-.btn--primary{background:var(--brand);color:#fff;box-shadow:0 6px 18px rgba(79,70,229,.28)}
-.btn--primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
-.btn--ghost{background:#fff;color:var(--ink);border-color:var(--line)}
-.btn--ghost:hover{border-color:var(--brand);color:var(--brand)}
-.btn--sm{padding:10px 18px;font-size:15px}
+.btn--primary{background:var(--brand);color:#fff}
+.btn--primary:hover{background:var(--brand-hover)}
+.btn--outline{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn--outline:hover{border-color:var(--brand-light);color:var(--brand-light)}
+.btn--sm{padding:9px 17px;font-size:14px}
 .btn--wide{width:100%}
+.btn svg{flex:none}
 
 /* ============================================================
    ШАПКА
    ============================================================ */
 .header{
-  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);
-  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:50;background:var(--surface);
+  border-bottom:1px solid var(--line);
 }
-.header__in{display:flex;align-items:center;gap:32px;height:70px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
-.logo__mark{
-  width:32px;height:32px;border-radius:9px;background:var(--brand);color:#fff;
-  display:grid;place-items:center;font-size:16px;font-weight:800;
+.header__in{display:flex;align-items:center;gap:36px;height:72px}
+
+/* логотип <smart campus> с зелёными скобками */
+.logo{display:flex;align-items:center;font-weight:750;font-size:19px;line-height:1.05;letter-spacing:-0.01em}
+.logo b{font-weight:750;color:var(--ink)}
+.logo i{color:var(--green);font-style:normal;font-weight:600}
+
+.nav{display:flex;gap:26px;margin-left:auto;font-size:15px;color:var(--muted)}
+.nav a{padding:6px 0;border-bottom:2px solid transparent;transition:.16s}
+.nav a:hover{color:var(--brand-light);border-bottom-color:var(--brand-light)}
+.header__cta{display:flex;gap:10px;align-items:center;min-width:0}
+.lbl-short{display:none}
+
+/* переключатель языка как в кабинете */
+.lang{display:flex;gap:2px;background:var(--bg);border-radius:99px;padding:3px}
+.lang span{
+  font-size:13px;font-weight:600;color:var(--muted);padding:5px 11px;border-radius:99px;cursor:pointer;
 }
-.nav{display:flex;gap:28px;margin-left:auto;font-size:15px;color:var(--muted)}
-.nav a:hover{color:var(--brand)}
-.header__cta{display:flex;gap:10px;align-items:center}
+.lang span.is-active{background:var(--brand-soft);color:var(--brand)}
 
 /* ============================================================
    ГЛАВНЫЙ ЭКРАН
    ============================================================ */
-.hero{padding:80px 0 72px;background:
-  radial-gradient(900px 420px at 80% -10%,var(--brand-soft),transparent 70%);}
-.hero__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero{padding:76px 0 84px}
+.hero__grid{display:grid;grid-template-columns:1fr 1.02fr;gap:52px;align-items:center}
 .chip{
-  display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
-  background:#fff;border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--muted);
+  display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 10px;border-radius:99px;
+  background:var(--green-soft);font-size:13px;font-weight:650;color:var(--green);
 }
-.chip__dot{width:8px;height:8px;border-radius:50%;background:#16A34A}
-.hero h1{font-size:clamp(34px,5vw,54px);font-weight:800;margin:20px 0 18px}
-.hero__sub{font-size:19px;color:var(--muted);max-width:540px}
-.hero__actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
-.hero__note{margin-top:16px;font-size:14px;color:var(--muted)}
+.chip__dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.hero h1{font-size:clamp(32px,4.6vw,50px);font-weight:750;margin:20px 0 18px}
+.hero__sub{font-size:18px;color:var(--muted);max-width:520px}
+.hero__actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.hero__note{margin-top:18px;font-size:14px;color:var(--muted)}
 
-/* карточка-превью справа */
-.preview{
-  background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;
-  box-shadow:0 24px 60px rgba(15,23,42,.10);
+/* ---------- Макет карточки урока из кабинета ---------- */
+.app{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 20px 50px var(--shadow);overflow:hidden;
 }
-.preview__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.preview__title{font-weight:700;font-size:16px}
-.preview__badge{font-size:12px;font-weight:700;color:#16A34A;background:#DCFCE7;padding:4px 10px;border-radius:999px}
-.metric{margin-bottom:16px}
-.metric__row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
-.metric__name{color:var(--muted)}
-.metric__val{font-weight:700}
-.bar{height:8px;border-radius:99px;background:var(--bg-soft);overflow:hidden}
-.bar span{display:block;height:100%;border-radius:99px;background:var(--brand)}
-.preview__foot{
-  margin-top:20px;padding-top:18px;border-top:1px solid var(--line);
-  display:flex;justify-content:space-between;font-size:14px;color:var(--muted);
+.app__bar{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px 20px;border-bottom:1px solid var(--line);
 }
-.preview__foot b{color:var(--ink)}
+.app__title{font-size:15px;font-weight:700}
+.app__desc{font-size:12.5px;color:var(--muted);margin-top:2px}
+.pill{
+  font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:99px;
+  background:var(--green-soft);color:var(--green);white-space:nowrap;
+}
+
+/* мета-строка урока */
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.meta__k{font-size:11px;color:var(--muted);margin-bottom:3px}
+.meta__v{font-size:13.5px;font-weight:650}
+
+/* табы */
+.tabs{display:flex;gap:6px;padding:16px 20px 0;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  font-size:13px;font-weight:600;color:var(--muted);
+  padding:9px 14px;border-radius:9px;white-space:nowrap;
+}
+.tab.is-active{background:var(--brand);color:#fff}
+
+.app__body{display:grid;grid-template-columns:1.25fr .95fr;gap:18px;padding:18px 20px 22px}
+
+/* реплики транскрипта */
+.line{display:flex;gap:9px;margin-bottom:11px}
+.ava{
+  width:26px;height:26px;border-radius:50%;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;
+}
+.line__body{flex:1;min-width:0}
+.line__head{font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.line__head b{color:var(--ink);font-weight:650}
+.line__head time{font-family:var(--mono);font-size:11px}
+.bubble{
+  background:var(--bg);border-radius:9px;padding:9px 11px;font-size:12.5px;line-height:1.5;
+}
+.bubble--answer{background:#FFFBEB;border-left:3px solid #FCD34D;color:#4A3E1A}
+.bubble em{font-style:normal;color:var(--brand-light);font-weight:600}
+
+/* донат SEL-аналитики */
+.sel{background:var(--bg);border-radius:12px;padding:16px;text-align:center}
+.sel__t{font-size:12px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px;justify-content:center}
+.donut{
+  width:104px;height:104px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;
+  background:conic-gradient(var(--green) 0 17.6%,var(--line) 17.6% 100%);
+}
+.donut__in{
+  width:78px;height:78px;border-radius:50%;background:var(--surface);
+  display:grid;place-items:center;font-size:19px;font-weight:750;font-variant-numeric:tabular-nums;
+}
+.sel__note{font-size:11.5px;color:var(--muted);line-height:1.45}
+.sel__row{
+  display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--line);
+}
+.sel__row b{color:var(--ink);font-variant-numeric:tabular-nums}
 
 /* ============================================================
-   ЛОГОТИПЫ / ДОВЕРИЕ
+   ПОЛОСА ПРЕИМУЩЕСТВ
    ============================================================ */
-.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:var(--bg-soft)}
-.strip__in{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:15px}
+.strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0}
+.strip__in{display:flex;gap:44px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:14.5px}
 .strip__item{display:flex;align-items:center;gap:9px}
-.strip__item svg{flex:none}
+.strip__item b{color:var(--ink);font-weight:650}
 
 /* ============================================================
    ВОЗМОЖНОСТИ
    ============================================================ */
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:46px}
 .card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;
-  transition:.18s ease;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;
+  transition:.16s ease;
 }
-.card:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,23,42,.07)}
+.card:hover{border-color:var(--brand-light);box-shadow:0 12px 28px var(--shadow);transform:translateY(-2px)}
 .card__icon{
-  width:44px;height:44px;border-radius:12px;background:var(--brand-soft);color:var(--brand);
-  display:grid;place-items:center;margin-bottom:16px;font-size:20px;
+  width:42px;height:42px;border-radius:11px;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;margin-bottom:16px;
 }
-.card h3{font-size:18px;font-weight:700;margin-bottom:8px}
-.card p{color:var(--muted);font-size:15px}
+.card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.card p{color:var(--muted);font-size:14.5px}
 
 /* ============================================================
    КАК ЭТО РАБОТАЕТ
    ============================================================ */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;counter-reset:s}
-.step{position:relative;padding-top:14px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.section--plain .step{background:var(--bg)}
 .step__num{
-  width:38px;height:38px;border-radius:50%;background:var(--brand);color:#fff;
-  display:grid;place-items:center;font-weight:800;margin-bottom:16px;
+  width:34px;height:34px;border-radius:10px;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:15px;margin-bottom:15px;
 }
-.step h3{font-size:17px;font-weight:700;margin-bottom:8px}
-.step p{color:var(--muted);font-size:15px}
+.step h3{font-size:16px;font-weight:700;margin-bottom:7px}
+.step p{color:var(--muted);font-size:14.5px}
 
 /* ============================================================
    ТАРИФЫ
    ============================================================ */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;align-items:start}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:46px;align-items:start}
 .plan{
-  background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px;position:relative;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px;position:relative;
 }
-.plan--featured{border:2px solid var(--brand);box-shadow:0 20px 50px rgba(79,70,229,.14)}
+.plan--featured{border:2px solid var(--brand);box-shadow:0 18px 44px var(--shadow)}
 .plan__badge{
-  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
-  background:var(--accent);color:#fff;font-size:12px;font-weight:800;
-  padding:5px 14px;border-radius:999px;letter-spacing:.03em;white-space:nowrap;
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--green);color:#fff;font-size:11.5px;font-weight:700;
+  padding:5px 13px;border-radius:99px;white-space:nowrap;
 }
-.plan h3{font-size:19px;font-weight:700}
-.plan__desc{color:var(--muted);font-size:14px;margin-top:6px;min-height:42px}
-.plan__price{font-size:38px;font-weight:800;margin:16px 0 4px;letter-spacing:-0.03em}
-.plan__price span{font-size:16px;font-weight:600;color:var(--muted)}
-.plan__hint{font-size:14px;color:var(--muted);min-height:22px}
-.plan ul{list-style:none;padding:0;margin:24px 0;display:grid;gap:11px}
-.plan li{display:flex;gap:10px;font-size:15px;color:var(--muted)}
-.plan li::before{content:"✓";color:var(--brand);font-weight:800;flex:none}
+.plan h3{font-size:18px;font-weight:700}
+.plan__desc{color:var(--muted);font-size:13.5px;margin-top:6px;min-height:40px}
+.plan__price{font-size:35px;font-weight:750;margin:16px 0 4px;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
+.plan__price span{font-size:15px;font-weight:600;color:var(--muted)}
+.plan__hint{font-size:13.5px;color:var(--muted);min-height:22px}
+.plan ul{list-style:none;padding:0;margin:22px 0;display:grid;gap:10px}
+.plan li{display:flex;gap:9px;font-size:14.5px;color:var(--muted)}
+.plan li::before{content:"✓";color:var(--green);font-weight:800;flex:none}
 .plans__note{
-  margin-top:28px;text-align:center;font-size:14px;color:var(--muted);
-  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+  margin-top:26px;font-size:14px;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;text-align:center;
 }
 .kaspi-chip{
   display:inline-flex;align-items:center;gap:7px;font-weight:700;color:var(--kaspi);
-  background:#FEF2F2;border:1px solid #FECACA;padding:4px 11px;border-radius:999px;font-size:13px;
+  background:var(--kaspi-soft);border:1px solid var(--kaspi-line);padding:4px 11px;border-radius:99px;font-size:12.5px;
 }
 
 /* ============================================================
    FAQ
    ============================================================ */
-.faq{max-width:820px;margin:44px auto 0;display:grid;gap:12px}
+.faq{max-width:800px;margin:42px auto 0;display:grid;gap:10px}
 .faq details{
-  background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 24px;transition:.18s;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:19px 22px;transition:.16s;
 }
-.faq details[open]{border-color:var(--brand)}
+.faq details[open]{border-color:var(--brand-light)}
 .faq summary{
-  cursor:pointer;font-weight:650;font-size:17px;list-style:none;
+  cursor:pointer;font-weight:650;font-size:16px;list-style:none;
   display:flex;justify-content:space-between;align-items:center;gap:16px;
 }
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-size:24px;color:var(--brand);font-weight:400;line-height:1}
+.faq summary::after{content:"+";font-size:22px;color:var(--brand-light);font-weight:400;line-height:1}
 .faq details[open] summary::after{content:"−"}
-.faq p{color:var(--muted);margin-top:14px;font-size:15px}
+.faq p{color:var(--muted);margin-top:13px;font-size:14.5px}
 
 /* ============================================================
-   ФИНАЛЬНЫЙ CTA
+   ФИНАЛЬНЫЙ CTA — в цвете навигации продукта
    ============================================================ */
-.cta{
-  background:linear-gradient(135deg,var(--brand),var(--brand-dark));
-  border-radius:24px;padding:64px 40px;text-align:center;color:#fff;
-}
-.cta h2{font-size:clamp(28px,4vw,40px);font-weight:800}
-.cta p{margin:16px auto 32px;max-width:520px;opacity:.9;font-size:18px}
-.cta .btn--primary{background:#fff;color:var(--brand);box-shadow:none}
-.cta .btn--primary:hover{background:#F1F1FF}
+.cta{background:var(--navy);border-radius:20px;padding:62px 40px;text-align:center;color:#fff}
+.cta h2{font-size:clamp(26px,3.6vw,37px);font-weight:750}
+.cta p{margin:15px auto 30px;max-width:500px;color:#B9B6D8;font-size:17px}
+.cta .btn--primary{background:#fff;color:var(--navy)}
+.cta .btn--primary:hover{background:#E9E7FA}
 
 /* ============================================================
    ПОДВАЛ
    ============================================================ */
-.footer{border-top:1px solid var(--line);padding:44px 0;margin-top:88px;font-size:14px;color:var(--muted)}
+.footer{background:var(--surface);border-top:1px solid var(--line);padding:38px 0;margin-top:88px;font-size:14px;color:var(--muted)}
 .footer__in{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
 .footer__links{display:flex;gap:22px;flex-wrap:wrap}
-.footer__links a:hover{color:var(--brand)}
+.footer__links a:hover{color:var(--brand-light)}
 
 /* ============================================================
    АДАПТИВ
    ============================================================ */
-@media (max-width:980px){
-  .hero__grid{grid-template-columns:1fr;gap:40px}
+@media (max-width:1040px){
+  .hero__grid{grid-template-columns:1fr;gap:44px}
+  .app__body{grid-template-columns:1fr}
   .cards,.plans{grid-template-columns:1fr}
   .steps{grid-template-columns:repeat(2,1fr)}
-  .nav{display:none}
+  .nav,.lang{display:none}
 }
-@media (max-width:560px){
+@media (max-width:600px){
   .section{padding:64px 0}
+  .wrap{padding:0 20px}
   .steps{grid-template-columns:1fr}
-  .header__cta .btn--ghost{display:none}
-  .cta{padding:48px 24px}
+  .meta{grid-template-columns:repeat(2,1fr)}
+  .header__cta .btn--outline{display:none}
+  .lbl-full{display:none}
+  .lbl-short{display:inline}
+  .cta{padding:46px 24px}
+  .strip__in{gap:16px;flex-direction:column;align-items:flex-start}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
 }
 </style>
 </head>
@@ -240,16 +359,22 @@ p{margin:0}
 <!-- ===================== ШАПКА ===================== -->
 <header class="header">
   <div class="wrap header__in">
-    <a href="#" class="logo"><span class="logo__mark">S</span> SmartCampus</a>
+    <a href="#" class="logo"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></a>
     <nav class="nav">
       <a href="#features">Возможности</a>
       <a href="#how">Как это работает</a>
       <a href="#plans">Тарифы</a>
       <a href="#faq">Вопросы</a>
     </nav>
+    <div class="lang">
+      <span class="is-active">Рус</span><span>Қаз</span><span>Eng</span>
+    </div>
     <div class="header__cta">
-      <a href="#" class="btn btn--ghost btn--sm">Войти</a>
-      <a href="#plans" class="btn btn--primary btn--sm">Попробовать бесплатно</a>
+      <a href="#" class="btn btn--outline btn--sm">Войти</a>
+      <a href="#plans" class="btn btn--primary btn--sm">
+        <span class="lbl-full">Попробовать бесплатно</span>
+        <span class="lbl-short">Начать</span>
+      </a>
     </div>
   </div>
 </header>
@@ -259,61 +384,85 @@ p{margin:0}
   <div class="wrap hero__grid">
     <div>
       <span class="chip"><span class="chip__dot"></span> Теперь и для индивидуальных учителей</span>
-      <h1>Объективный анализ ваших уроков — без наблюдателя в классе</h1>
+      <h1>Транскрипт, речевая аналитика и разбор урока по критериям</h1>
       <p class="hero__sub">
-        SmartCampus разбирает запись урока и показывает, что реально происходит:
-        структура, вовлечённость учеников, речь, динамика от урока к уроку.
-        Без согласований со школой и без менеджеров.
+        SmartCampus расшифровывает запись урока, размечает реплики по типам и показывает,
+        что реально происходило в классе. Раньше — только через школу. Теперь можно оформить
+        подписку на себя.
       </p>
       <div class="hero__actions">
         <a href="#plans" class="btn btn--primary">Попробовать бесплатно</a>
-        <a href="#how" class="btn btn--ghost">Как это работает</a>
+        <a href="#how" class="btn btn--outline">Как это работает</a>
       </div>
       <p class="hero__note">3 анализа и 30 дней бесплатно · карта не нужна · оплата через Kaspi QR</p>
     </div>
 
-    <!-- Демонстрационная карточка отчёта -->
-    <div class="preview">
-      <div class="preview__head">
+    <!-- Макет экрана «Данные урока» из личного кабинета -->
+    <div class="app">
+      <div class="app__bar">
         <div>
-          <div class="preview__title">Алгебра, 8 «Б» — 12 марта</div>
-          <div style="font-size:13px;color:var(--muted)">Анализ готов за 6 минут</div>
+          <div class="app__title">Русский язык — Урок №12</div>
+          <div class="app__desc">Транскрипт, речевая аналитика и разбор урока по критериям</div>
         </div>
-        <span class="preview__badge">Готово</span>
+        <span class="pill">готово</span>
       </div>
 
-      <div class="metric">
-        <div class="metric__row"><span class="metric__name">Вовлечённость учеников</span><span class="metric__val">82%</span></div>
-        <div class="bar"><span style="width:82%"></span></div>
-      </div>
-      <div class="metric">
-        <div class="metric__row"><span class="metric__name">Доля речи учителя</span><span class="metric__val">64%</span></div>
-        <div class="bar"><span style="width:64%"></span></div>
-      </div>
-      <div class="metric">
-        <div class="metric__row"><span class="metric__name">Соблюдение структуры урока</span><span class="metric__val">91%</span></div>
-        <div class="bar"><span style="width:91%"></span></div>
-      </div>
-      <div class="metric">
-        <div class="metric__row"><span class="metric__name">Открытые вопросы классу</span><span class="metric__val">17</span></div>
-        <div class="bar"><span style="width:70%"></span></div>
+      <div class="meta">
+        <div><div class="meta__k">Предмет</div><div class="meta__v">Русский язык</div></div>
+        <div><div class="meta__k">Класс</div><div class="meta__v">6Б</div></div>
+        <div><div class="meta__k">Дата</div><div class="meta__v">05.08.2026</div></div>
+        <div><div class="meta__k">Время</div><div class="meta__v">09:00–10:00</div></div>
       </div>
 
-      <div class="preview__foot">
-        <span>Осталось анализов: <b>2 из 3</b></span>
-        <span>Пробный период: <b>27 дней</b></span>
+      <div class="tabs">
+        <span class="tab is-active">Транскрипт и медиа</span>
+        <span class="tab">Оценка урока</span>
+        <span class="tab">Рефлексия</span>
+      </div>
+
+      <div class="app__body">
+        <div>
+          <div class="line">
+            <span class="ava">У</span>
+            <div class="line__body">
+              <div class="line__head"><b>Учитель</b> <time>02:06</time> · Вопрос</div>
+              <div class="bubble">Ребята, запишите тему сегодняшнего урока. Мир и проблемы двадцать первого века. <em>Согласны?</em></div>
+            </div>
+          </div>
+          <div class="line">
+            <span class="ava">У2</span>
+            <div class="line__body">
+              <div class="line__head"><b>Ученик 2</b> <time>02:33</time> · Ответ ученика</div>
+              <div class="bubble bubble--answer">Сейчас очень много болезней.</div>
+            </div>
+          </div>
+          <div class="line">
+            <span class="ava">У</span>
+            <div class="line__body">
+              <div class="line__head"><b>Учитель</b> <time>02:38</time> · Похвала</div>
+              <div class="bubble">Все верно. <em>С чем это связано?</em></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sel">
+          <div class="sel__t">SEL-аналитика</div>
+          <div class="donut"><div class="donut__in">17,6%</div></div>
+          <div class="sel__note">610 слов относится к SEL-категориям из 3472 слов урока</div>
+          <div class="sel__row"><span>Реплик в транскрипте</span><b>172</b></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== ПОЛОСА ДОВЕРИЯ ===================== -->
+<!-- ===================== ПОЛОСА ПРЕИМУЩЕСТВ ===================== -->
 <div class="strip">
   <div class="wrap strip__in">
-    <div class="strip__item">✅ Регистрация за 2 минуты</div>
-    <div class="strip__item">🔒 Записи видны только вам</div>
-    <div class="strip__item">⚡ Доступ сразу после оплаты</div>
-    <div class="strip__item">💳 Оплата привычным Kaspi QR</div>
+    <div class="strip__item"><b>2 минуты</b> на регистрацию</div>
+    <div class="strip__item"><b>Только вы</b> видите свои уроки</div>
+    <div class="strip__item"><b>Сразу</b> доступ после оплаты</div>
+    <div class="strip__item"><b>Kaspi QR</b> — привычная оплата</div>
   </div>
 </div>
 
@@ -322,47 +471,59 @@ p{margin:0}
   <div class="wrap">
     <div class="center">
       <div class="eyebrow">Возможности</div>
-      <h2 class="h2">Что вы получаете после анализа урока</h2>
-      <p class="lead">Не оценка «сверху», а рабочий инструмент: конкретные цифры, разбор и понятные шаги на следующий урок.</p>
+      <h2 class="h2">Что вы получаете после загрузки урока</h2>
+      <p class="lead">Не оценка «сверху», а рабочий инструмент: транскрипт, цифры и понятные шаги на следующий урок.</p>
     </div>
 
     <div class="cards">
       <div class="card">
-        <div class="card__icon">📊</div>
-        <h3>Объективные метрики</h3>
-        <p>Вовлечённость класса, баланс речи, темп, структура урока и работа с вопросами — в цифрах, а не «на глаз».</p>
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg>
+        </div>
+        <h3>Полный транскрипт</h3>
+        <p>Запись урока превращается в текст с разделением на реплики учителя и учеников, с таймкодами.</p>
       </div>
       <div class="card">
-        <div class="card__icon">📈</div>
-        <h3>Динамика роста</h3>
-        <p>Сравнение уроков между собой: видно, что улучшилось, а что просело за месяц работы.</p>
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M7 16V9M12 16V4M17 16v-5"/></svg>
+        </div>
+        <h3>Речевая аналитика</h3>
+        <p>Доля речи учителя, число открытых вопросов, типы реплик — вопрос, похвала, ответ ученика.</p>
       </div>
       <div class="card">
-        <div class="card__icon">💡</div>
-        <h3>Персональные рекомендации</h3>
-        <p>Конкретные советы под ваш стиль преподавания — что попробовать на ближайшем уроке.</p>
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 14.5a5 5 0 0 0 7 0"/></svg>
+        </div>
+        <h3>SEL-аналитика</h3>
+        <p>Какая доля урока связана с социально-эмоциональными категориями и как она меняется со временем.</p>
       </div>
       <div class="card">
-        <div class="card__icon">🗂️</div>
-        <h3>История уроков</h3>
-        <p>Все загруженные уроки и отчёты хранятся в личном кабинете — удобно возвращаться и сравнивать.</p>
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
+        </div>
+        <h3>Оценка по критериям</h3>
+        <p>Разбор урока по методическим критериям — видно, что удалось, а над чем стоит поработать.</p>
       </div>
       <div class="card">
-        <div class="card__icon">👤</div>
-        <h3>Личный кабинет</h3>
-        <p>Тариф, статус подписки, дата окончания, остаток бесплатных анализов и история платежей — на одном экране.</p>
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <h3>История и динамика</h3>
+        <p>Все уроки хранятся в кабинете: сравнивайте отчёты между собой и отслеживайте рост за месяц.</p>
       </div>
       <div class="card">
-        <div class="card__icon">🔐</div>
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </div>
         <h3>Приватность</h3>
-        <p>Ваши записи и отчёты не уходят в школу и не попадают к администрации без вашего решения.</p>
+        <p>Уроки по личной подписке не уходят в школу и не попадают к администрации без вашего решения.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===================== КАК ЭТО РАБОТАЕТ ===================== -->
-<section class="section section--soft" id="how">
+<section class="section section--plain" id="how">
   <div class="wrap">
     <div class="center">
       <div class="eyebrow">Как это работает</div>
@@ -383,12 +544,12 @@ p{margin:0}
       <div class="step">
         <div class="step__num">3</div>
         <h3>Загрузка урока</h3>
-        <p>Загружаете запись урока — отчёт с метриками и рекомендациями приходит в кабинет.</p>
+        <p>Загружаете запись — транскрипт, аналитика и разбор по критериям появляются в кабинете.</p>
       </div>
       <div class="step">
         <div class="step__num">4</div>
         <h3>Подписка</h3>
-        <p>Понравилось — выбираете тариф и оплачиваете через Kaspi QR. Доступ открывается автоматически.</p>
+        <p>Понравилось — выбираете тариф и платите через Kaspi QR. Доступ открывается автоматически.</p>
       </div>
     </div>
   </div>
@@ -416,7 +577,7 @@ p{margin:0}
           <li>Личный кабинет и история</li>
           <li>Оплата не требуется</li>
         </ul>
-        <a href="#" class="btn btn--ghost btn--wide">Зарегистрироваться</a>
+        <a href="#" class="btn btn--outline btn--wide">Зарегистрироваться</a>
       </div>
 
       <!-- Полугодовой (рекомендуемый) -->
@@ -447,7 +608,7 @@ p{margin:0}
           <li>Динамика и сравнение уроков</li>
           <li>Продление в один клик</li>
         </ul>
-        <a href="#" class="btn btn--ghost btn--wide">Оплатить через Kaspi QR</a>
+        <a href="#" class="btn btn--outline btn--wide">Оплатить через Kaspi QR</a>
       </div>
     </div>
 
@@ -459,7 +620,7 @@ p{margin:0}
 </section>
 
 <!-- ===================== FAQ ===================== -->
-<section class="section section--soft" id="faq">
+<section class="section section--plain" id="faq">
   <div class="wrap">
     <div class="center">
       <div class="eyebrow">Вопросы</div>
@@ -498,7 +659,7 @@ p{margin:0}
 <!-- ===================== ФИНАЛЬНЫЙ CTA ===================== -->
 <section class="wrap" style="padding-top:24px">
   <div class="cta">
-    <h2>Первый анализ урока — уже сегодня</h2>
+    <h2>Первый разбор урока — уже сегодня</h2>
     <p>Зарегистрируйтесь и получите 3 бесплатных анализа на 30 дней. Без карты и без обязательств.</p>
     <a href="#" class="btn btn--primary">Попробовать бесплатно</a>
   </div>
@@ -507,13 +668,14 @@ p{margin:0}
 <!-- ===================== ПОДВАЛ ===================== -->
 <footer class="footer">
   <div class="wrap footer__in">
-    <div>© 2026 SmartCampus. Все права защищены.</div>
+    <div class="logo" style="font-size:16px"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></div>
     <div class="footer__links">
       <a href="#plans">Тарифы</a>
       <a href="#faq">Вопросы</a>
       <a href="#">Публичная оферта</a>
       <a href="#">Поддержка</a>
     </div>
+    <div>© 2026 SmartCampus</div>
   </div>
 </footer>
 
