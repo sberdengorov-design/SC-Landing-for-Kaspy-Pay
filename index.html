@@ -208,23 +208,23 @@ p{margin:0}
 .bubble--answer{background:#FFFBEB;border-left:3px solid #FCD34D;color:#4A3E1A}
 .bubble em{font-style:normal;color:var(--brand-light);font-weight:600}
 
-/* донат SEL-аналитики */
-.sel{background:var(--bg);border-radius:12px;padding:16px;text-align:center}
-.sel__t{font-size:12px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px;justify-content:center}
+/* панель речевой аналитики */
+.stat{background:var(--bg);border-radius:12px;padding:16px;text-align:center}
+.stat__t{font-size:12px;font-weight:700;margin-bottom:14px}
 .donut{
   width:104px;height:104px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;
-  background:conic-gradient(var(--green) 0 17.6%,var(--line) 17.6% 100%);
+  background:conic-gradient(var(--brand) 0 64%,var(--line) 64% 100%);
 }
 .donut__in{
   width:78px;height:78px;border-radius:50%;background:var(--surface);
   display:grid;place-items:center;font-size:19px;font-weight:750;font-variant-numeric:tabular-nums;
 }
-.sel__note{font-size:11.5px;color:var(--muted);line-height:1.45}
-.sel__row{
+.stat__note{font-size:11.5px;color:var(--muted);line-height:1.45}
+.stat__row{
   display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);
-  margin-top:12px;padding-top:12px;border-top:1px solid var(--line);
+  margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
 }
-.sel__row b{color:var(--ink);font-variant-numeric:tabular-nums}
+.stat__row b{color:var(--ink);font-variant-numeric:tabular-nums}
 
 /* ============================================================
    ПОЛОСА ПРЕИМУЩЕСТВ
@@ -445,11 +445,12 @@ p{margin:0}
           </div>
         </div>
 
-        <div class="sel">
-          <div class="sel__t">SEL-аналитика</div>
-          <div class="donut"><div class="donut__in">17,6%</div></div>
-          <div class="sel__note">610 слов относится к SEL-категориям из 3472 слов урока</div>
-          <div class="sel__row"><span>Реплик в транскрипте</span><b>172</b></div>
+        <div class="stat">
+          <div class="stat__t">Речевая аналитика</div>
+          <div class="donut"><div class="donut__in">64%</div></div>
+          <div class="stat__note">Доля речи учителя от общего времени урока</div>
+          <div class="stat__row"><span>Реплик в транскрипте</span><b>172</b></div>
+          <div class="stat__row"><span>Открытых вопросов</span><b>17</b></div>
         </div>
       </div>
     </div>
@@ -492,10 +493,10 @@ p{margin:0}
       </div>
       <div class="card">
         <div class="card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M8.5 14.5a5 5 0 0 0 7 0"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M10 17h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.3.3.5.7.5 1.1h6c0-.4.2-.8.5-1.1A6 6 0 0 0 12 3z"/></svg>
         </div>
-        <h3>SEL-аналитика</h3>
-        <p>Какая доля урока связана с социально-эмоциональными категориями и как она меняется со временем.</p>
+        <h3>Персональные рекомендации</h3>
+        <p>Конкретные советы под ваш стиль преподавания — что стоит попробовать на ближайшем уроке.</p>
       </div>
       <div class="card">
         <div class="card__icon">
