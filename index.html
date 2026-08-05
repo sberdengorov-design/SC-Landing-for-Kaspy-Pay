@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartCampus для учителей — анализ уроков по подписке</title>
+<meta name="description" content="Анализ ваших уроков без наблюдателя в классе. 3 бесплатных анализа, 30 дней. Подписка от 14 000 ₸/мес, оплата через Kaspi QR.">
+<style>
+/* ============================================================
+   ПЕРЕМЕННЫЕ — правьте цвета и размеры здесь
+   ============================================================ */
+:root{
+  --brand:#4F46E5;         /* основной цвет */
+  --brand-dark:#3730A3;
+  --brand-soft:#EEF2FF;
+  --accent:#F59E0B;        /* акцент (бейджи, выгода) */
+  --kaspi:#F14635;         /* фирменный красный Kaspi */
+  --ink:#0F172A;           /* основной текст */
+  --muted:#5B6478;         /* второстепенный текст */
+  --line:#E4E7EF;          /* границы */
+  --bg:#FFFFFF;
+  --bg-soft:#F7F8FC;
+  --radius:16px;
+  --maxw:1140px;
+  --font:"Segoe UI",-apple-system,BlinkMacSystemFont,"Inter",Roboto,Arial,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{line-height:1.2;margin:0;letter-spacing:-0.02em}
+p{margin:0}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.section{padding:88px 0}
+.section--soft{background:var(--bg-soft)}
+
+.eyebrow{
+  font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--brand);margin-bottom:14px;
+}
+.h2{font-size:clamp(28px,4vw,40px);font-weight:800}
+.lead{color:var(--muted);font-size:18px;margin-top:14px;max-width:640px}
+.center{text-align:center}
+.center .lead{margin-left:auto;margin-right:auto}
+
+/* ---------- Кнопки ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 26px;border-radius:12px;font-weight:600;font-size:16px;
+  border:1px solid transparent;cursor:pointer;transition:.18s ease;white-space:nowrap;
+}
+.btn--primary{background:var(--brand);color:#fff;box-shadow:0 6px 18px rgba(79,70,229,.28)}
+.btn--primary:hover{background:var(--brand-dark);transform:translateY(-1px)}
+.btn--ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn--ghost:hover{border-color:var(--brand);color:var(--brand)}
+.btn--sm{padding:10px 18px;font-size:15px}
+.btn--wide{width:100%}
+
+/* ============================================================
+   ШАПКА
+   ============================================================ */
+.header{
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.header__in{display:flex;align-items:center;gap:32px;height:70px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+.logo__mark{
+  width:32px;height:32px;border-radius:9px;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-size:16px;font-weight:800;
+}
+.nav{display:flex;gap:28px;margin-left:auto;font-size:15px;color:var(--muted)}
+.nav a:hover{color:var(--brand)}
+.header__cta{display:flex;gap:10px;align-items:center}
+
+/* ============================================================
+   ГЛАВНЫЙ ЭКРАН
+   ============================================================ */
+.hero{padding:80px 0 72px;background:
+  radial-gradient(900px 420px at 80% -10%,var(--brand-soft),transparent 70%);}
+.hero__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
+  background:#fff;border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--muted);
+}
+.chip__dot{width:8px;height:8px;border-radius:50%;background:#16A34A}
+.hero h1{font-size:clamp(34px,5vw,54px);font-weight:800;margin:20px 0 18px}
+.hero__sub{font-size:19px;color:var(--muted);max-width:540px}
+.hero__actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
+.hero__note{margin-top:16px;font-size:14px;color:var(--muted)}
+
+/* карточка-превью справа */
+.preview{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;
+  box-shadow:0 24px 60px rgba(15,23,42,.10);
+}
+.preview__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.preview__title{font-weight:700;font-size:16px}
+.preview__badge{font-size:12px;font-weight:700;color:#16A34A;background:#DCFCE7;padding:4px 10px;border-radius:999px}
+.metric{margin-bottom:16px}
+.metric__row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.metric__name{color:var(--muted)}
+.metric__val{font-weight:700}
+.bar{height:8px;border-radius:99px;background:var(--bg-soft);overflow:hidden}
+.bar span{display:block;height:100%;border-radius:99px;background:var(--brand)}
+.preview__foot{
+  margin-top:20px;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;font-size:14px;color:var(--muted);
+}
+.preview__foot b{color:var(--ink)}
+
+/* ============================================================
+   ЛОГОТИПЫ / ДОВЕРИЕ
+   ============================================================ */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:var(--bg-soft)}
+.strip__in{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:15px}
+.strip__item{display:flex;align-items:center;gap:9px}
+.strip__item svg{flex:none}
+
+/* ============================================================
+   ВОЗМОЖНОСТИ
+   ============================================================ */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+  transition:.18s ease;
+}
+.card:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 14px 34px rgba(15,23,42,.07)}
+.card__icon{
+  width:44px;height:44px;border-radius:12px;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;margin-bottom:16px;font-size:20px;
+}
+.card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px}
+
+/* ============================================================
+   КАК ЭТО РАБОТАЕТ
+   ============================================================ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;counter-reset:s}
+.step{position:relative;padding-top:14px}
+.step__num{
+  width:38px;height:38px;border-radius:50%;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-weight:800;margin-bottom:16px;
+}
+.step h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.step p{color:var(--muted);font-size:15px}
+
+/* ============================================================
+   ТАРИФЫ
+   ============================================================ */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;align-items:start}
+.plan{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px;position:relative;
+}
+.plan--featured{border:2px solid var(--brand);box-shadow:0 20px 50px rgba(79,70,229,.14)}
+.plan__badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;font-size:12px;font-weight:800;
+  padding:5px 14px;border-radius:999px;letter-spacing:.03em;white-space:nowrap;
+}
+.plan h3{font-size:19px;font-weight:700}
+.plan__desc{color:var(--muted);font-size:14px;margin-top:6px;min-height:42px}
+.plan__price{font-size:38px;font-weight:800;margin:16px 0 4px;letter-spacing:-0.03em}
+.plan__price span{font-size:16px;font-weight:600;color:var(--muted)}
+.plan__hint{font-size:14px;color:var(--muted);min-height:22px}
+.plan ul{list-style:none;padding:0;margin:24px 0;display:grid;gap:11px}
+.plan li{display:flex;gap:10px;font-size:15px;color:var(--muted)}
+.plan li::before{content:"✓";color:var(--brand);font-weight:800;flex:none}
+.plans__note{
+  margin-top:28px;text-align:center;font-size:14px;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+}
+.kaspi-chip{
+  display:inline-flex;align-items:center;gap:7px;font-weight:700;color:var(--kaspi);
+  background:#FEF2F2;border:1px solid #FECACA;padding:4px 11px;border-radius:999px;font-size:13px;
+}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq{max-width:820px;margin:44px auto 0;display:grid;gap:12px}
+.faq details{
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 24px;transition:.18s;
+}
+.faq details[open]{border-color:var(--brand)}
+.faq summary{
+  cursor:pointer;font-weight:650;font-size:17px;list-style:none;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;color:var(--brand);font-weight:400;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq p{color:var(--muted);margin-top:14px;font-size:15px}
+
+/* ============================================================
+   ФИНАЛЬНЫЙ CTA
+   ============================================================ */
+.cta{
+  background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+  border-radius:24px;padding:64px 40px;text-align:center;color:#fff;
+}
+.cta h2{font-size:clamp(28px,4vw,40px);font-weight:800}
+.cta p{margin:16px auto 32px;max-width:520px;opacity:.9;font-size:18px}
+.cta .btn--primary{background:#fff;color:var(--brand);box-shadow:none}
+.cta .btn--primary:hover{background:#F1F1FF}
+
+/* ============================================================
+   ПОДВАЛ
+   ============================================================ */
+.footer{border-top:1px solid var(--line);padding:44px 0;margin-top:88px;font-size:14px;color:var(--muted)}
+.footer__in{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.footer__links{display:flex;gap:22px;flex-wrap:wrap}
+.footer__links a:hover{color:var(--brand)}
+
+/* ============================================================
+   АДАПТИВ
+   ============================================================ */
+@media (max-width:980px){
+  .hero__grid{grid-template-columns:1fr;gap:40px}
+  .cards,.plans{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .nav{display:none}
+}
+@media (max-width:560px){
+  .section{padding:64px 0}
+  .steps{grid-template-columns:1fr}
+  .header__cta .btn--ghost{display:none}
+  .cta{padding:48px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== ШАПКА ===================== -->
+<header class="header">
+  <div class="wrap header__in">
+    <a href="#" class="logo"><span class="logo__mark">S</span> SmartCampus</a>
+    <nav class="nav">
+      <a href="#features">Возможности</a>
+      <a href="#how">Как это работает</a>
+      <a href="#plans">Тарифы</a>
+      <a href="#faq">Вопросы</a>
+    </nav>
+    <div class="header__cta">
+      <a href="#" class="btn btn--ghost btn--sm">Войти</a>
+      <a href="#plans" class="btn btn--primary btn--sm">Попробовать бесплатно</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== ГЛАВНЫЙ ЭКРАН ===================== -->
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div>
+      <span class="chip"><span class="chip__dot"></span> Теперь и для индивидуальных учителей</span>
+      <h1>Объективный анализ ваших уроков — без наблюдателя в классе</h1>
+      <p class="hero__sub">
+        SmartCampus разбирает запись урока и показывает, что реально происходит:
+        структура, вовлечённость учеников, речь, динамика от урока к уроку.
+        Без согласований со школой и без менеджеров.
+      </p>
+      <div class="hero__actions">
+        <a href="#plans" class="btn btn--primary">Попробовать бесплатно</a>
+        <a href="#how" class="btn btn--ghost">Как это работает</a>
+      </div>
+      <p class="hero__note">3 анализа и 30 дней бесплатно · карта не нужна · оплата через Kaspi QR</p>
+    </div>
+
+    <!-- Демонстрационная карточка отчёта -->
+    <div class="preview">
+      <div class="preview__head">
+        <div>
+          <div class="preview__title">Алгебра, 8 «Б» — 12 марта</div>
+          <div style="font-size:13px;color:var(--muted)">Анализ готов за 6 минут</div>
+        </div>
+        <span class="preview__badge">Готово</span>
+      </div>
+
+      <div class="metric">
+        <div class="metric__row"><span class="metric__name">Вовлечённость учеников</span><span class="metric__val">82%</span></div>
+        <div class="bar"><span style="width:82%"></span></div>
+      </div>
+      <div class="metric">
+        <div class="metric__row"><span class="metric__name">Доля речи учителя</span><span class="metric__val">64%</span></div>
+        <div class="bar"><span style="width:64%"></span></div>
+      </div>
+      <div class="metric">
+        <div class="metric__row"><span class="metric__name">Соблюдение структуры урока</span><span class="metric__val">91%</span></div>
+        <div class="bar"><span style="width:91%"></span></div>
+      </div>
+      <div class="metric">
+        <div class="metric__row"><span class="metric__name">Открытые вопросы классу</span><span class="metric__val">17</span></div>
+        <div class="bar"><span style="width:70%"></span></div>
+      </div>
+
+      <div class="preview__foot">
+        <span>Осталось анализов: <b>2 из 3</b></span>
+        <span>Пробный период: <b>27 дней</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ПОЛОСА ДОВЕРИЯ ===================== -->
+<div class="strip">
+  <div class="wrap strip__in">
+    <div class="strip__item">✅ Регистрация за 2 минуты</div>
+    <div class="strip__item">🔒 Записи видны только вам</div>
+    <div class="strip__item">⚡ Доступ сразу после оплаты</div>
+    <div class="strip__item">💳 Оплата привычным Kaspi QR</div>
+  </div>
+</div>
+
+<!-- ===================== ВОЗМОЖНОСТИ ===================== -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Возможности</div>
+      <h2 class="h2">Что вы получаете после анализа урока</h2>
+      <p class="lead">Не оценка «сверху», а рабочий инструмент: конкретные цифры, разбор и понятные шаги на следующий урок.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card__icon">📊</div>
+        <h3>Объективные метрики</h3>
+        <p>Вовлечённость класса, баланс речи, темп, структура урока и работа с вопросами — в цифрах, а не «на глаз».</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">📈</div>
+        <h3>Динамика роста</h3>
+        <p>Сравнение уроков между собой: видно, что улучшилось, а что просело за месяц работы.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">💡</div>
+        <h3>Персональные рекомендации</h3>
+        <p>Конкретные советы под ваш стиль преподавания — что попробовать на ближайшем уроке.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🗂️</div>
+        <h3>История уроков</h3>
+        <p>Все загруженные уроки и отчёты хранятся в личном кабинете — удобно возвращаться и сравнивать.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">👤</div>
+        <h3>Личный кабинет</h3>
+        <p>Тариф, статус подписки, дата окончания, остаток бесплатных анализов и история платежей — на одном экране.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">🔐</div>
+        <h3>Приватность</h3>
+        <p>Ваши записи и отчёты не уходят в школу и не попадают к администрации без вашего решения.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== КАК ЭТО РАБОТАЕТ ===================== -->
+<section class="section section--soft" id="how">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Как это работает</div>
+      <h2 class="h2">От регистрации до первого отчёта — один вечер</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step__num">1</div>
+        <h3>Регистрация</h3>
+        <p>Создайте личный кабинет на почту. Договор со школой и участие менеджера не нужны.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">2</div>
+        <h3>Пробный период</h3>
+        <p>Сразу активируются 3 бесплатных анализа на 30 дней. Оплата на этом шаге не требуется.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">3</div>
+        <h3>Загрузка урока</h3>
+        <p>Загружаете запись урока — отчёт с метриками и рекомендациями приходит в кабинет.</p>
+      </div>
+      <div class="step">
+        <div class="step__num">4</div>
+        <h3>Подписка</h3>
+        <p>Понравилось — выбираете тариф и оплачиваете через Kaspi QR. Доступ открывается автоматически.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ТАРИФЫ ===================== -->
+<section class="section" id="plans">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Тарифы</div>
+      <h2 class="h2">Начните бесплатно, платите только если подошло</h2>
+      <p class="lead">Один учитель — одна подписка. Без скрытых платежей и автосписаний.</p>
+    </div>
+
+    <div class="plans">
+      <!-- Пробный -->
+      <div class="plan">
+        <h3>Пробный</h3>
+        <p class="plan__desc">Чтобы спокойно проверить сервис на своих уроках.</p>
+        <div class="plan__price">Бесплатно</div>
+        <div class="plan__hint">30 дней с момента регистрации</div>
+        <ul>
+          <li>3 анализа уроков</li>
+          <li>Полный отчёт по каждому уроку</li>
+          <li>Личный кабинет и история</li>
+          <li>Оплата не требуется</li>
+        </ul>
+        <a href="#" class="btn btn--ghost btn--wide">Зарегистрироваться</a>
+      </div>
+
+      <!-- Полугодовой (рекомендуемый) -->
+      <div class="plan plan--featured">
+        <span class="plan__badge">Выгоднее на 18%</span>
+        <h3>Полугодовой</h3>
+        <p class="plan__desc">Для тех, кто хочет видеть рост за учебное полугодие.</p>
+        <div class="plan__price">84 000 <span>₸ / 6 мес</span></div>
+        <div class="plan__hint">14 000 ₸ в месяц</div>
+        <ul>
+          <li>Полный доступ на 6 месяцев</li>
+          <li>Анализ уроков без ограничения по числу</li>
+          <li>Динамика и сравнение уроков</li>
+          <li>Приоритетная поддержка</li>
+        </ul>
+        <a href="#" class="btn btn--primary btn--wide">Оплатить через Kaspi QR</a>
+      </div>
+
+      <!-- Месячный -->
+      <div class="plan">
+        <h3>Месячный</h3>
+        <p class="plan__desc">Разовый доступ на месяц — без обязательств дальше.</p>
+        <div class="plan__price">17 000 <span>₸ / мес</span></div>
+        <div class="plan__hint">Разовый платёж, автосписаний нет</div>
+        <ul>
+          <li>Полный доступ на 1 месяц</li>
+          <li>Анализ уроков без ограничения по числу</li>
+          <li>Динамика и сравнение уроков</li>
+          <li>Продление в один клик</li>
+        </ul>
+        <a href="#" class="btn btn--ghost btn--wide">Оплатить через Kaspi QR</a>
+      </div>
+    </div>
+
+    <div class="plans__note">
+      <span class="kaspi-chip">Kaspi QR</span>
+      <span>Оплата разовая — деньги не списываются автоматически. Подписка активируется сразу после подтверждения платежа.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="section section--soft" id="faq">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Вопросы</div>
+      <h2 class="h2">Частые вопросы</h2>
+    </div>
+
+    <div class="faq">
+      <details open>
+        <summary>Что входит в бесплатный пробный период?</summary>
+        <p>3 полных анализа уроков в течение 30 дней после регистрации. Отчёты — такие же, как на платном тарифе. Доступ закрывается, когда закончатся анализы или 30 дней — что наступит раньше.</p>
+      </details>
+      <details>
+        <summary>Нужен ли договор со школой?</summary>
+        <p>Нет. Подписка оформляется на вас как на физическое лицо: регистрируетесь сами, оплачиваете сами, доступ ваш личный.</p>
+      </details>
+      <details>
+        <summary>Как проходит оплата?</summary>
+        <p>Вы выбираете тариф, сканируете Kaspi QR в приложении Kaspi.kz и подтверждаете платёж. После подтверждения подписка активируется автоматически — ждать менеджера не нужно.</p>
+      </details>
+      <details>
+        <summary>Подписка продлевается сама?</summary>
+        <p>Нет. Это разовый платёж — автосписаний нет. Когда срок подходит к концу, вы продлеваете подписку в один клик из личного кабинета.</p>
+      </details>
+      <details>
+        <summary>Что делать, если оплата не прошла?</summary>
+        <p>Вы вернётесь на страницу с понятным статусом и кнопкой «Повторить оплату». Доступ при неуспешном платеже не выдаётся, деньги не списываются.</p>
+      </details>
+      <details>
+        <summary>Кто видит мои уроки?</summary>
+        <p>Только вы. Записи и отчёты по личной подписке не передаются школе или администрации — доступ к ним открываете вы сами.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ФИНАЛЬНЫЙ CTA ===================== -->
+<section class="wrap" style="padding-top:24px">
+  <div class="cta">
+    <h2>Первый анализ урока — уже сегодня</h2>
+    <p>Зарегистрируйтесь и получите 3 бесплатных анализа на 30 дней. Без карты и без обязательств.</p>
+    <a href="#" class="btn btn--primary">Попробовать бесплатно</a>
+  </div>
+</section>
+
+<!-- ===================== ПОДВАЛ ===================== -->
+<footer class="footer">
+  <div class="wrap footer__in">
+    <div>© 2026 SmartCampus. Все права защищены.</div>
+    <div class="footer__links">
+      <a href="#plans">Тарифы</a>
+      <a href="#faq">Вопросы</a>
+      <a href="#">Публичная оферта</a>
+      <a href="#">Поддержка</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
