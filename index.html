@@ -1013,7 +1013,7 @@ p{margin:0}
         <div class="form">
           <div class="field field--wide" data-for="code" style="max-width:260px">
             <label for="f-code" data-i18n="reg.code">Код из SMS</label>
-            <input id="f-code" name="code" class="code-input" type="text" inputmode="numeric" maxlength="4" placeholder="0000">
+            <input id="f-code" name="code" class="code-input" type="text" inputmode="numeric" maxlength="6" placeholder="000000">
             <span class="err" data-i18n="reg.errCode">Введите 4 цифры из SMS</span>
           </div>
           <div class="reg__actions">
@@ -1307,7 +1307,7 @@ p{margin:0}
       "reg.errFio":"Укажите фамилию, имя и отчество","reg.errIin":"Проверьте ИИН — 12 цифр, контрольный разряд не сходится",
       "reg.errPhone":"Введите номер в формате +7 7XX XXX XX XX","reg.errEmail":"Проверьте адрес почты",
       "reg.errSubject":"Выберите предмет","reg.errExp":"Выберите стаж",
-      "reg.errCat":"Выберите категорию","reg.errCode":"Введите 4 цифры из SMS",
+      "reg.errCat":"Выберите категорию","reg.errCode":"Введите 6 цифр из SMS",
 
       "hero.chip":"Провести следующий урок ещё лучше",
       "hero.h1":"Разберите свой урок с помощью Smart Class и получите рекомендации для следующего занятия",
@@ -1453,7 +1453,7 @@ p{margin:0}
       "reg.errFio":"Тегіңіз, атыңыз және әкеңіздің атын көрсетіңіз","reg.errIin":"ЖСН-ді тексеріңіз — 12 сан, бақылау разряды сәйкес келмейді",
       "reg.errPhone":"Нөмірді +7 7XX XXX XX XX форматында енгізіңіз","reg.errEmail":"Пошта мекенжайын тексеріңіз",
       "reg.errSubject":"Пәнді таңдаңыз","reg.errExp":"Өтілді таңдаңыз",
-      "reg.errCat":"Санатты таңдаңыз","reg.errCode":"SMS-тен 4 санды енгізіңіз",
+      "reg.errCat":"Санатты таңдаңыз","reg.errCode":"SMS-тен 6 санды енгізіңіз",
 
       "hero.chip":"Келесі сабақты одан да жақсы өткізу",
       "hero.h1":"Сабағыңызды Smart Class көмегімен талдаңыз және келесі сабаққа ұсыныстар алыңыз",
@@ -1599,7 +1599,7 @@ p{margin:0}
       "reg.errFio":"Enter your full name","reg.errIin":"Check the IIN — 12 digits, the checksum does not match",
       "reg.errPhone":"Use the format +7 7XX XXX XX XX","reg.errEmail":"Check the e-mail address",
       "reg.errSubject":"Choose a subject","reg.errExp":"Choose experience",
-      "reg.errCat":"Choose a category","reg.errCode":"Enter the 4 digits from the SMS",
+      "reg.errCat":"Choose a category","reg.errCode":"Enter the 6 digits from the SMS",
 
       "hero.chip":"Make your next lesson even better",
       "hero.h1":"Analyze your lesson with Smart Class and get recommendations for your next class",
@@ -2306,7 +2306,7 @@ p{margin:0}
 
   step2.addEventListener("submit", function(e){
     e.preventDefault();
-    if (!mark("code", /^\d{4}$/.test(val("f-code")))){
+    if (!mark("code", /^\d{6}$/.test(val("f-code")))){
       document.getElementById("f-code").focus();
       return;
     }

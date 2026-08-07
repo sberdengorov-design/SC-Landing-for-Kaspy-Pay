@@ -52,8 +52,10 @@
 ## POST /api/registration/confirm
 
 ```json
-{ "phone": "77012345678", "code": "1234" }
+{ "phone": "77012345678", "code": "123456" }
 ```
+
+Код — 6 цифр.
 
 При верном коде: создаётся `teacher` с `source = 'self'`, запись в `trial`
 (3 анализа, 30 дней) и запись в `consent`. Строка `otp_code` удаляется вместе
