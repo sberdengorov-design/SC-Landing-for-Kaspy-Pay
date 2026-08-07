@@ -913,7 +913,7 @@ p{margin:0}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
         <span data-i18n="prac.back">Назад</span>
       </button>
-      <div class="modal__title" id="practice-title">Лучшая практика</div>
+      <div class="modal__title" id="practice-title" data-i18n="prac.eyebrow">Лучшая практика</div>
       <button type="button" class="modal__btn" id="practice-close">
         <span data-i18n="prac.close">Закрыть</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -942,13 +942,13 @@ p{margin:0}
         <div class="form">
           <div class="field field--wide" data-for="fio">
             <label for="f-fio" data-i18n="reg.fio">ФИО</label>
-            <input id="f-fio" name="fio" type="text" autocomplete="name" placeholder="Иванова Айгуль Серикқызы">
+            <input id="f-fio" name="fio" type="text" autocomplete="name" data-i18n-ph="reg.fioPh" placeholder="Иванова Айгуль Серикқызы">
             <span class="err" data-i18n="reg.errFio">Укажите фамилию, имя и отчество</span>
           </div>
 
           <div class="field" data-for="iin">
             <label for="f-iin" data-i18n="reg.iin">ИИН</label>
-            <input id="f-iin" name="iin" type="text" inputmode="numeric" maxlength="12" placeholder="12 цифр">
+            <input id="f-iin" name="iin" type="text" inputmode="numeric" maxlength="12" data-i18n-ph="reg.iinPh" placeholder="12 цифр">
             <small data-i18n="reg.iinHint">12 цифр, как в удостоверении личности</small>
             <span class="err" data-i18n="reg.errIin">Проверьте ИИН — 12 цифр, контрольный разряд не сходится</span>
           </div>
@@ -980,8 +980,8 @@ p{margin:0}
 
           <div class="field" data-for="subject">
             <label for="f-subject" data-i18n="reg.subject">Учитель предмета</label>
-            <input id="f-subject" name="subject" type="text" placeholder="География">
-            <span class="err" data-i18n="reg.errSubject">Укажите предмет</span>
+            <select id="f-subject" name="subject"></select>
+            <span class="err" data-i18n="reg.errSubject">Выберите предмет</span>
           </div>
 
           <div class="field" data-for="exp">
@@ -1274,11 +1274,11 @@ p{margin:0}
 
       "reg.title":"Регистрация в пробной версии",
       "reg.sub":"Заполните данные — доступ откроется сразу после подтверждения номера телефона.",
-      "reg.fio":"ФИО","reg.iin":"ИИН","reg.iinHint":"12 цифр, как в удостоверении личности",
+      "reg.fio":"ФИО","reg.fioPh":"Иванова Айгуль Серикқызы","reg.iin":"ИИН","reg.iinPh":"12 цифр","reg.iinHint":"12 цифр, как в удостоверении личности",
       "reg.phone":"Номер телефона","reg.phoneHint":"Это ваш логин. На него придёт код для входа.",
       "reg.city":"Город","reg.cityPick":"Выберите город","reg.errCity":"Выберите город",
       "reg.user":"Пользователь","reg.userPick":"Выберите тип пользователя","reg.errUser":"Выберите тип пользователя",
-      "reg.email":"E-mail","reg.subject":"Учитель предмета","reg.exp":"Стаж, лет","reg.cat":"Категория",
+      "reg.email":"E-mail","reg.subject":"Учитель предмета","reg.subjectPick":"Выберите предмет","reg.exp":"Стаж, лет","reg.cat":"Категория",
       "reg.catPick":"Выберите категорию","reg.cat0":"Без категории","reg.cat1":"Педагог-модератор",
       "reg.cat2":"Педагог-эксперт","reg.cat3":"Педагог-исследователь","reg.cat4":"Педагог-мастер",
       "reg.demoNote":"Форма на лендинге — прототип: данные никуда не отправляются. Боевая регистрация выполняется в системе Smart Campus.",
@@ -1290,7 +1290,7 @@ p{margin:0}
       "reg.go":"Перейти в систему",
       "reg.errFio":"Укажите фамилию, имя и отчество","reg.errIin":"Проверьте ИИН — 12 цифр, контрольный разряд не сходится",
       "reg.errPhone":"Введите номер в формате +7 7XX XXX XX XX","reg.errEmail":"Проверьте адрес почты",
-      "reg.errSubject":"Укажите предмет","reg.errExp":"Стаж — число от 0 до 60",
+      "reg.errSubject":"Выберите предмет","reg.errExp":"Стаж — число от 0 до 60",
       "reg.errCat":"Выберите категорию","reg.errCode":"Введите 4 цифры из SMS",
 
       "hero.chip":"Провести следующий урок ещё лучше",
@@ -1417,11 +1417,11 @@ p{margin:0}
 
       "reg.title":"Сынақ нұсқасына тіркелу",
       "reg.sub":"Деректерді толтырыңыз — телефон нөмірі расталған соң қолжетімділік бірден ашылады.",
-      "reg.fio":"Аты-жөні","reg.iin":"ЖСН","reg.iinHint":"Жеке куәліктегідей 12 сан",
+      "reg.fio":"Аты-жөні","reg.fioPh":"Иванова Айгүл Серікқызы","reg.iin":"ЖСН","reg.iinPh":"12 сан","reg.iinHint":"Жеке куәліктегідей 12 сан",
       "reg.phone":"Телефон нөмірі","reg.phoneHint":"Бұл сіздің логиніңіз. Кіру коды осы нөмірге келеді.",
       "reg.city":"Қала","reg.cityPick":"Қаланы таңдаңыз","reg.errCity":"Қаланы таңдаңыз",
       "reg.user":"Пайдаланушы","reg.userPick":"Пайдаланушы түрін таңдаңыз","reg.errUser":"Пайдаланушы түрін таңдаңыз",
-      "reg.email":"E-mail","reg.subject":"Пән мұғалімі","reg.exp":"Өтілі, жыл","reg.cat":"Санаты",
+      "reg.email":"E-mail","reg.subject":"Пән мұғалімі","reg.subjectPick":"Пәнді таңдаңыз","reg.exp":"Өтілі, жыл","reg.cat":"Санаты",
       "reg.catPick":"Санатты таңдаңыз","reg.cat0":"Санатсыз","reg.cat1":"Педагог-модератор",
       "reg.cat2":"Педагог-сарапшы","reg.cat3":"Педагог-зерттеуші","reg.cat4":"Педагог-шебер",
       "reg.demoNote":"Лендингтегі форма — прототип: деректер ешқайда жіберілмейді. Нақты тіркелу Smart Campus жүйесінде жүреді.",
@@ -1433,7 +1433,7 @@ p{margin:0}
       "reg.go":"Жүйеге өту",
       "reg.errFio":"Тегіңіз, атыңыз және әкеңіздің атын көрсетіңіз","reg.errIin":"ЖСН-ді тексеріңіз — 12 сан, бақылау разряды сәйкес келмейді",
       "reg.errPhone":"Нөмірді +7 7XX XXX XX XX форматында енгізіңіз","reg.errEmail":"Пошта мекенжайын тексеріңіз",
-      "reg.errSubject":"Пәнді көрсетіңіз","reg.errExp":"Өтілі — 0-ден 60-қа дейінгі сан",
+      "reg.errSubject":"Пәнді таңдаңыз","reg.errExp":"Өтілі — 0-ден 60-қа дейінгі сан",
       "reg.errCat":"Санатты таңдаңыз","reg.errCode":"SMS-тен 4 санды енгізіңіз",
 
       "hero.chip":"Келесі сабақты одан да жақсы өткізу",
@@ -1560,11 +1560,11 @@ p{margin:0}
 
       "reg.title":"Free trial sign-up",
       "reg.sub":"Fill in your details — access opens as soon as your phone number is confirmed.",
-      "reg.fio":"Full name","reg.iin":"IIN","reg.iinHint":"12 digits, as on your ID card",
+      "reg.fio":"Full name","reg.fioPh":"Aigul Ivanova","reg.iin":"IIN","reg.iinPh":"12 digits","reg.iinHint":"12 digits, as on your ID card",
       "reg.phone":"Phone number","reg.phoneHint":"This is your login. The sign-in code is sent here.",
       "reg.city":"City","reg.cityPick":"Choose a city","reg.errCity":"Choose a city",
       "reg.user":"User type","reg.userPick":"Choose a user type","reg.errUser":"Choose a user type",
-      "reg.email":"E-mail","reg.subject":"Subject taught","reg.exp":"Experience, years","reg.cat":"Category",
+      "reg.email":"E-mail","reg.subject":"Subject taught","reg.subjectPick":"Choose a subject","reg.exp":"Experience, years","reg.cat":"Category",
       "reg.catPick":"Choose a category","reg.cat0":"No category","reg.cat1":"Teacher-moderator",
       "reg.cat2":"Teacher-expert","reg.cat3":"Teacher-researcher","reg.cat4":"Teacher-master",
       "reg.demoNote":"This landing-page form is a prototype: nothing is submitted anywhere. Real sign-up happens in Smart Campus.",
@@ -1576,7 +1576,7 @@ p{margin:0}
       "reg.go":"Go to the app",
       "reg.errFio":"Enter your full name","reg.errIin":"Check the IIN — 12 digits, the checksum does not match",
       "reg.errPhone":"Use the format +7 7XX XXX XX XX","reg.errEmail":"Check the e-mail address",
-      "reg.errSubject":"Enter the subject","reg.errExp":"Experience must be a number from 0 to 60",
+      "reg.errSubject":"Choose a subject","reg.errExp":"Experience must be a number from 0 to 60",
       "reg.errCat":"Choose a category","reg.errCode":"Enter the 4 digits from the SMS",
 
       "hero.chip":"Make your next lesson even better",
@@ -1842,6 +1842,32 @@ p{margin:0}
     { v:"oskemen",      ru:"Усть-Каменогорск",    kk:"Өскемен",    en:"Oskemen" }
   ];
 
+  /* Предметы */
+  var SUBJECTS = [
+    { v:"math",      ru:"Математика",          kk:"Математика",        en:"Mathematics" },
+    { v:"algebra",   ru:"Алгебра",             kk:"Алгебра",           en:"Algebra" },
+    { v:"geometry",  ru:"Геометрия",           kk:"Геометрия",         en:"Geometry" },
+    { v:"physics",   ru:"Физика",              kk:"Физика",            en:"Physics" },
+    { v:"chemistry", ru:"Химия",               kk:"Химия",             en:"Chemistry" },
+    { v:"biology",   ru:"Биология",            kk:"Биология",          en:"Biology" },
+    { v:"geography", ru:"География",           kk:"География",         en:"Geography" },
+    { v:"it",        ru:"Информатика",         kk:"Информатика",       en:"Computer science" },
+    { v:"histkz",    ru:"История Казахстана",  kk:"Қазақстан тарихы",  en:"History of Kazakhstan" },
+    { v:"histworld", ru:"Всемирная история",   kk:"Дүниежүзі тарихы",  en:"World history" },
+    { v:"law",       ru:"Основы права",        kk:"Құқық негіздері",   en:"Basics of law" },
+    { v:"kazlang",   ru:"Казахский язык",      kk:"Қазақ тілі",        en:"Kazakh language" },
+    { v:"kazlit",    ru:"Казахская литература",kk:"Қазақ әдебиеті",    en:"Kazakh literature" },
+    { v:"ruslang",   ru:"Русский язык",        kk:"Орыс тілі",         en:"Russian language" },
+    { v:"ruslit",    ru:"Русская литература",  kk:"Орыс әдебиеті",     en:"Russian literature" },
+    { v:"english",   ru:"Английский язык",     kk:"Ағылшын тілі",      en:"English language" },
+    { v:"primary",   ru:"Начальные классы",    kk:"Бастауыш сынып",    en:"Primary school" },
+    { v:"pe",        ru:"Физическая культура", kk:"Дене шынықтыру",    en:"Physical education" },
+    { v:"art",       ru:"Художественный труд", kk:"Көркем еңбек",      en:"Art and craft" },
+    { v:"music",     ru:"Музыка",              kk:"Музыка",            en:"Music" },
+    { v:"nvp",       ru:"Начальная военная подготовка", kk:"Алғашқы әскери дайындық", en:"Basic military training" },
+    { v:"other",     ru:"Другой предмет",      kk:"Басқа пән",         en:"Other subject" }
+  ];
+
   /* Тип пользователя */
   var USER_TYPES = [
     { v:"binom",  ru:"УК BINOM",            kk:"BINOM ОҚ",           en:"BINOM education complex" },
@@ -1872,6 +1898,11 @@ p{margin:0}
       if (typeof value === "string") el.textContent = value;
     });
 
+    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){
+      var value = dict[el.getAttribute("data-i18n-ph")];
+      if (typeof value === "string") el.setAttribute("placeholder", value);
+    });
+
     document.documentElement.lang = lang;
     if (dict["meta.title"]) document.title = dict["meta.title"];
     if (descMeta && dict["meta.desc"]) descMeta.setAttribute("content", dict["meta.desc"]);
@@ -1882,8 +1913,9 @@ p{margin:0}
 
     try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
 
-    fillSelect("f-city", CITIES,     dict["reg.cityPick"]);
-    fillSelect("f-user", USER_TYPES, dict["reg.userPick"]);
+    fillSelect("f-city",    CITIES,     dict["reg.cityPick"]);
+    fillSelect("f-user",    USER_TYPES, dict["reg.userPick"]);
+    fillSelect("f-subject", SUBJECTS,   dict["reg.subjectPick"]);
 
     if (!modal.hidden) renderCurrent();   // подписи внутри модального окна тоже переводим
   }
@@ -2199,7 +2231,7 @@ p{margin:0}
       mark("email",   /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val("f-email"))),
       mark("city",    val("f-city") !== ""),
       mark("user",    val("f-user") !== ""),
-      mark("subject", val("f-subject").length >= 2),
+      mark("subject", val("f-subject") !== ""),
       mark("exp",     /^\d{1,2}$/.test(val("f-exp")) && +val("f-exp") <= 60),
       mark("cat",     val("f-cat") !== "")
     ];
