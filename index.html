@@ -987,9 +987,9 @@ p{margin:0}
           </div>
 
           <div class="field" data-for="exp">
-            <label for="f-exp" data-i18n="reg.exp">Стаж, лет</label>
-            <input id="f-exp" name="exp" type="text" inputmode="numeric" maxlength="2" placeholder="12">
-            <span class="err" data-i18n="reg.errExp">Стаж — число от 0 до 60</span>
+            <label for="f-exp" data-i18n="reg.exp">Стаж</label>
+            <select id="f-exp" name="exp"></select>
+            <span class="err" data-i18n="reg.errExp">Выберите стаж</span>
           </div>
 
           <div class="field" data-for="cat">
@@ -1297,7 +1297,7 @@ p{margin:0}
       "reg.phone":"Номер телефона","reg.phoneHint":"Это ваш логин. На него придёт код для входа.",
       "reg.city":"Город","reg.cityPick":"Выберите город","reg.errCity":"Выберите город",
       "reg.user":"Пользователь","reg.userPick":"Выберите тип пользователя","reg.errUser":"Выберите тип пользователя",
-      "reg.email":"E-mail","reg.subject":"Учитель предмета","reg.subjectPick":"Выберите предмет","reg.exp":"Стаж, лет","reg.cat":"Категория",
+      "reg.email":"E-mail","reg.subject":"Учитель предмета","reg.subjectPick":"Выберите предмет","reg.exp":"Стаж","reg.expPick":"Выберите стаж","reg.cat":"Категория",
       "reg.catPick":"Выберите категорию","reg.cat0":"Без категории","reg.cat1":"Педагог-модератор",
       "reg.cat2":"Педагог-эксперт","reg.cat3":"Педагог-исследователь","reg.cat4":"Педагог-мастер",
       "reg.demoNote":"Форма на лендинге — прототип: данные никуда не отправляются. Регистрация ведёт в тестовую версию Smart Campus.",
@@ -1313,7 +1313,7 @@ p{margin:0}
       "reg.go":"Перейти в систему",
       "reg.errFio":"Укажите фамилию, имя и отчество","reg.errIin":"Проверьте ИИН — 12 цифр, контрольный разряд не сходится",
       "reg.errPhone":"Введите номер в формате +7 7XX XXX XX XX","reg.errEmail":"Проверьте адрес почты",
-      "reg.errSubject":"Выберите предмет","reg.errExp":"Стаж — число от 0 до 60",
+      "reg.errSubject":"Выберите предмет","reg.errExp":"Выберите стаж",
       "reg.errCat":"Выберите категорию","reg.errCode":"Введите 4 цифры из SMS",
 
       "hero.chip":"Провести следующий урок ещё лучше",
@@ -1444,7 +1444,7 @@ p{margin:0}
       "reg.phone":"Телефон нөмірі","reg.phoneHint":"Бұл сіздің логиніңіз. Кіру коды осы нөмірге келеді.",
       "reg.city":"Қала","reg.cityPick":"Қаланы таңдаңыз","reg.errCity":"Қаланы таңдаңыз",
       "reg.user":"Пайдаланушы","reg.userPick":"Пайдаланушы түрін таңдаңыз","reg.errUser":"Пайдаланушы түрін таңдаңыз",
-      "reg.email":"E-mail","reg.subject":"Пән мұғалімі","reg.subjectPick":"Пәнді таңдаңыз","reg.exp":"Өтілі, жыл","reg.cat":"Санаты",
+      "reg.email":"E-mail","reg.subject":"Пән мұғалімі","reg.subjectPick":"Пәнді таңдаңыз","reg.exp":"Өтілі","reg.expPick":"Өтілді таңдаңыз","reg.cat":"Санаты",
       "reg.catPick":"Санатты таңдаңыз","reg.cat0":"Санатсыз","reg.cat1":"Педагог-модератор",
       "reg.cat2":"Педагог-сарапшы","reg.cat3":"Педагог-зерттеуші","reg.cat4":"Педагог-шебер",
       "reg.demoNote":"Лендингтегі форма — прототип: деректер ешқайда жіберілмейді. Тіркелу Smart Campus-тің сынақ нұсқасына апарады.",
@@ -1460,7 +1460,7 @@ p{margin:0}
       "reg.go":"Жүйеге өту",
       "reg.errFio":"Тегіңіз, атыңыз және әкеңіздің атын көрсетіңіз","reg.errIin":"ЖСН-ді тексеріңіз — 12 сан, бақылау разряды сәйкес келмейді",
       "reg.errPhone":"Нөмірді +7 7XX XXX XX XX форматында енгізіңіз","reg.errEmail":"Пошта мекенжайын тексеріңіз",
-      "reg.errSubject":"Пәнді таңдаңыз","reg.errExp":"Өтілі — 0-ден 60-қа дейінгі сан",
+      "reg.errSubject":"Пәнді таңдаңыз","reg.errExp":"Өтілді таңдаңыз",
       "reg.errCat":"Санатты таңдаңыз","reg.errCode":"SMS-тен 4 санды енгізіңіз",
 
       "hero.chip":"Келесі сабақты одан да жақсы өткізу",
@@ -1591,7 +1591,7 @@ p{margin:0}
       "reg.phone":"Phone number","reg.phoneHint":"This is your login. The sign-in code is sent here.",
       "reg.city":"City","reg.cityPick":"Choose a city","reg.errCity":"Choose a city",
       "reg.user":"User type","reg.userPick":"Choose a user type","reg.errUser":"Choose a user type",
-      "reg.email":"E-mail","reg.subject":"Subject taught","reg.subjectPick":"Choose a subject","reg.exp":"Experience, years","reg.cat":"Category",
+      "reg.email":"E-mail","reg.subject":"Subject taught","reg.subjectPick":"Choose a subject","reg.exp":"Experience","reg.expPick":"Choose experience","reg.cat":"Category",
       "reg.catPick":"Choose a category","reg.cat0":"No category","reg.cat1":"Teacher-moderator",
       "reg.cat2":"Teacher-expert","reg.cat3":"Teacher-researcher","reg.cat4":"Teacher-master",
       "reg.demoNote":"This landing-page form is a prototype: nothing is submitted anywhere. Sign-up leads to the Smart Campus test environment.",
@@ -1607,7 +1607,7 @@ p{margin:0}
       "reg.go":"Go to the app",
       "reg.errFio":"Enter your full name","reg.errIin":"Check the IIN — 12 digits, the checksum does not match",
       "reg.errPhone":"Use the format +7 7XX XXX XX XX","reg.errEmail":"Check the e-mail address",
-      "reg.errSubject":"Choose a subject","reg.errExp":"Experience must be a number from 0 to 60",
+      "reg.errSubject":"Choose a subject","reg.errExp":"Choose experience",
       "reg.errCat":"Choose a category","reg.errCode":"Enter the 4 digits from the SMS",
 
       "hero.chip":"Make your next lesson even better",
@@ -1899,6 +1899,19 @@ p{margin:0}
     { v:"other",     ru:"Другой предмет",      kk:"Басқа пән",         en:"Other subject" }
   ];
 
+  /* Стаж — диапазоны, как в карточке учителя в системе */
+  var EXPERIENCE = [
+    { v:"lt1",   ru:"До 1 года",  kk:"1 жылға дейін", en:"Under 1 year" },
+    { v:"1-3",   ru:"1-3 года",   kk:"1-3 жыл",       en:"1-3 years" },
+    { v:"3-5",   ru:"3-5 лет",    kk:"3-5 жыл",       en:"3-5 years" },
+    { v:"5-10",  ru:"5-10 лет",   kk:"5-10 жыл",      en:"5-10 years" },
+    { v:"10-15", ru:"10-15 лет",  kk:"10-15 жыл",     en:"10-15 years" },
+    { v:"15-20", ru:"15-20 лет",  kk:"15-20 жыл",     en:"15-20 years" },
+    { v:"20-25", ru:"20-25 лет",  kk:"20-25 жыл",     en:"20-25 years" },
+    { v:"25-30", ru:"25-30 лет",  kk:"25-30 жыл",     en:"25-30 years" },
+    { v:"30+",   ru:"30+ лет",    kk:"30+ жыл",       en:"30+ years" }
+  ];
+
   /* Тип пользователя */
   var USER_TYPES = [
     { v:"binom",  ru:"УК BINOM",            kk:"BINOM ОҚ",           en:"BINOM education complex" },
@@ -1947,6 +1960,7 @@ p{margin:0}
     fillSelect("f-city",    CITIES,     dict["reg.cityPick"]);
     fillSelect("f-user",    USER_TYPES, dict["reg.userPick"]);
     fillSelect("f-subject", SUBJECTS,   dict["reg.subjectPick"]);
+    fillSelect("f-exp",     EXPERIENCE, dict["reg.expPick"]);
 
     if (!modal.hidden) renderCurrent();   // подписи внутри модального окна тоже переводим
   }
@@ -2269,7 +2283,7 @@ p{margin:0}
       mark("city",    val("f-city") !== ""),
       mark("user",    val("f-user") !== ""),
       mark("subject", val("f-subject") !== ""),
-      mark("exp",     /^\d{1,2}$/.test(val("f-exp")) && +val("f-exp") <= 60),
+      mark("exp",     val("f-exp") !== ""),
       mark("cat",     val("f-cat") !== "")
     ];
 
