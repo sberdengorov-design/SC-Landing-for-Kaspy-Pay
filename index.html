@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SmartCampus для учителей — анализ уроков по подписке</title>
-<meta name="description" content="Транскрипт, речевая аналитика и разбор урока по критериям. 3 бесплатных анализа на 30 дней, подписка от 14 000 ₸/мес, оплата через Kaspi QR.">
+<title>Smart Campus для учителей — анализ урока и рекомендации</title>
+<meta name="description" content="Запишите или загрузите урок: транскрипт, анализ по критериям современного урока и персональные рекомендации. 3 бесплатных анализа, оплата через Kaspi QR.">
 <style>
 /* ============================================================
    ТОКЕНЫ ДИЗАЙН-СИСТЕМЫ SMARTCAMPUS
@@ -20,6 +20,8 @@
   --brand-soft:#EDEBFA;    /* светлая подложка чипов и иконок */
   --green:#00B368;         /* зелёный из логотипа, статусы «готово» */
   --green-soft:#E3F8EE;
+  --warn:#B7791F;          /* статус «частично» в отчёте */
+  --warn-soft:#FFF7E6;
   --kaspi:#F14635;         /* фирменный красный Kaspi */
   --kaspi-soft:#FEF1EF;
   --kaspi-line:#FBD5D0;
@@ -50,6 +52,8 @@
     --brand-soft:#26224F;
     --green:#3DD68C;
     --green-soft:#15321F;
+    --warn:#F0B858;
+    --warn-soft:#3A2E12;
     --kaspi:#FF8071;
     --kaspi-soft:#33191A;
     --kaspi-line:#57292A;
@@ -65,6 +69,7 @@
   --navy:#151233; --navy-deep:#100E28;
   --brand:#8079E8; --brand-hover:#948DF2; --brand-light:#8079E8; --brand-soft:#26224F;
   --green:#3DD68C; --green-soft:#15321F;
+  --warn:#F0B858; --warn-soft:#3A2E12;
   --kaspi:#FF8071; --kaspi-soft:#33191A; --kaspi-line:#57292A;
   --ink:#EAE9F5; --muted:#9E9BC0; --line:#2A2752;
   --bg:#0E0C21; --surface:#161334; --shadow:rgba(0,0,0,.45);
@@ -73,6 +78,7 @@
   --navy:#211D52; --navy-deep:#1A1744;
   --brand:#3B3392; --brand-hover:#2E2778; --brand-light:#5B52C4; --brand-soft:#EDEBFA;
   --green:#00B368; --green-soft:#E3F8EE;
+  --warn:#B7791F; --warn-soft:#FFF7E6;
   --kaspi:#F14635; --kaspi-soft:#FEF1EF; --kaspi-line:#FBD5D0;
   --ink:#1A1744; --muted:#7E7BA0; --line:#E7E7F0;
   --bg:#F5F6FA; --surface:#FFFFFF; --shadow:rgba(26,23,68,.07);
@@ -125,14 +131,14 @@ p{margin:0}
   position:sticky;top:0;z-index:50;background:var(--surface);
   border-bottom:1px solid var(--line);
 }
-.header__in{display:flex;align-items:center;gap:36px;height:72px}
+.header__in{display:flex;align-items:center;gap:26px;height:72px}
 
 /* логотип <smart campus> с зелёными скобками */
 .logo{display:flex;align-items:center;font-weight:750;font-size:19px;line-height:1.05;letter-spacing:-0.01em}
 .logo b{font-weight:750;color:var(--ink)}
 .logo i{color:var(--green);font-style:normal;font-weight:600}
 
-.nav{display:flex;gap:26px;margin-left:auto;font-size:15px;color:var(--muted)}
+.nav{display:flex;gap:20px;margin-left:auto;font-size:14.5px;color:var(--muted)}
 .nav a{padding:6px 0;border-bottom:2px solid transparent;transition:.16s}
 .nav a:hover{color:var(--brand-light);border-bottom-color:var(--brand-light)}
 .header__cta{display:flex;gap:10px;align-items:center;min-width:0}
@@ -140,10 +146,12 @@ p{margin:0}
 
 /* переключатель языка как в кабинете */
 .lang{display:flex;gap:2px;background:var(--bg);border-radius:99px;padding:3px}
-.lang span{
-  font-size:13px;font-weight:600;color:var(--muted);padding:5px 11px;border-radius:99px;cursor:pointer;
+.lang button{
+  font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);
+  padding:5px 11px;border-radius:99px;cursor:pointer;border:0;background:none;transition:.16s;
 }
-.lang span.is-active{background:var(--brand-soft);color:var(--brand)}
+.lang button:hover{color:var(--ink)}
+.lang button[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand)}
 
 /* ============================================================
    ГЛАВНЫЙ ЭКРАН
@@ -154,9 +162,9 @@ p{margin:0}
   display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 10px;border-radius:99px;
   background:var(--green-soft);font-size:13px;font-weight:650;color:var(--green);
 }
-.chip__dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
-.hero h1{font-size:clamp(32px,4.6vw,50px);font-weight:750;margin:20px 0 18px}
-.hero__sub{font-size:18px;color:var(--muted);max-width:520px}
+.chip__dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+.hero h1{font-size:clamp(30px,4.2vw,44px);font-weight:750;margin:20px 0 18px}
+.hero__sub{font-size:17px;color:var(--muted);max-width:540px}
 .hero__actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
 .hero__note{margin-top:18px;font-size:14px;color:var(--muted)}
 
@@ -227,12 +235,15 @@ p{margin:0}
 .stat__row b{color:var(--ink);font-variant-numeric:tabular-nums}
 
 /* ============================================================
-   ПОЛОСА ПРЕИМУЩЕСТВ
+   АПРОБАЦИЯ — ЦИФРЫ
    ============================================================ */
-.strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0}
-.strip__in{display:flex;gap:44px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:14.5px}
-.strip__item{display:flex;align-items:center;gap:9px}
-.strip__item b{color:var(--ink);font-weight:650}
+.numbers{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:56px 0}
+.numbers__lead{color:var(--muted);font-size:15px;margin-top:12px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:34px 0 24px}
+.num{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px 20px;text-align:center}
+.num__v{font-size:clamp(30px,4vw,40px);font-weight:750;color:var(--brand);letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
+.num__k{font-size:14px;color:var(--muted);margin-top:6px}
+.numbers__note{font-size:14px;color:var(--muted);text-align:center;max-width:720px;margin:0 auto}
 
 /* ============================================================
    ВОЗМОЖНОСТИ
@@ -251,10 +262,25 @@ p{margin:0}
 .card p{color:var(--muted);font-size:14.5px}
 
 /* ============================================================
+   ДЛЯ ЧЕГО ИСПОЛЬЗОВАТЬ
+   ============================================================ */
+.uses{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:46px}
+.use{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px;display:flex;gap:16px;
+}
+.use__n{
+  width:34px;height:34px;border-radius:10px;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;flex:none;
+}
+.use h3{font-size:16.5px;font-weight:700;margin-bottom:7px}
+.use p{color:var(--muted);font-size:14.5px}
+
+/* ============================================================
    КАК ЭТО РАБОТАЕТ
    ============================================================ */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px}
-.step{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:46px}
+.step{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:24px;position:relative}
 .section--plain .step{background:var(--bg)}
 .step__num{
   width:34px;height:34px;border-radius:10px;background:var(--brand);color:#fff;
@@ -262,6 +288,207 @@ p{margin:0}
 }
 .step h3{font-size:16px;font-weight:700;margin-bottom:7px}
 .step p{color:var(--muted);font-size:14.5px}
+.step__arrow{
+  position:absolute;top:38px;right:-14px;width:22px;height:22px;
+  display:grid;place-items:center;color:var(--brand-light);
+}
+
+/* ============================================================
+   ПОЧЕМУ ВЫБИРАЮТ
+   ============================================================ */
+.center-cta{display:flex;justify-content:center;margin-top:38px}
+
+/* ============================================================
+   ЛУЧШАЯ ПРАКТИКА — модальное окно с тремя экранами
+   ============================================================ */
+.practice__box{
+  max-width:760px;margin:42px auto 0;background:var(--surface);border:1px solid var(--line);
+  border-radius:18px;padding:32px;text-align:center;
+}
+.practice__ava{display:flex;justify-content:center;margin-bottom:18px}
+.practice__ava span{
+  width:48px;height:48px;border-radius:50%;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;font-weight:700;font-size:15px;border:3px solid var(--surface);
+}
+.practice__ava span+span{margin-left:-14px}
+
+.modal{
+  position:fixed;inset:0;z-index:100;background:rgba(16,14,40,.6);
+  display:grid;place-items:start center;padding:28px 18px;overflow-y:auto;
+}
+.modal[hidden]{display:none}
+.modal__in{
+  background:var(--bg);border-radius:20px;max-width:880px;width:100%;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden;
+}
+.modal__bar{
+  display:flex;align-items:center;gap:12px;padding:15px 20px;
+  border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:2;
+}
+.modal__title{font-weight:700;font-size:16px;margin-right:auto;min-width:0}
+.modal__btn{
+  font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);background:none;border:0;
+  cursor:pointer;padding:7px 11px;border-radius:8px;display:inline-flex;align-items:center;gap:7px;transition:.16s;
+}
+.modal__btn:hover{background:var(--bg);color:var(--ink)}
+.modal__body{padding:24px}
+
+.tcards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.tcard,.lcard{
+  font-family:inherit;color:inherit;text-align:left;width:100%;cursor:pointer;
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;transition:.16s;
+}
+.tcard:hover,.lcard:hover{border-color:var(--brand-light);box-shadow:0 12px 28px var(--shadow)}
+.tcard{display:flex;gap:14px;align-items:flex-start}
+.tcard__ava{
+  width:46px;height:46px;border-radius:50%;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;font-weight:700;font-size:15px;flex:none;
+}
+.tcard__b,.tcard__n,.tcard__m,.lcard__b,.lcard__t,.lcard__m{display:block}
+.tcard__b,.lcard__b{flex:1;min-width:0}
+.tcard__n{font-weight:700;font-size:15.5px}
+.tcard__m{font-size:13px;color:var(--muted);margin-top:4px}
+/* в модальном окне реплики собраны из span — делаем их блочными */
+.modal .line__body,.modal .line__head,.modal .bubble{display:block}
+
+.lcards{display:grid;gap:14px}
+.lcard{display:flex;align-items:center;gap:16px}
+.lcard__b{flex:1;min-width:0}
+.lcard__t{font-weight:700;font-size:15.5px}
+.lcard__m{font-size:13px;color:var(--muted);margin-top:4px}
+.score{
+  flex:none;text-align:center;background:var(--green-soft);color:var(--green);
+  border-radius:12px;padding:10px 14px;font-weight:750;font-variant-numeric:tabular-nums;
+}
+.score b{font-size:20px;display:block;line-height:1.1}
+.score span{display:block;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;opacity:.85}
+
+.lang-chip{
+  display:inline-block;margin-top:8px;font-size:11px;font-weight:700;
+  background:var(--brand-soft);color:var(--brand);padding:3px 10px;border-radius:99px;
+}
+.lesson__top{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.lesson__topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.lesson__title{font-size:16px;font-weight:700}
+.lesson__topic{font-size:13px;color:var(--brand-light);margin-top:3px}
+.lesson__top .meta{border-bottom:1px solid var(--line)}
+.lesson__stats{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;padding:14px 20px;font-size:13px;color:var(--muted)}
+.lesson__stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+.lesson__h{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 12px}
+.lesson__card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;font-size:14px}
+.legend{font-size:11.5px;color:var(--muted);padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+/* транскрипт листается внутри окна, а не растягивает страницу */
+.scroll-box{
+  max-height:340px;overflow-y:auto;padding-right:10px;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;overscroll-behavior:contain;
+}
+.scroll-box::-webkit-scrollbar{width:8px}
+.scroll-box::-webkit-scrollbar-track{background:var(--bg);border-radius:99px}
+.scroll-box::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+.scroll-box::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+.scroll-box:focus-visible{outline:2px solid var(--brand-light);outline-offset:2px;border-radius:8px}
+.steps-list{margin:0;padding-left:20px;display:grid;gap:10px}
+.steps-list li{font-size:14px}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sum__box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.sum__box h4{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.sum__box p{font-size:14px;color:var(--ink)}
+
+/* кольцо соотношения речи */
+.ring{width:120px;height:120px;border-radius:50%;margin:4px auto 14px;display:grid;place-items:center}
+.ring span{
+  width:84px;height:84px;border-radius:50%;background:var(--surface);
+  display:grid;place-items:center;font-size:18px;font-weight:750;font-variant-numeric:tabular-nums;
+}
+.keys{display:grid;gap:7px;font-size:13px;color:var(--muted)}
+.keys span{display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:2px;flex:none}
+.dot--brand{background:var(--brand)}
+.dot--green{background:var(--green)}
+
+/* полосы: языки и общий прогресс */
+.bar{display:block;flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.bar-row{display:flex;align-items:center;gap:11px;font-size:13px;color:var(--muted);margin-bottom:10px}
+.bar-row:last-child{margin-bottom:0}
+.bar-row__k{flex:none;min-width:104px}
+.bar-row__v{color:var(--ink);font-variant-numeric:tabular-nums;flex:none}
+.prog{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+}
+/* ============================================================
+   РЕГИСТРАЦИЯ В ПРОБНОЙ ВЕРСИИ
+   ============================================================ */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field--wide{grid-column:1/-1}
+.field label{font-size:13px;font-weight:650;color:var(--ink)}
+.field input,.field select{
+  font-family:inherit;font-size:15px;color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px;width:100%;transition:.16s;
+}
+.field input:focus,.field select:focus{border-color:var(--brand-light);outline:none}
+.field input::placeholder{color:var(--muted);opacity:.75}
+.field small{font-size:12px;color:var(--muted)}
+.field .err{font-size:12px;color:var(--kaspi);display:none}
+.field.is-bad input,.field.is-bad select{border-color:var(--kaspi)}
+.field.is-bad .err{display:block}
+.field.is-bad small{display:none}
+
+.reg__note{
+  grid-column:1/-1;font-size:12.5px;color:var(--muted);
+  background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px 15px;
+}
+.reg__actions{grid-column:1/-1;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.reg__link{
+  font-family:inherit;font-size:14px;font-weight:600;color:var(--brand-light);
+  background:none;border:0;cursor:pointer;padding:6px 2px;
+}
+.reg__sent{font-size:14px;color:var(--muted);margin-bottom:18px}
+.reg__sent b{color:var(--ink)}
+.code-input{letter-spacing:.5em;font-size:20px!important;font-weight:700;text-align:center}
+
+.done{text-align:center;padding:8px 0 4px}
+.done__ico{
+  width:56px;height:56px;border-radius:50%;background:var(--green-soft);color:var(--green);
+  display:grid;place-items:center;margin:0 auto 16px;
+}
+.done h3{font-size:19px;font-weight:750;margin-bottom:8px}
+.done p{color:var(--muted);font-size:15px;max-width:460px;margin:0 auto}
+.quota{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:22px auto 14px;
+}
+.quota i{width:34px;height:8px;border-radius:99px;background:var(--green)}
+.quota i.is-used{background:var(--line)}
+.quota__n{font-size:14px;font-weight:700;color:var(--ink);margin-left:6px;font-variant-numeric:tabular-nums}
+
+.prog__k{font-size:13.5px;color:var(--muted)}
+.prog__v{font-size:19px;font-weight:750;color:var(--green);font-variant-numeric:tabular-nums;margin-left:auto}
+.bar--wide{flex-basis:100%;height:10px}
+
+.checks{list-style:none;padding:0;margin:42px auto 0;max-width:760px;display:grid;gap:12px}
+.checks li{
+  display:flex;gap:12px;align-items:flex-start;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;font-size:15.5px;
+}
+.checks li::before{content:"✓";color:var(--green);font-weight:800;flex:none;font-size:16px}
+
+/* ============================================================
+   ПРОБНАЯ ВЕРСИЯ
+   ============================================================ */
+.trial{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:32px;margin-top:46px;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;
+}
+.trial__t{font-size:16px;font-weight:700;margin-bottom:16px}
+.trial ul{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+.trial li{display:flex;gap:10px;font-size:15px;color:var(--muted)}
+.trial li::before{content:"✓";color:var(--green);font-weight:800;flex:none}
+.trial__side{display:flex;flex-direction:column;justify-content:center;gap:18px}
+.trial__note{font-size:13.5px;color:var(--muted);background:var(--bg);border-radius:12px;padding:15px 17px}
 
 /* ============================================================
    ТАРИФЫ
@@ -278,11 +505,11 @@ p{margin:0}
   background:var(--green);color:#fff;font-size:11.5px;font-weight:700;
   padding:5px 13px;border-radius:99px;white-space:nowrap;
 }
-.plan h3{font-size:17px;font-weight:700}
-.plan__desc{color:var(--muted);font-size:13px;margin-top:6px;min-height:58px}
+.plan h3{font-size:17px;font-weight:700;min-height:41px}
+.plan__desc{color:var(--muted);font-size:13px;margin-top:6px;min-height:62px}
 .plan__price{font-size:30px;font-weight:750;margin:14px 0 4px;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
 .plan__price span{font-size:14px;font-weight:600;color:var(--muted)}
-.plan__hint{font-size:13px;color:var(--muted);min-height:38px}
+.plan__hint{font-size:13px;color:var(--muted);min-height:42px}
 .plan ul{list-style:none;padding:0;margin:20px 0;display:grid;gap:10px}
 .plan li{display:flex;gap:9px;font-size:14px;color:var(--muted)}
 .plan li::before{content:"✓";color:var(--green);font-weight:800;flex:none}
@@ -317,9 +544,10 @@ p{margin:0}
    ============================================================ */
 .cta{background:var(--navy);border-radius:20px;padding:62px 40px;text-align:center;color:#fff}
 .cta h2{font-size:clamp(26px,3.6vw,37px);font-weight:750}
-.cta p{margin:15px auto 30px;max-width:500px;color:#B9B6D8;font-size:17px}
+.cta p{margin:15px auto 30px;max-width:560px;color:#B9B6D8;font-size:17px}
 .cta .btn--primary{background:#fff;color:var(--navy)}
 .cta .btn--primary:hover{background:#E9E7FA}
+.cta__tag{margin-top:24px;font-size:14px;color:#8F8BC0}
 
 /* ============================================================
    ПОДВАЛ
@@ -337,20 +565,35 @@ p{margin:0}
   .app__body{grid-template-columns:1fr}
   .cards{grid-template-columns:1fr}
   .plans{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .steps{grid-template-columns:repeat(2,1fr)}
-  .nav,.lang{display:none}
+  .uses{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .step__arrow{display:none}
+  .trial{grid-template-columns:1fr;gap:24px}
+  .nav{display:none}
+  .lang{margin-left:auto}
 }
 @media (max-width:600px){
   .section{padding:64px 0}
   .wrap{padding:0 20px}
-  .plans,.steps{grid-template-columns:1fr}
-  .plan__desc,.plan__hint{min-height:0}
+  .plans{grid-template-columns:1fr}
+  .plan h3,.plan__desc,.plan__hint{min-height:0}
+  .nums{grid-template-columns:1fr}
+  .tcards,.sum,.form{grid-template-columns:1fr}
+  .modal{padding:0}
+  .modal__in{border-radius:0;min-height:100vh}
+  .modal__body{padding:18px}
+  .practice__box{padding:24px}
   .meta{grid-template-columns:repeat(2,1fr)}
+  .header__in{gap:10px}
+  .logo{font-size:16px}
   .header__cta .btn--outline{display:none}
+  .header__cta .btn--primary{padding:9px 13px}
+  .lang{padding:2px}
+  .lang button{padding:5px 9px;font-size:12px}
   .lbl-full{display:none}
   .lbl-short{display:inline}
   .cta{padding:46px 24px}
-  .strip__in{gap:16px;flex-direction:column;align-items:flex-start}
+  .trial{padding:24px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -360,124 +603,152 @@ p{margin:0}
 </head>
 <body>
 
+<!--
+  Куда ведут кнопки (стенд: https://smartcampus.test.wip.kz/)
+  Для боевого запуска заменить хост на https://smartcampus.kz/
+    «Войти»                          → /login
+    «Попробовать бесплатно»          → / (корень сам редиректит на /login)
+    «Зарегистрироваться»             → / — публичной страницы регистрации на сайте пока нет,
+                                          /register отдаёт 404. Когда появится — поменять здесь.
+    «Оплатить через Kaspi QR»        → / (оплата оформляется в личном кабинете)
+    «Публичная оферта», «Поддержка»  → / — точные адреса страниц уточнить.
+-->
+
 <!-- ===================== ШАПКА ===================== -->
 <header class="header">
   <div class="wrap header__in">
-    <a href="#" class="logo"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></a>
+    <a href="https://smartcampus.test.wip.kz/" class="logo"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></a>
     <nav class="nav">
-      <a href="#features">Возможности</a>
-      <a href="#how">Как это работает</a>
-      <a href="#plans">Тарифы</a>
-      <a href="#faq">Вопросы</a>
+      <a href="#features" data-i18n="nav.features">Возможности</a>
+      <a href="#how" data-i18n="nav.how">Как это работает</a>
+      <a href="#practice" data-i18n="prac.eyebrow">Лучшая практика</a>
+      <a href="#plans" data-i18n="nav.plans">Тарифы</a>
+      <a href="#faq" data-i18n="nav.faq">Вопросы</a>
     </nav>
-    <div class="lang">
-      <span class="is-active">Рус</span><span>Қаз</span><span>Eng</span>
+    <div class="lang" role="group" aria-label="Язык интерфейса">
+      <button type="button" data-lang="ru" aria-pressed="true"><span class="lbl-full">Рус</span><span class="lbl-short">RU</span></button>
+      <button type="button" data-lang="kk" aria-pressed="false"><span class="lbl-full">Қаз</span><span class="lbl-short">KZ</span></button>
+      <button type="button" data-lang="en" aria-pressed="false"><span class="lbl-full">Eng</span><span class="lbl-short">EN</span></button>
     </div>
     <div class="header__cta">
-      <a href="#" class="btn btn--outline btn--sm">Войти</a>
-      <a href="#plans" class="btn btn--primary btn--sm">
-        <span class="lbl-full">Попробовать бесплатно</span>
-        <span class="lbl-short">Начать</span>
+      <a href="https://smartcampus.test.wip.kz/login" class="btn btn--outline btn--sm" data-i18n="btn.login">Войти</a>
+      <a href="#trial" class="btn btn--primary btn--sm" data-reg>
+        <span class="lbl-full" data-i18n="btn.try">Попробовать бесплатно</span>
+        <span class="lbl-short" data-i18n="btn.tryShort">Начать</span>
       </a>
     </div>
   </div>
 </header>
 
-<!-- ===================== ГЛАВНЫЙ ЭКРАН ===================== -->
+<!-- ===================== БЛОК 1. ПЕРВЫЙ ЭКРАН ===================== -->
 <section class="hero">
   <div class="wrap hero__grid">
     <div>
-      <span class="chip"><span class="chip__dot"></span> Теперь и для индивидуальных учителей</span>
-      <h1>Транскрипт, речевая аналитика и разбор урока по критериям</h1>
-      <p class="hero__sub">
-        Расшифровываем запись урока и размечаем реплики — видно, что реально
-        происходило в классе. Раньше только через школу, теперь подписку можно
-        оформить на себя.
-      </p>
+      <span class="chip"><span class="chip__dot"></span> <span data-i18n="hero.chip">Провести следующий урок ещё лучше</span></span>
+      <h1 data-i18n="hero.h1">Разберите свой урок с помощью Smart Campus и получите рекомендации для следующего занятия</h1>
+      <p class="hero__sub" data-i18n="hero.sub">Запишите или загрузите урок. Smart Class автоматически подготовит транскрипт, проанализирует урок по критериям современного урока и покажет, что уже получается хорошо, а что можно улучшить.</p>
       <div class="hero__actions">
-        <a href="#plans" class="btn btn--primary">Попробовать бесплатно</a>
-        <a href="#how" class="btn btn--outline">Как это работает</a>
+        <a href="#trial" class="btn btn--primary" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
+        <a href="#how" class="btn btn--outline" data-i18n="nav.how">Как это работает</a>
       </div>
-      <p class="hero__note">3 анализа и 30 дней бесплатно · карта не нужна · оплата через Kaspi QR</p>
+      <p class="hero__note" data-i18n="hero.note">3 бесплатных анализа уроков</p>
     </div>
 
     <!-- Макет экрана «Данные урока» из личного кабинета -->
     <div class="app">
       <div class="app__bar">
         <div>
-          <div class="app__title">Русский язык — Урок №12</div>
-          <div class="app__desc">Транскрипт, речевая аналитика и разбор урока по критериям</div>
+          <div class="app__title" data-i18n="app.title">Русский язык — Урок №12</div>
+          <div class="app__desc" data-i18n="app.desc">Транскрипт, анализ взаимодействия и разбор по критериям</div>
         </div>
-        <span class="pill">готово</span>
+        <span class="pill" data-i18n="app.status">готово</span>
       </div>
 
       <div class="meta">
-        <div><div class="meta__k">Предмет</div><div class="meta__v">Русский язык</div></div>
-        <div><div class="meta__k">Класс</div><div class="meta__v">6Б</div></div>
-        <div><div class="meta__k">Дата</div><div class="meta__v">05.08.2026</div></div>
-        <div><div class="meta__k">Время</div><div class="meta__v">09:00–10:00</div></div>
+        <div><div class="meta__k" data-i18n="app.subject">Предмет</div><div class="meta__v" data-i18n="app.subjectV">Русский язык</div></div>
+        <div><div class="meta__k" data-i18n="app.class">Класс</div><div class="meta__v" data-i18n="app.classV">6Б</div></div>
+        <div><div class="meta__k" data-i18n="app.date">Дата</div><div class="meta__v">05.08.2026</div></div>
+        <div><div class="meta__k" data-i18n="app.time">Время</div><div class="meta__v">09:00–10:00</div></div>
       </div>
 
       <div class="tabs">
-        <span class="tab is-active">Транскрипт и медиа</span>
-        <span class="tab">Оценка урока</span>
-        <span class="tab">Рефлексия</span>
+        <span class="tab is-active" data-i18n="app.tab1">Транскрипт и медиа</span>
+        <span class="tab" data-i18n="app.tab2">Оценка урока</span>
+        <span class="tab" data-i18n="app.tab3">Рефлексия</span>
       </div>
 
       <div class="app__body">
         <div>
           <div class="line">
-            <span class="ava">У</span>
+            <span class="ava" data-i18n="app.avaT">У</span>
             <div class="line__body">
-              <div class="line__head"><b>Учитель</b> <time>02:06</time> · Вопрос</div>
-              <div class="bubble">Ребята, запишите тему сегодняшнего урока. Мир и проблемы двадцать первого века. <em>Согласны?</em></div>
+              <div class="line__head"><b data-i18n="app.roleT">Учитель</b> <time>02:06</time> <span data-i18n="app.kindQ">· Вопрос</span></div>
+              <div class="bubble" data-i18n="app.msg1">Ребята, запишите тему сегодняшнего урока. Мир и проблемы двадцать первого века.</div>
             </div>
           </div>
           <div class="line">
-            <span class="ava">У2</span>
+            <span class="ava" data-i18n="app.avaS">У2</span>
             <div class="line__body">
-              <div class="line__head"><b>Ученик 2</b> <time>02:33</time> · Ответ ученика</div>
-              <div class="bubble bubble--answer">Сейчас очень много болезней.</div>
+              <div class="line__head"><b data-i18n="app.roleS">Ученик 2</b> <time>02:33</time> <span data-i18n="app.kindA">· Ответ ученика</span></div>
+              <div class="bubble bubble--answer" data-i18n="app.msg2">Сейчас очень много болезней.</div>
             </div>
           </div>
           <div class="line">
-            <span class="ava">У</span>
+            <span class="ava" data-i18n="app.avaT">У</span>
             <div class="line__body">
-              <div class="line__head"><b>Учитель</b> <time>02:38</time> · Похвала</div>
-              <div class="bubble">Все верно. <em>С чем это связано?</em></div>
+              <div class="line__head"><b data-i18n="app.roleT">Учитель</b> <time>02:38</time> <span data-i18n="app.kindP">· Похвала</span></div>
+              <div class="bubble" data-i18n="app.msg3">Всё верно. С чем это связано?</div>
             </div>
           </div>
         </div>
 
         <div class="stat">
-          <div class="stat__t">Речевая аналитика</div>
+          <div class="stat__t" data-i18n="app.statT">Анализ взаимодействия</div>
           <div class="donut"><div class="donut__in">64%</div></div>
-          <div class="stat__note">Доля речи учителя от общего времени урока</div>
-          <div class="stat__row"><span>Реплик в транскрипте</span><b>172</b></div>
-          <div class="stat__row"><span>Открытых вопросов</span><b>17</b></div>
+          <div class="stat__note" data-i18n="app.statNote">Доля речи учителя от общего времени урока</div>
+          <div class="stat__row"><span data-i18n="app.statR1">Реплик в транскрипте</span><b>172</b></div>
+          <div class="stat__row"><span data-i18n="app.statR2">Открытых вопросов</span><b>17</b></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== ПОЛОСА ПРЕИМУЩЕСТВ ===================== -->
-<div class="strip">
-  <div class="wrap strip__in">
-    <div class="strip__item"><b>2 минуты</b> на регистрацию</div>
-    <div class="strip__item"><b>Только вы</b> видите свои уроки</div>
-    <div class="strip__item"><b>Сразу</b> доступ после оплаты</div>
-    <div class="strip__item"><b>Kaspi QR</b> — привычная оплата</div>
-  </div>
-</div>
+<!-- ===================== БЛОК 2. УЖЕ ПРОВЕРЕНО НА ПРАКТИКЕ ===================== -->
+<section class="numbers">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="nums.eyebrow">Апробация</div>
+      <h2 class="h2" data-i18n="nums.h2">Smart Class уже помогает педагогам анализировать свои уроки</h2>
+      <p class="numbers__lead" data-i18n="nums.lead">За время апробации платформы:</p>
+    </div>
 
-<!-- ===================== ВОЗМОЖНОСТИ ===================== -->
+    <div class="nums">
+      <div class="num">
+        <div class="num__v">1000+</div>
+        <div class="num__k" data-i18n="nums.k1">проанализированных уроков</div>
+      </div>
+      <div class="num">
+        <div class="num__v">150+</div>
+        <div class="num__k" data-i18n="nums.k2">педагогов приняли участие</div>
+      </div>
+      <div class="num">
+        <div class="num__v">10</div>
+        <div class="num__k" data-i18n="nums.k3">школ используют Smart Class</div>
+      </div>
+    </div>
+
+    <p class="numbers__note" data-i18n="nums.note">Система прошла апробацию на реальных уроках и помогает педагогам получать объективную обратную связь после каждого занятия.</p>
+  </div>
+</section>
+
+<!-- ===================== БЛОК 3. ПОСЛЕ АНАЛИЗА УРОКА ВЫ ПОЛУЧИТЕ ===================== -->
 <section class="section" id="features">
   <div class="wrap">
     <div class="center">
-      <div class="eyebrow">Возможности</div>
-      <h2 class="h2">Что вы получаете после загрузки урока</h2>
-      <p class="lead">Не оценка «сверху», а рабочий инструмент: транскрипт, цифры и понятные шаги на следующий урок.</p>
+      <div class="eyebrow" data-i18n="feat.eyebrow">Возможности</div>
+      <h2 class="h2" data-i18n="feat.h2">После анализа урока вы получите</h2>
+      <p class="lead" data-i18n="feat.lead">Каждый отчёт помогает посмотреть на урок со стороны и понять, какие решения стоит сохранить, а что можно изменить уже на следующем занятии.</p>
     </div>
 
     <div class="cards">
@@ -485,76 +756,341 @@ p{margin:0}
         <div class="card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg>
         </div>
-        <h3>Полный транскрипт</h3>
-        <p>Запись урока превращается в текст с разделением на реплики учителя и учеников, с таймкодами.</p>
+        <h3 data-i18n="feat.c1t">Полная картина урока</h3>
+        <p data-i18n="feat.c1d">Транскрипт с разделением реплик и таймкодами.</p>
       </div>
       <div class="card">
         <div class="card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M7 16V9M12 16V4M17 16v-5"/></svg>
         </div>
-        <h3>Речевая аналитика</h3>
-        <p>Доля речи учителя, число открытых вопросов, типы реплик — вопрос, похвала, ответ ученика.</p>
-      </div>
-      <div class="card">
-        <div class="card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M10 17h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.3.3.5.7.5 1.1h6c0-.4.2-.8.5-1.1A6 6 0 0 0 12 3z"/></svg>
-        </div>
-        <h3>Персональные рекомендации</h3>
-        <p>Конкретные советы под ваш стиль преподавания — что стоит попробовать на ближайшем уроке.</p>
+        <h3 data-i18n="feat.c2t">Анализ взаимодействия</h3>
+        <p data-i18n="feat.c2d">Кто говорил больше, какие вопросы задавались, насколько активно участвовали ученики.</p>
       </div>
       <div class="card">
         <div class="card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
         </div>
-        <h3>Оценка по критериям</h3>
-        <p>Разбор урока по методическим критериям — видно, что удалось, а над чем стоит поработать.</p>
+        <h3 data-i18n="feat.c3t">Сильные стороны урока</h3>
+        <p data-i18n="feat.c3d">Критерии, которые уже реализованы успешно.</p>
+      </div>
+      <div class="card">
+        <div class="card__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M10 17h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.3.3.5.7.5 1.1h6c0-.4.2-.8.5-1.1A6 6 0 0 0 12 3z"/></svg>
+        </div>
+        <h3 data-i18n="feat.c4t">Рекомендации</h3>
+        <p data-i18n="feat.c4d">Конкретные предложения по улучшению следующего урока.</p>
       </div>
       <div class="card">
         <div class="card__icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
         </div>
-        <h3>История и динамика</h3>
-        <p>Все уроки хранятся в кабинете: сравнивайте отчёты между собой и отслеживайте рост за месяц.</p>
+        <h3 data-i18n="feat.c5t">История развития</h3>
+        <p data-i18n="feat.c5d">Сравнение результатов разных уроков и отслеживание собственного прогресса.</p>
       </div>
       <div class="card">
         <div class="card__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8"/><path d="M5 8V4h3M5 12V8M5 16v-4M5 20v-4h3"/><path d="M11 10h5M11 14h4"/></svg>
         </div>
-        <h3>Приватность</h3>
-        <p>Уроки по личной подписке не уходят в школу и не попадают к администрации без вашего решения.</p>
+        <h3 data-i18n="feat.c6t">Сравнение урока с КСП</h3>
+        <p data-i18n="feat.c6d">Насколько проведённый урок совпал с краткосрочным планом.</p>
+      </div>
+    </div>
+
+    <div class="center-cta">
+      <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline">
+        <span data-i18n="btn.allFeatures">Все возможности в системе</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== БЛОК 4. ДЛЯ ЧЕГО ИСПОЛЬЗОВАТЬ ===================== -->
+<section class="section section--plain">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="uses.eyebrow">Применение</div>
+      <h2 class="h2" data-i18n="uses.h2">Для чего использовать Smart Class</h2>
+    </div>
+
+    <div class="uses">
+      <div class="use">
+        <div class="use__n">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </div>
+        <div>
+          <h3 data-i18n="uses.t1">Рефлексия уроков</h3>
+          <p data-i18n="uses.d1">Получайте объективную обратную связь после каждого занятия.</p>
+        </div>
+      </div>
+      <div class="use">
+        <div class="use__n">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6M9 14l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <h3 data-i18n="uses.t2">Подготовка к аттестации</h3>
+          <p data-i18n="uses.d2">Smart Class анализирует урок по критериям, соответствующим Листу наблюдения урока (Приказ МП РК №73). Это позволяет использовать результаты анализа для самооценки, подготовки к аттестации и планомерного развития профессиональных компетенций.</p>
+        </div>
+      </div>
+      <div class="use">
+        <div class="use__n">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+        </div>
+        <div>
+          <h3 data-i18n="uses.t3">Повышение педагогического мастерства</h3>
+          <p data-i18n="uses.d3">Следите за изменением своих результатов и совершенствуйте урок от занятия к занятию.</p>
+        </div>
+      </div>
+      <div class="use">
+        <div class="use__n">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        </div>
+        <div>
+          <h3 data-i18n="uses.t4">Работа над ошибками</h3>
+          <p data-i18n="uses.d4">Получайте рекомендации и применяйте их уже на следующем уроке.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== КАК ЭТО РАБОТАЕТ ===================== -->
-<section class="section section--plain" id="how">
+<!-- ===================== БЛОК 5. КАК ЭТО РАБОТАЕТ ===================== -->
+<section class="section" id="how">
   <div class="wrap">
     <div class="center">
-      <div class="eyebrow">Как это работает</div>
-      <h2 class="h2">От регистрации до первого отчёта — один вечер</h2>
+      <div class="eyebrow" data-i18n="how.eyebrow">Три шага</div>
+      <h2 class="h2" data-i18n="how.h2">Как это работает</h2>
     </div>
 
     <div class="steps">
       <div class="step">
         <div class="step__num">1</div>
-        <h3>Регистрация</h3>
-        <p>Создайте личный кабинет на почту. Договор со школой и участие менеджера не нужны.</p>
+        <h3 data-i18n="how.t1">Зарегистрируйтесь</h3>
+        <p data-i18n="how.d1">Создайте бесплатный аккаунт.</p>
+        <div class="step__arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
       </div>
       <div class="step">
         <div class="step__num">2</div>
-        <h3>Пробный период</h3>
-        <p>Сразу активируются 3 бесплатных анализа на 30 дней. Оплата на этом шаге не требуется.</p>
+        <h3 data-i18n="how.t2">Запишите или загрузите урок</h3>
+        <p data-i18n="how.d2">Используйте запись с телефона или другого устройства.</p>
+        <div class="step__arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
       </div>
       <div class="step">
         <div class="step__num">3</div>
-        <h3>Загрузка урока</h3>
-        <p>Загружаете запись — транскрипт, аналитика и разбор по критериям появляются в кабинете.</p>
+        <h3 data-i18n="how.t3">Получите анализ</h3>
+        <p data-i18n="how.d3">Через несколько минут система сформирует полный отчёт и рекомендации.</p>
       </div>
-      <div class="step">
-        <div class="step__num">4</div>
-        <h3>Подписка</h3>
-        <p>Понравилось — выбираете тариф и платите через Kaspi QR. Доступ открывается автоматически.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ЛУЧШАЯ ПРАКТИКА ===================== -->
+<section class="section" id="practice">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="prac.eyebrow">Лучшая практика</div>
+      <h2 class="h2" data-i18n="prac.h2">Лучшие уроки педагогов</h2>
+      <p class="lead" data-i18n="prac.lead">Посмотрите, как выглядит разбор сильного урока: короткий фрагмент транскрипта, итоги анализа и оценка по критериям.</p>
+    </div>
+
+    <div class="practice__box">
+      <div class="practice__ava"><span>РХ</span><span>ДТ</span></div>
+      <p class="lead" style="margin:0 auto 22px" data-i18n="prac.boxText">Два педагога — участника апробации: урок географии на казахском языке и урок русского языка. Выберите педагога, чтобы открыть разбор.</p>
+      <button type="button" class="btn btn--primary" id="practice-open" data-i18n="prac.open">Смотреть лучшие практики</button>
+    </div>
+  </div>
+</section>
+
+<!-- Модальное окно: педагоги → уроки → разбор урока -->
+<div class="modal" id="practice-modal" hidden role="dialog" aria-modal="true" aria-labelledby="practice-title">
+  <div class="modal__in">
+    <div class="modal__bar">
+      <button type="button" class="modal__btn" id="practice-back" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        <span data-i18n="prac.back">Назад</span>
+      </button>
+      <div class="modal__title" id="practice-title">Лучшая практика</div>
+      <button type="button" class="modal__btn" id="practice-close">
+        <span data-i18n="prac.close">Закрыть</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal__body" id="practice-body"></div>
+  </div>
+</div>
+
+<!-- Регистрация в пробной версии: анкета → код на телефон → доступ -->
+<div class="modal" id="reg-modal" hidden role="dialog" aria-modal="true" aria-labelledby="reg-title">
+  <div class="modal__in">
+    <div class="modal__bar">
+      <div class="modal__title" id="reg-title" data-i18n="reg.title">Регистрация в пробной версии</div>
+      <button type="button" class="modal__btn" id="reg-close">
+        <span data-i18n="prac.close">Закрыть</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="modal__body">
+      <!-- Шаг 1. Анкета -->
+      <form id="reg-step1" novalidate>
+        <p class="lead" style="margin:0 0 22px;font-size:15px" data-i18n="reg.sub">Заполните данные — доступ откроется сразу после подтверждения номера телефона.</p>
+
+        <div class="form">
+          <div class="field field--wide" data-for="fio">
+            <label for="f-fio" data-i18n="reg.fio">ФИО</label>
+            <input id="f-fio" name="fio" type="text" autocomplete="name" placeholder="Иванова Айгуль Серикқызы">
+            <span class="err" data-i18n="reg.errFio">Укажите фамилию, имя и отчество</span>
+          </div>
+
+          <div class="field" data-for="iin">
+            <label for="f-iin" data-i18n="reg.iin">ИИН</label>
+            <input id="f-iin" name="iin" type="text" inputmode="numeric" maxlength="12" placeholder="12 цифр">
+            <small data-i18n="reg.iinHint">12 цифр, как в удостоверении личности</small>
+            <span class="err" data-i18n="reg.errIin">Проверьте ИИН — 12 цифр, контрольный разряд не сходится</span>
+          </div>
+
+          <div class="field" data-for="phone">
+            <label for="f-phone" data-i18n="reg.phone">Номер телефона</label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7 700 000 00 00">
+            <small data-i18n="reg.phoneHint">Это ваш логин. На него придёт код для входа.</small>
+            <span class="err" data-i18n="reg.errPhone">Введите номер в формате +7 7XX XXX XX XX</span>
+          </div>
+
+          <div class="field" data-for="email">
+            <label for="f-email" data-i18n="reg.email">E-mail</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" placeholder="teacher@mail.kz">
+            <span class="err" data-i18n="reg.errEmail">Проверьте адрес почты</span>
+          </div>
+
+          <div class="field" data-for="city">
+            <label for="f-city" data-i18n="reg.city">Город</label>
+            <select id="f-city" name="city"></select>
+            <span class="err" data-i18n="reg.errCity">Выберите город</span>
+          </div>
+
+          <div class="field" data-for="user">
+            <label for="f-user" data-i18n="reg.user">Пользователь</label>
+            <select id="f-user" name="user"></select>
+            <span class="err" data-i18n="reg.errUser">Выберите тип пользователя</span>
+          </div>
+
+          <div class="field" data-for="subject">
+            <label for="f-subject" data-i18n="reg.subject">Учитель предмета</label>
+            <input id="f-subject" name="subject" type="text" placeholder="География">
+            <span class="err" data-i18n="reg.errSubject">Укажите предмет</span>
+          </div>
+
+          <div class="field" data-for="exp">
+            <label for="f-exp" data-i18n="reg.exp">Стаж, лет</label>
+            <input id="f-exp" name="exp" type="text" inputmode="numeric" maxlength="2" placeholder="12">
+            <span class="err" data-i18n="reg.errExp">Стаж — число от 0 до 60</span>
+          </div>
+
+          <div class="field" data-for="cat">
+            <label for="f-cat" data-i18n="reg.cat">Категория</label>
+            <select id="f-cat" name="cat">
+              <option value="" data-i18n="reg.catPick">Выберите категорию</option>
+              <option value="none" data-i18n="reg.cat0">Без категории</option>
+              <option value="moderator" data-i18n="reg.cat1">Педагог-модератор</option>
+              <option value="expert" data-i18n="reg.cat2">Педагог-эксперт</option>
+              <option value="researcher" data-i18n="reg.cat3">Педагог-исследователь</option>
+              <option value="master" data-i18n="reg.cat4">Педагог-мастер</option>
+            </select>
+            <span class="err" data-i18n="reg.errCat">Выберите категорию</span>
+          </div>
+
+          <p class="reg__note" data-i18n="reg.demoNote">Форма на лендинге — прототип: данные никуда не отправляются. Боевая регистрация выполняется в системе Smart Campus.</p>
+
+          <div class="reg__actions">
+            <button type="submit" class="btn btn--primary" data-i18n="reg.getCode">Получить код</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Шаг 2. Код из SMS -->
+      <form id="reg-step2" hidden novalidate>
+        <p class="reg__sent"><span data-i18n="reg.codeSent">Код отправлен на номер</span> <b id="reg-phone-echo"></b></p>
+        <div class="form">
+          <div class="field field--wide" data-for="code" style="max-width:260px">
+            <label for="f-code" data-i18n="reg.code">Код из SMS</label>
+            <input id="f-code" name="code" class="code-input" type="text" inputmode="numeric" maxlength="4" placeholder="0000">
+            <span class="err" data-i18n="reg.errCode">Введите 4 цифры из SMS</span>
+          </div>
+          <div class="reg__actions">
+            <button type="submit" class="btn btn--primary" data-i18n="reg.confirm">Подтвердить</button>
+            <button type="button" class="reg__link" id="reg-edit" data-i18n="reg.backEdit">Изменить данные</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Шаг 3. Доступ открыт -->
+      <div id="reg-step3" hidden>
+        <div class="done">
+          <div class="done__ico">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <h3 data-i18n="reg.doneTitle">Пробный доступ открыт</h3>
+          <p data-i18n="reg.doneText">Вам доступны 3 анализа уроков в течение 30 дней. Логин — ваш номер телефона.</p>
+
+          <div class="quota">
+            <i></i><i></i><i></i>
+            <span class="quota__n" id="reg-quota">3 / 3</span>
+          </div>
+          <p style="font-size:13.5px" data-i18n="reg.quotaAfter">Когда 3 анализа закончатся, загрузка новых уроков закрывается. Все полученные отчёты и рекомендации остаются доступны.</p>
+
+          <div class="center-cta">
+            <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary" data-i18n="reg.go">Перейти в систему</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== БЛОК 7. ПОЧЕМУ ВЫБИРАЮТ ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="why.eyebrow">Преимущества</div>
+      <h2 class="h2" data-i18n="why.h2">Почему педагоги выбирают Smart Class</h2>
+    </div>
+
+    <ul class="checks">
+      <li data-i18n="why.1">Объективная обратная связь после каждого урока.</li>
+      <li data-i18n="why.2">Анализ по критериям современного урока.</li>
+      <li data-i18n="why.3">Возможность отслеживать профессиональный прогресс.</li>
+      <li data-i18n="why.4">История всех уроков в одном месте.</li>
+      <li data-i18n="why.5">Рекомендации, которые можно применять сразу.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== БЛОК 8. ПРОБНАЯ ВЕРСИЯ ===================== -->
+<section class="section section--plain" id="trial">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="trial.eyebrow">Пробный период</div>
+      <h2 class="h2" data-i18n="trial.h2">Попробуйте бесплатно</h2>
+    </div>
+
+    <div class="trial">
+      <div>
+        <div class="trial__t" data-i18n="trial.listT">Что входит в пробную версию</div>
+        <ul>
+          <li data-i18n="trial.i1">3 бесплатных анализа уроков</li>
+          <li data-i18n="trial.i2">Полный транскрипт</li>
+          <li data-i18n="trial.i3">Анализ по критериям современного урока</li>
+          <li data-i18n="trial.i4">Персональные рекомендации</li>
+          <li data-i18n="trial.i5">История всех проанализированных уроков</li>
+        </ul>
+      </div>
+      <div class="trial__side">
+        <p class="trial__note" data-i18n="trial.note">После использования трёх анализов новые уроки анализировать нельзя, но все ранее полученные отчёты и рекомендации останутся доступны.</p>
+        <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary btn--wide" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
       </div>
     </div>
   </div>
@@ -564,124 +1100,130 @@ p{margin:0}
 <section class="section" id="plans">
   <div class="wrap">
     <div class="center">
-      <div class="eyebrow">Тарифы</div>
-      <h2 class="h2">Начните бесплатно, платите только если подошло</h2>
-      <p class="lead">Один учитель — одна подписка. Без скрытых платежей и автосписаний.</p>
+      <div class="eyebrow" data-i18n="plans.eyebrow">Тарифы</div>
+      <h2 class="h2" data-i18n="plans.h2">Начните бесплатно, платите только если подошло</h2>
+      <p class="lead" data-i18n="plans.lead">Один учитель — одна подписка. Без скрытых платежей и автосписаний.</p>
     </div>
 
     <div class="plans">
       <!-- Пробный -->
       <div class="plan">
-        <h3>Пробный</h3>
-        <p class="plan__desc">Чтобы спокойно проверить сервис на своих уроках.</p>
-        <div class="plan__price">Бесплатно</div>
-        <div class="plan__hint">30 дней с момента регистрации</div>
+        <h3 data-i18n="plan.free.t">Пробный</h3>
+        <p class="plan__desc" data-i18n="plan.free.d">Чтобы спокойно проверить сервис на своих уроках.</p>
+        <div class="plan__price" data-i18n="plan.free.price">Бесплатно</div>
+        <div class="plan__hint" data-i18n="plan.free.hint">30 дней с момента регистрации</div>
         <ul>
-          <li>3 анализа уроков</li>
-          <li>Полный отчёт по каждому уроку</li>
-          <li>Личный кабинет и история</li>
-          <li>Оплата не требуется</li>
+          <li data-i18n="plan.free.f1">3 анализа уроков</li>
+          <li data-i18n="plan.free.f2">Полный отчёт по каждому уроку</li>
+          <li data-i18n="plan.free.f3">Личный кабинет и история</li>
+          <li data-i18n="plan.free.f4">Оплата не требуется</li>
         </ul>
-        <a href="#" class="btn btn--outline btn--wide">Зарегистрироваться</a>
+        <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline btn--wide" data-i18n="btn.signup" data-reg>Зарегистрироваться</a>
       </div>
 
       <!-- Месячный, 30 уроков -->
       <div class="plan">
-        <h3>Месячный · 30 уроков</h3>
-        <p class="plan__desc">Если ведёте один-два класса и разбираете не каждый урок.</p>
-        <div class="plan__price">9 900 <span>₸ / мес</span></div>
-        <div class="plan__hint">330 ₸ за урок. Разовый платёж, автосписаний нет</div>
+        <h3 data-i18n="plan.m30.t">Месячный · 30 уроков</h3>
+        <p class="plan__desc" data-i18n="plan.m30.d">Если ведёте один-два класса и разбираете не каждый урок.</p>
+        <div class="plan__price">9 900 <span data-i18n="plan.perMonth">₸ / мес</span></div>
+        <div class="plan__hint" data-i18n="plan.m30.hint">330 ₸ за урок. Разовый платёж, автосписаний нет</div>
         <ul>
-          <li>Запись и анализ 30 уроков</li>
-          <li>Полный отчёт по каждому уроку</li>
-          <li>Динамика и сравнение уроков</li>
-          <li>Продление в один клик</li>
+          <li data-i18n="plan.m30.f1">Запись и анализ 30 уроков</li>
+          <li data-i18n="plan.f.report">Полный отчёт по каждому уроку</li>
+          <li data-i18n="plan.f.dynamics">Динамика и сравнение уроков</li>
+          <li data-i18n="plan.f.renew">Продление в один клик</li>
         </ul>
-        <a href="#" class="btn btn--outline btn--wide">Оплатить через Kaspi QR</a>
+        <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
       </div>
 
       <!-- Месячный, 50 уроков -->
       <div class="plan">
-        <h3>Месячный · 50 уроков</h3>
-        <p class="plan__desc">Если разбираете уроки регулярно и ведёте несколько классов.</p>
-        <div class="plan__price">17 000 <span>₸ / мес</span></div>
-        <div class="plan__hint">340 ₸ за урок. Разовый платёж, автосписаний нет</div>
+        <h3 data-i18n="plan.m50.t">Месячный · 50 уроков</h3>
+        <p class="plan__desc" data-i18n="plan.m50.d">Если разбираете уроки регулярно и ведёте несколько классов.</p>
+        <div class="plan__price">17 000 <span data-i18n="plan.perMonth">₸ / мес</span></div>
+        <div class="plan__hint" data-i18n="plan.m50.hint">340 ₸ за урок. Разовый платёж, автосписаний нет</div>
         <ul>
-          <li>Запись и анализ 50 уроков</li>
-          <li>Полный отчёт по каждому уроку</li>
-          <li>Динамика и сравнение уроков</li>
-          <li>Продление в один клик</li>
+          <li data-i18n="plan.m50.f1">Запись и анализ 50 уроков</li>
+          <li data-i18n="plan.f.report">Полный отчёт по каждому уроку</li>
+          <li data-i18n="plan.f.dynamics">Динамика и сравнение уроков</li>
+          <li data-i18n="plan.f.renew">Продление в один клик</li>
         </ul>
-        <a href="#" class="btn btn--outline btn--wide">Оплатить через Kaspi QR</a>
+        <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
       </div>
 
-      <!-- Полугодовой (рекомендуемый) -->
+      <!-- Полугодовой, 50 уроков (рекомендуемый) -->
       <div class="plan plan--featured">
-        <span class="plan__badge">Выгоднее на 18%</span>
-        <h3>Полугодовой</h3>
-        <p class="plan__desc">Для тех, кто хочет видеть рост за учебное полугодие.</p>
-        <div class="plan__price">84 000 <span>₸ / 6 мес</span></div>
-        <div class="plan__hint">14 000 ₸ в месяц вместо 17 000</div>
+        <span class="plan__badge" data-i18n="plan.half.badge">Выгоднее на 18%</span>
+        <h3 data-i18n="plan.half.t">Полугодовой · 50 уроков</h3>
+        <p class="plan__desc" data-i18n="plan.half.d">Для тех, кто хочет видеть рост за учебное полугодие.</p>
+        <div class="plan__price">84 000 <span data-i18n="plan.perHalf">₸ / 6 мес</span></div>
+        <div class="plan__hint" data-i18n="plan.half.hint">14 000 ₸ в месяц вместо 17 000</div>
         <ul>
-          <li>Полный доступ на 6 месяцев</li>
-          <li>Анализ уроков без ограничения по числу</li>
-          <li>Динамика и сравнение уроков</li>
-          <li>Приоритетная поддержка</li>
+          <li data-i18n="plan.half.f1">Запись и анализ 50 уроков в месяц</li>
+          <li data-i18n="plan.half.f2">Полный доступ на 6 месяцев</li>
+          <li data-i18n="plan.half.f3">Аудиоустройство для записи — бесплатно</li>
+          <li data-i18n="plan.f.dynamics">Динамика и сравнение уроков</li>
+          <li data-i18n="plan.half.f5">Приоритетная поддержка</li>
         </ul>
-        <a href="#" class="btn btn--primary btn--wide">Оплатить через Kaspi QR</a>
+        <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
       </div>
     </div>
 
     <div class="plans__note">
       <span class="kaspi-chip">Kaspi QR</span>
-      <span>Оплата разовая — деньги не списываются автоматически. Подписка активируется сразу после подтверждения платежа.</span>
+      <span data-i18n="plans.note">Оплата разовая — деньги не списываются автоматически. Подписка активируется сразу после подтверждения платежа.</span>
     </div>
   </div>
 </section>
 
-<!-- ===================== FAQ ===================== -->
+<!-- ===================== БЛОК 9. ЧАСТЫЕ ВОПРОСЫ ===================== -->
 <section class="section section--plain" id="faq">
   <div class="wrap">
     <div class="center">
-      <div class="eyebrow">Вопросы</div>
-      <h2 class="h2">Частые вопросы</h2>
+      <div class="eyebrow" data-i18n="faq.eyebrow">Вопросы</div>
+      <h2 class="h2" data-i18n="faq.h2">Частые вопросы</h2>
     </div>
 
     <div class="faq">
       <details open>
-        <summary>Что входит в бесплатный пробный период?</summary>
-        <p>3 полных анализа уроков в течение 30 дней после регистрации. Отчёты — такие же, как на платном тарифе. Доступ закрывается, когда закончатся анализы или 30 дней — что наступит раньше.</p>
+        <summary><span data-i18n="faq.q1">Можно ли использовать запись с телефона?</span></summary>
+        <p data-i18n="faq.a1">Да. Достаточно загрузить аудиозапись урока.</p>
       </details>
       <details>
-        <summary>Нужен ли договор со школой?</summary>
-        <p>Нет. Подписка оформляется на вас как на физическое лицо: регистрируетесь сами, оплачиваете сами, доступ ваш личный.</p>
+        <summary><span data-i18n="faq.q2">Кто увидит мои уроки?</span></summary>
+        <p data-i18n="faq.a2">Доступ к вашим урокам есть только у вас.</p>
       </details>
       <details>
-        <summary>Как проходит оплата?</summary>
-        <p>Вы выбираете тариф, сканируете Kaspi QR в приложении Kaspi.kz и подтверждаете платёж. После подтверждения подписка активируется автоматически — ждать менеджера не нужно.</p>
+        <summary><span data-i18n="faq.q3">Сколько занимает анализ?</span></summary>
+        <p data-i18n="faq.a3">Обычно несколько минут после загрузки записи.</p>
       </details>
       <details>
-        <summary>Подписка продлевается сама?</summary>
-        <p>Нет. Это разовый платёж — автосписаний нет. Когда срок подходит к концу, вы продлеваете подписку в один клик из личного кабинета.</p>
+        <summary><span data-i18n="faq.q4">Что будет после окончания пробного периода?</span></summary>
+        <p data-i18n="faq.a4">Вы сохраните доступ ко всем ранее проанализированным урокам, но не сможете анализировать новые записи без подключения тарифа.</p>
       </details>
       <details>
-        <summary>Что делать, если оплата не прошла?</summary>
-        <p>Вы вернётесь на страницу с понятным статусом и кнопкой «Повторить оплату». Доступ при неуспешном платеже не выдаётся, деньги не списываются.</p>
+        <summary><span data-i18n="faq.q5">Можно ли пользоваться сервисом без школы?</span></summary>
+        <p data-i18n="faq.a5">Да. Достаточно зарегистрироваться и начать использовать Smart Class самостоятельно.</p>
       </details>
       <details>
-        <summary>Кто видит мои уроки?</summary>
-        <p>Только вы. Записи и отчёты по личной подписке не передаются школе или администрации — доступ к ним открываете вы сами.</p>
+        <summary><span data-i18n="faq.q6">Как проходит оплата?</span></summary>
+        <p data-i18n="faq.a6">Вы выбираете тариф, сканируете Kaspi QR в приложении Kaspi.kz и подтверждаете платёж. После подтверждения подписка активируется автоматически.</p>
+      </details>
+      <details>
+        <summary><span data-i18n="faq.q7">Подписка продлевается сама?</span></summary>
+        <p data-i18n="faq.a7">Нет. Это разовый платёж — автосписаний нет. Когда срок подходит к концу, вы продлеваете подписку в один клик из личного кабинета.</p>
       </details>
     </div>
   </div>
 </section>
 
-<!-- ===================== ФИНАЛЬНЫЙ CTA ===================== -->
+<!-- ===================== ФИНАЛЬНЫЙ ЭКРАН ===================== -->
 <section class="wrap" style="padding-top:24px">
   <div class="cta">
-    <h2>Первый разбор урока — уже сегодня</h2>
-    <p>Зарегистрируйтесь и получите 3 бесплатных анализа на 30 дней. Без карты и без обязательств.</p>
-    <a href="#" class="btn btn--primary">Попробовать бесплатно</a>
+    <h2 data-i18n="final.h2">Начните с первого урока</h2>
+    <p data-i18n="final.p">Попробуйте Smart Class бесплатно, получите три анализа уроков и оцените, как объективная обратная связь помогает совершенствовать преподавание.</p>
+    <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
+    <p class="cta__tag" data-i18n="final.tag">Не просто анализировать прошедший урок, а провести следующий ещё лучше.</p>
   </div>
 </section>
 
@@ -690,14 +1232,1036 @@ p{margin:0}
   <div class="wrap footer__in">
     <div class="logo" style="font-size:16px"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></div>
     <div class="footer__links">
-      <a href="#plans">Тарифы</a>
-      <a href="#faq">Вопросы</a>
-      <a href="#">Публичная оферта</a>
-      <a href="#">Поддержка</a>
+      <a href="#plans" data-i18n="nav.plans">Тарифы</a>
+      <a href="#faq" data-i18n="nav.faq">Вопросы</a>
+      <a href="https://smartcampus.test.wip.kz/" data-i18n="foot.offer">Публичная оферта</a>
+      <a href="https://smartcampus.test.wip.kz/" data-i18n="foot.support">Поддержка</a>
     </div>
-    <div>© 2026 SmartCampus</div>
+    <div>© 2026 Smart Campus</div>
   </div>
 </footer>
+
+<script>
+/* ============================================================
+   ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
+   Русский лежит в разметке; kk и en подставляются по data-i18n.
+   Ключ ставится только на конечных элементах (без вложенной вёрстки).
+   ============================================================ */
+(function(){
+  "use strict";
+
+  var DICT = {
+    ru: {
+      "meta.title":"Smart Campus для учителей — анализ урока и рекомендации",
+      "meta.desc":"Запишите или загрузите урок: транскрипт, анализ по критериям современного урока и персональные рекомендации. 3 бесплатных анализа, оплата через Kaspi QR.",
+
+      "nav.features":"Возможности","nav.how":"Как это работает","nav.plans":"Тарифы","nav.faq":"Вопросы",
+      "btn.login":"Войти","btn.try":"Попробовать бесплатно","btn.tryShort":"Начать",
+      "btn.signup":"Зарегистрироваться","btn.kaspi":"Оплатить через Kaspi QR",
+      "btn.allFeatures":"Все возможности в системе",
+
+      "prac.eyebrow":"Лучшая практика","prac.h2":"Лучшие уроки педагогов",
+      "prac.lead":"Посмотрите, как выглядит разбор сильного урока: короткий фрагмент транскрипта, итоги анализа и оценка по критериям.",
+      "prac.boxText":"Два педагога — участника апробации: урок географии на казахском языке и урок русского языка. Выберите педагога, чтобы открыть разбор.",
+      "prac.open":"Смотреть лучшие практики","prac.back":"Назад","prac.close":"Закрыть",
+      "prac.chooseTeacher":"Выберите педагога","prac.chooseLesson":"Выберите урок",
+      "prac.pilot":"Участник апробации",
+      
+      
+      
+      
+      
+
+      "reg.title":"Регистрация в пробной версии",
+      "reg.sub":"Заполните данные — доступ откроется сразу после подтверждения номера телефона.",
+      "reg.fio":"ФИО","reg.iin":"ИИН","reg.iinHint":"12 цифр, как в удостоверении личности",
+      "reg.phone":"Номер телефона","reg.phoneHint":"Это ваш логин. На него придёт код для входа.",
+      "reg.city":"Город","reg.cityPick":"Выберите город","reg.errCity":"Выберите город",
+      "reg.user":"Пользователь","reg.userPick":"Выберите тип пользователя","reg.errUser":"Выберите тип пользователя",
+      "reg.email":"E-mail","reg.subject":"Учитель предмета","reg.exp":"Стаж, лет","reg.cat":"Категория",
+      "reg.catPick":"Выберите категорию","reg.cat0":"Без категории","reg.cat1":"Педагог-модератор",
+      "reg.cat2":"Педагог-эксперт","reg.cat3":"Педагог-исследователь","reg.cat4":"Педагог-мастер",
+      "reg.demoNote":"Форма на лендинге — прототип: данные никуда не отправляются. Боевая регистрация выполняется в системе Smart Campus.",
+      "reg.getCode":"Получить код","reg.codeSent":"Код отправлен на номер","reg.code":"Код из SMS",
+      "reg.confirm":"Подтвердить","reg.backEdit":"Изменить данные",
+      "reg.doneTitle":"Пробный доступ открыт",
+      "reg.doneText":"Вам доступны 3 анализа уроков в течение 30 дней. Логин — ваш номер телефона.",
+      "reg.quotaAfter":"Когда 3 анализа закончатся, загрузка новых уроков закрывается. Все полученные отчёты и рекомендации остаются доступны.",
+      "reg.go":"Перейти в систему",
+      "reg.errFio":"Укажите фамилию, имя и отчество","reg.errIin":"Проверьте ИИН — 12 цифр, контрольный разряд не сходится",
+      "reg.errPhone":"Введите номер в формате +7 7XX XXX XX XX","reg.errEmail":"Проверьте адрес почты",
+      "reg.errSubject":"Укажите предмет","reg.errExp":"Стаж — число от 0 до 60",
+      "reg.errCat":"Выберите категорию","reg.errCode":"Введите 4 цифры из SMS",
+
+      "hero.chip":"Провести следующий урок ещё лучше",
+      "hero.h1":"Разберите свой урок с помощью Smart Campus и получите рекомендации для следующего занятия",
+      "hero.sub":"Запишите или загрузите урок. Smart Class автоматически подготовит транскрипт, проанализирует урок по критериям современного урока и покажет, что уже получается хорошо, а что можно улучшить.",
+      "hero.note":"3 бесплатных анализа уроков",
+
+      "app.title":"Русский язык — Урок №12","app.desc":"Транскрипт, анализ взаимодействия и разбор по критериям","app.status":"готово",
+      "app.subject":"Предмет","app.subjectV":"Русский язык","app.class":"Класс","app.classV":"6Б","app.date":"Дата","app.time":"Время",
+      "app.avaT":"У","app.avaS":"У2",
+      "app.tab1":"Транскрипт и медиа","app.tab2":"Оценка урока","app.tab3":"Рефлексия",
+      "app.roleT":"Учитель","app.roleS":"Ученик 2",
+      "app.kindQ":"· Вопрос","app.kindA":"· Ответ ученика","app.kindP":"· Похвала",
+      "app.msg1":"Ребята, запишите тему сегодняшнего урока. Мир и проблемы двадцать первого века.",
+      "app.msg2":"Сейчас очень много болезней.",
+      "app.msg3":"Всё верно. С чем это связано?",
+      "app.statT":"Анализ взаимодействия","app.statNote":"Доля речи учителя от общего времени урока",
+      "app.statR1":"Реплик в транскрипте","app.statR2":"Открытых вопросов",
+
+      "nums.eyebrow":"Апробация",
+      "nums.h2":"Smart Class уже помогает педагогам анализировать свои уроки",
+      "nums.lead":"За время апробации платформы:",
+      "nums.k1":"проанализированных уроков","nums.k2":"педагогов приняли участие","nums.k3":"школ используют Smart Class",
+      "nums.note":"Система прошла апробацию на реальных уроках и помогает педагогам получать объективную обратную связь после каждого занятия.",
+
+      "feat.eyebrow":"Возможности","feat.h2":"После анализа урока вы получите",
+      "feat.lead":"Каждый отчёт помогает посмотреть на урок со стороны и понять, какие решения стоит сохранить, а что можно изменить уже на следующем занятии.",
+      "feat.c1t":"Полная картина урока","feat.c1d":"Транскрипт с разделением реплик и таймкодами.",
+      "feat.c2t":"Анализ взаимодействия","feat.c2d":"Кто говорил больше, какие вопросы задавались, насколько активно участвовали ученики.",
+      "feat.c3t":"Сильные стороны урока","feat.c3d":"Критерии, которые уже реализованы успешно.",
+      "feat.c4t":"Рекомендации","feat.c4d":"Конкретные предложения по улучшению следующего урока.",
+      "feat.c5t":"История развития","feat.c5d":"Сравнение результатов разных уроков и отслеживание собственного прогресса.",
+      "feat.c6t":"Сравнение урока с КСП","feat.c6d":"Насколько проведённый урок совпал с краткосрочным планом.",
+
+      "uses.eyebrow":"Применение","uses.h2":"Для чего использовать Smart Class",
+      "uses.t1":"Рефлексия уроков","uses.d1":"Получайте объективную обратную связь после каждого занятия.",
+      "uses.t2":"Подготовка к аттестации","uses.d2":"Smart Class анализирует урок по критериям, соответствующим Листу наблюдения урока (Приказ МП РК №73). Это позволяет использовать результаты анализа для самооценки, подготовки к аттестации и планомерного развития профессиональных компетенций.",
+      "uses.t3":"Повышение педагогического мастерства","uses.d3":"Следите за изменением своих результатов и совершенствуйте урок от занятия к занятию.",
+      "uses.t4":"Работа над ошибками","uses.d4":"Получайте рекомендации и применяйте их уже на следующем уроке.",
+
+      "how.eyebrow":"Три шага","how.h2":"Как это работает",
+      "how.t1":"Зарегистрируйтесь","how.d1":"Создайте бесплатный аккаунт.",
+      "how.t2":"Запишите или загрузите урок","how.d2":"Используйте запись с телефона или другого устройства.",
+      "how.t3":"Получите анализ","how.d3":"Через несколько минут система сформирует полный отчёт и рекомендации.",
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      "why.eyebrow":"Преимущества","why.h2":"Почему педагоги выбирают Smart Class",
+      "why.1":"Объективная обратная связь после каждого урока.",
+      "why.2":"Анализ по критериям современного урока.",
+      "why.3":"Возможность отслеживать профессиональный прогресс.",
+      "why.4":"История всех уроков в одном месте.",
+      "why.5":"Рекомендации, которые можно применять сразу.",
+
+      "trial.eyebrow":"Пробный период","trial.h2":"Попробуйте бесплатно","trial.listT":"Что входит в пробную версию",
+      "trial.i1":"3 бесплатных анализа уроков","trial.i2":"Полный транскрипт",
+      "trial.i3":"Анализ по критериям современного урока","trial.i4":"Персональные рекомендации",
+      "trial.i5":"История всех проанализированных уроков",
+      "trial.note":"После использования трёх анализов новые уроки анализировать нельзя, но все ранее полученные отчёты и рекомендации останутся доступны.",
+
+      "plans.eyebrow":"Тарифы","plans.h2":"Начните бесплатно, платите только если подошло",
+      "plans.lead":"Один учитель — одна подписка. Без скрытых платежей и автосписаний.",
+      "plans.note":"Оплата разовая — деньги не списываются автоматически. Подписка активируется сразу после подтверждения платежа.",
+      "plan.perMonth":"₸ / мес","plan.perHalf":"₸ / 6 мес",
+      "plan.f.report":"Полный отчёт по каждому уроку","plan.f.dynamics":"Динамика и сравнение уроков","plan.f.renew":"Продление в один клик",
+      "plan.free.t":"Пробный","plan.free.d":"Чтобы спокойно проверить сервис на своих уроках.",
+      "plan.free.price":"Бесплатно","plan.free.hint":"30 дней с момента регистрации",
+      "plan.free.f1":"3 анализа уроков","plan.free.f2":"Полный отчёт по каждому уроку",
+      "plan.free.f3":"Личный кабинет и история","plan.free.f4":"Оплата не требуется",
+      "plan.m30.t":"Месячный · 30 уроков","plan.m30.d":"Если ведёте один-два класса и разбираете не каждый урок.",
+      "plan.m30.hint":"330 ₸ за урок. Разовый платёж, автосписаний нет","plan.m30.f1":"Запись и анализ 30 уроков",
+      "plan.m50.t":"Месячный · 50 уроков","plan.m50.d":"Если разбираете уроки регулярно и ведёте несколько классов.",
+      "plan.m50.hint":"340 ₸ за урок. Разовый платёж, автосписаний нет","plan.m50.f1":"Запись и анализ 50 уроков",
+      "plan.half.badge":"Выгоднее на 18%","plan.half.t":"Полугодовой · 50 уроков",
+      "plan.half.d":"Для тех, кто хочет видеть рост за учебное полугодие.",
+      "plan.half.hint":"14 000 ₸ в месяц вместо 17 000",
+      "plan.half.f1":"Запись и анализ 50 уроков в месяц","plan.half.f2":"Полный доступ на 6 месяцев",
+      "plan.half.f3":"Аудиоустройство для записи — бесплатно","plan.half.f5":"Приоритетная поддержка",
+
+      "faq.eyebrow":"Вопросы","faq.h2":"Частые вопросы",
+      "faq.q1":"Можно ли использовать запись с телефона?","faq.a1":"Да. Достаточно загрузить аудиозапись урока.",
+      "faq.q2":"Кто увидит мои уроки?","faq.a2":"Доступ к вашим урокам есть только у вас.",
+      "faq.q3":"Сколько занимает анализ?","faq.a3":"Обычно несколько минут после загрузки записи.",
+      "faq.q4":"Что будет после окончания пробного периода?","faq.a4":"Вы сохраните доступ ко всем ранее проанализированным урокам, но не сможете анализировать новые записи без подключения тарифа.",
+      "faq.q5":"Можно ли пользоваться сервисом без школы?","faq.a5":"Да. Достаточно зарегистрироваться и начать использовать Smart Class самостоятельно.",
+      "faq.q6":"Как проходит оплата?","faq.a6":"Вы выбираете тариф, сканируете Kaspi QR в приложении Kaspi.kz и подтверждаете платёж. После подтверждения подписка активируется автоматически.",
+      "faq.q7":"Подписка продлевается сама?","faq.a7":"Нет. Это разовый платёж — автосписаний нет. Когда срок подходит к концу, вы продлеваете подписку в один клик из личного кабинета.",
+
+      "final.h2":"Начните с первого урока",
+      "final.p":"Попробуйте Smart Class бесплатно, получите три анализа уроков и оцените, как объективная обратная связь помогает совершенствовать преподавание.",
+      "final.tag":"Не просто анализировать прошедший урок, а провести следующий ещё лучше.",
+      "foot.offer":"Публичная оферта","foot.support":"Поддержка"
+    },
+
+    kk: {
+      "meta.title":"Мұғалімдерге арналған Smart Campus — сабақ талдауы және ұсыныстар",
+      "meta.desc":"Сабақты жазып алыңыз немесе жүктеңіз: транскрипт, заманауи сабақ критерийлері бойынша талдау және жеке ұсыныстар. 3 тегін талдау, Kaspi QR арқылы төлем.",
+
+      "nav.features":"Мүмкіндіктер","nav.how":"Қалай жұмыс істейді","nav.plans":"Тарифтер","nav.faq":"Сұрақтар",
+      "btn.login":"Кіру","btn.try":"Тегін көріп көру","btn.tryShort":"Бастау",
+      "btn.signup":"Тіркелу","btn.kaspi":"Kaspi QR арқылы төлеу",
+      "btn.allFeatures":"Жүйедегі барлық мүмкіндіктер",
+
+      "prac.eyebrow":"Үздік тәжірибе","prac.h2":"Педагогтердің үздік сабақтары",
+      "prac.lead":"Күшті сабақтың талдауы қалай көрінетінін қараңыз: транскриптің қысқа үзіндісі, талдау қорытындысы және критерийлер бойынша баға.",
+      "prac.boxText":"Апробацияға қатысқан екі педагог: қазақ тіліндегі география сабағы және орыс тілі сабағы. Талдауды ашу үшін педагогты таңдаңыз.",
+      "prac.open":"Үздік тәжірибелерді көру","prac.back":"Артқа","prac.close":"Жабу",
+      "prac.chooseTeacher":"Педагогты таңдаңыз","prac.chooseLesson":"Сабақты таңдаңыз",
+      "prac.pilot":"Апробацияға қатысушы",
+      
+      
+      
+      
+      
+
+      "reg.title":"Сынақ нұсқасына тіркелу",
+      "reg.sub":"Деректерді толтырыңыз — телефон нөмірі расталған соң қолжетімділік бірден ашылады.",
+      "reg.fio":"Аты-жөні","reg.iin":"ЖСН","reg.iinHint":"Жеке куәліктегідей 12 сан",
+      "reg.phone":"Телефон нөмірі","reg.phoneHint":"Бұл сіздің логиніңіз. Кіру коды осы нөмірге келеді.",
+      "reg.city":"Қала","reg.cityPick":"Қаланы таңдаңыз","reg.errCity":"Қаланы таңдаңыз",
+      "reg.user":"Пайдаланушы","reg.userPick":"Пайдаланушы түрін таңдаңыз","reg.errUser":"Пайдаланушы түрін таңдаңыз",
+      "reg.email":"E-mail","reg.subject":"Пән мұғалімі","reg.exp":"Өтілі, жыл","reg.cat":"Санаты",
+      "reg.catPick":"Санатты таңдаңыз","reg.cat0":"Санатсыз","reg.cat1":"Педагог-модератор",
+      "reg.cat2":"Педагог-сарапшы","reg.cat3":"Педагог-зерттеуші","reg.cat4":"Педагог-шебер",
+      "reg.demoNote":"Лендингтегі форма — прототип: деректер ешқайда жіберілмейді. Нақты тіркелу Smart Campus жүйесінде жүреді.",
+      "reg.getCode":"Код алу","reg.codeSent":"Код мына нөмірге жіберілді","reg.code":"SMS коды",
+      "reg.confirm":"Растау","reg.backEdit":"Деректерді өзгерту",
+      "reg.doneTitle":"Сынақ қолжетімділігі ашылды",
+      "reg.doneText":"Сізге 30 күн ішінде 3 сабақ талдауы қолжетімді. Логин — телефон нөміріңіз.",
+      "reg.quotaAfter":"3 талдау аяқталған соң жаңа сабақтарды жүктеу жабылады. Алынған барлық есептер мен ұсыныстар қолжетімді болып қалады.",
+      "reg.go":"Жүйеге өту",
+      "reg.errFio":"Тегіңіз, атыңыз және әкеңіздің атын көрсетіңіз","reg.errIin":"ЖСН-ді тексеріңіз — 12 сан, бақылау разряды сәйкес келмейді",
+      "reg.errPhone":"Нөмірді +7 7XX XXX XX XX форматында енгізіңіз","reg.errEmail":"Пошта мекенжайын тексеріңіз",
+      "reg.errSubject":"Пәнді көрсетіңіз","reg.errExp":"Өтілі — 0-ден 60-қа дейінгі сан",
+      "reg.errCat":"Санатты таңдаңыз","reg.errCode":"SMS-тен 4 санды енгізіңіз",
+
+      "hero.chip":"Келесі сабақты одан да жақсы өткізу",
+      "hero.h1":"Сабағыңызды Smart Campus көмегімен талдаңыз және келесі сабаққа ұсыныстар алыңыз",
+      "hero.sub":"Сабақты жазып алыңыз немесе жүктеңіз. Smart Class автоматты түрде транскрипт дайындайды, сабақты заманауи сабақ критерийлері бойынша талдайды және не жақсы шығып жатқанын, нені жақсартуға болатынын көрсетеді.",
+      "hero.note":"3 тегін сабақ талдауы",
+
+      "app.title":"Орыс тілі — №12 сабақ","app.desc":"Транскрипт, өзара әрекеттесу талдауы және критерийлер бойынша талдау","app.status":"дайын",
+      "app.subject":"Пән","app.subjectV":"Орыс тілі","app.class":"Сынып","app.classV":"6Б","app.date":"Күні","app.time":"Уақыты",
+      "app.avaT":"М","app.avaS":"О2",
+      "app.tab1":"Транскрипт және медиа","app.tab2":"Сабақты бағалау","app.tab3":"Рефлексия",
+      "app.roleT":"Мұғалім","app.roleS":"2-оқушы",
+      "app.kindQ":"· Сұрақ","app.kindA":"· Оқушының жауабы","app.kindP":"· Мадақтау",
+      "app.msg1":"Балалар, бүгінгі сабақтың тақырыбын жазып алыңдар. Әлем және ХХІ ғасыр мәселелері.",
+      "app.msg2":"Қазір ауру көп.",
+      "app.msg3":"Дұрыс. Бұл немен байланысты?",
+      "app.statT":"Өзара әрекеттесу талдауы","app.statNote":"Сабақтың жалпы уақытындағы мұғалім сөзінің үлесі",
+      "app.statR1":"Транскриптегі реплика","app.statR2":"Ашық сұрақтар",
+
+      "nums.eyebrow":"Сынақтан өтті",
+      "nums.h2":"Smart Class педагогтерге сабақтарын талдауға қазірден көмектесіп жүр",
+      "nums.lead":"Платформаны сынақтан өткізу кезінде:",
+      "nums.k1":"талданған сабақ","nums.k2":"педагог қатысты","nums.k3":"мектеп Smart Class-ті пайдаланады",
+      "nums.note":"Жүйе нақты сабақтарда сынақтан өтті және педагогтерге әр сабақтан кейін объективті кері байланыс алуға көмектеседі.",
+
+      "feat.eyebrow":"Мүмкіндіктер","feat.h2":"Сабақ талданғаннан кейін сіз аласыз",
+      "feat.lead":"Әрбір есеп сабаққа сырттай қарауға және қандай шешімдерді сақтау керектігін, ал нені келесі сабақта өзгертуге болатынын түсінуге көмектеседі.",
+      "feat.c1t":"Сабақтың толық көрінісі","feat.c1d":"Репликаларға бөлінген және таймкодтары бар транскрипт.",
+      "feat.c2t":"Өзара әрекеттесу талдауы","feat.c2d":"Кім көбірек сөйледі, қандай сұрақтар қойылды, оқушылар қаншалықты белсенді қатысты.",
+      "feat.c3t":"Сабақтың күшті жақтары","feat.c3d":"Табысты іске асырылған критерийлер.",
+      "feat.c4t":"Ұсыныстар","feat.c4d":"Келесі сабақты жақсартуға арналған нақты ұсыныстар.",
+      "feat.c5t":"Даму тарихы","feat.c5d":"Әртүрлі сабақтардың нәтижелерін салыстыру және өз прогресіңізді бақылау.",
+      "feat.c6t":"Сабақты ҚМЖ-мен салыстыру","feat.c6d":"Өткізілген сабақ қысқа мерзімді жоспарға қаншалықты сәйкес келді.",
+
+      "uses.eyebrow":"Қолданылуы","uses.h2":"Smart Class не үшін қажет",
+      "uses.t1":"Сабақ рефлексиясы","uses.d1":"Әр сабақтан кейін объективті кері байланыс алыңыз.",
+      "uses.t2":"Аттестаттауға дайындық","uses.d2":"Smart Class сабақты Сабақты бақылау парағына сәйкес критерийлер бойынша талдайды (ҚР ОАМ №73 бұйрығы). Бұл талдау нәтижелерін өзін-өзі бағалауға, аттестаттауға дайындалуға және кәсіби құзыреттерді жүйелі дамытуға пайдалануға мүмкіндік береді.",
+      "uses.t3":"Педагогикалық шеберлікті арттыру","uses.d3":"Нәтижелеріңіздің өзгерісін бақылап, сабақты сабақтан сабаққа жетілдіріңіз.",
+      "uses.t4":"Қателермен жұмыс","uses.d4":"Ұсыныстар алып, оларды келесі сабақта қолданыңыз.",
+
+      "how.eyebrow":"Үш қадам","how.h2":"Қалай жұмыс істейді",
+      "how.t1":"Тіркеліңіз","how.d1":"Тегін аккаунт жасаңыз.",
+      "how.t2":"Сабақты жазыңыз немесе жүктеңіз","how.d2":"Телефонмен немесе басқа құрылғымен жазылған жазбаны пайдаланыңыз.",
+      "how.t3":"Талдау алыңыз","how.d3":"Бірнеше минуттан кейін жүйе толық есеп пен ұсыныстар қалыптастырады.",
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      "why.eyebrow":"Артықшылықтары","why.h2":"Педагогтер Smart Class-ті неге таңдайды",
+      "why.1":"Әр сабақтан кейінгі объективті кері байланыс.",
+      "why.2":"Заманауи сабақ критерийлері бойынша талдау.",
+      "why.3":"Кәсіби өсуді бақылау мүмкіндігі.",
+      "why.4":"Барлық сабақтардың тарихы бір жерде.",
+      "why.5":"Бірден қолдануға болатын ұсыныстар.",
+
+      "trial.eyebrow":"Сынақ кезеңі","trial.h2":"Тегін көріп көріңіз","trial.listT":"Сынақ нұсқасына не кіреді",
+      "trial.i1":"3 тегін сабақ талдауы","trial.i2":"Толық транскрипт",
+      "trial.i3":"Заманауи сабақ критерийлері бойынша талдау","trial.i4":"Жеке ұсыныстар",
+      "trial.i5":"Талданған барлық сабақтардың тарихы",
+      "trial.note":"Үш талдау пайдаланылғаннан кейін жаңа сабақтарды талдау мүмкін болмайды, бірақ бұрын алынған барлық есептер мен ұсыныстар қолжетімді болып қалады.",
+
+      "plans.eyebrow":"Тарифтер","plans.h2":"Тегін бастаңыз, ұнаса ғана төлеңіз",
+      "plans.lead":"Бір мұғалім — бір жазылым. Жасырын төлемдерсіз және автоматты шегерімсіз.",
+      "plans.note":"Төлем біржолғы — ақша автоматты түрде шегерілмейді. Жазылым төлем расталғаннан кейін бірден іске қосылады.",
+      "plan.perMonth":"₸ / ай","plan.perHalf":"₸ / 6 ай",
+      "plan.f.report":"Әр сабақ бойынша толық есеп","plan.f.dynamics":"Динамика және сабақтарды салыстыру","plan.f.renew":"Бір рет басып ұзарту",
+      "plan.free.t":"Сынақ","plan.free.d":"Сервисті өз сабақтарыңызда байыппен тексеру үшін.",
+      "plan.free.price":"Тегін","plan.free.hint":"Тіркелген сәттен бастап 30 күн",
+      "plan.free.f1":"3 сабақ талдауы","plan.free.f2":"Әр сабақ бойынша толық есеп",
+      "plan.free.f3":"Жеке кабинет және тарих","plan.free.f4":"Төлем қажет емес",
+      "plan.m30.t":"Айлық · 30 сабақ","plan.m30.d":"Бір-екі сынып жүргізіп, әр сабақты талдамайтын болсаңыз.",
+      "plan.m30.hint":"Сабағы 330 ₸. Біржолғы төлем, автоматты шегерім жоқ","plan.m30.f1":"30 сабақты жазу және талдау",
+      "plan.m50.t":"Айлық · 50 сабақ","plan.m50.d":"Сабақтарды жүйелі талдап, бірнеше сынып жүргізсеңіз.",
+      "plan.m50.hint":"Сабағы 340 ₸. Біржолғы төлем, автоматты шегерім жоқ","plan.m50.f1":"50 сабақты жазу және талдау",
+      "plan.half.badge":"18% тиімдірек","plan.half.t":"Жарты жылдық · 50 сабақ",
+      "plan.half.d":"Оқу жартыжылдығындағы өсуді көргісі келетіндерге.",
+      "plan.half.hint":"17 000-ның орнына айына 14 000 ₸",
+      "plan.half.f1":"Айына 50 сабақты жазу және талдау","plan.half.f2":"6 айға толық қолжетімділік",
+      "plan.half.f3":"Жазуға арналған аудиоқұрылғы — тегін","plan.half.f5":"Басым қолдау",
+
+      "faq.eyebrow":"Сұрақтар","faq.h2":"Жиі қойылатын сұрақтар",
+      "faq.q1":"Телефонға жазылған жазбаны пайдалануға бола ма?","faq.a1":"Иә. Сабақтың аудиожазбасын жүктесеңіз жеткілікті.",
+      "faq.q2":"Менің сабақтарымды кім көреді?","faq.a2":"Сабақтарыңызға тек сіздің ғана қолжетімділігіңіз бар.",
+      "faq.q3":"Талдау қанша уақыт алады?","faq.a3":"Әдетте жазба жүктелгеннен кейін бірнеше минут.",
+      "faq.q4":"Сынақ кезеңі аяқталғаннан кейін не болады?","faq.a4":"Бұрын талданған барлық сабақтарға қолжетімділік сақталады, бірақ тариф қоспай жаңа жазбаларды талдай алмайсыз.",
+      "faq.q5":"Сервисті мектепсіз пайдалануға бола ма?","faq.a5":"Иә. Тіркеліп, Smart Class-ті өз бетіңізше пайдалана бастасаңыз болды.",
+      "faq.q6":"Төлем қалай жүреді?","faq.a6":"Тарифті таңдайсыз, Kaspi.kz қосымшасында Kaspi QR сканерлеп, төлемді растайсыз. Расталғаннан кейін жазылым автоматты түрде іске қосылады.",
+      "faq.q7":"Жазылым өзі жаңарады ма?","faq.a7":"Жоқ. Бұл біржолғы төлем — автоматты шегерім жоқ. Мерзім аяқталғанда жазылымды жеке кабинеттен бір рет басып жаңартасыз.",
+
+      "final.h2":"Бірінші сабақтан бастаңыз",
+      "final.p":"Smart Class-ті тегін көріп көріңіз, үш сабақ талдауын алыңыз және объективті кері байланыс сабақ беруді жетілдіруге қалай көмектесетінін бағалаңыз.",
+      "final.tag":"Өткен сабақты жай талдау емес, келесісін одан да жақсы өткізу.",
+      "foot.offer":"Жария оферта","foot.support":"Қолдау"
+    },
+
+    en: {
+      "meta.title":"Smart Campus for teachers — lesson analysis and recommendations",
+      "meta.desc":"Record or upload a lesson: transcript, analysis against modern-lesson criteria and personal recommendations. 3 free analyses, payment via Kaspi QR.",
+
+      "nav.features":"Features","nav.how":"How it works","nav.plans":"Pricing","nav.faq":"FAQ",
+      "btn.login":"Log in","btn.try":"Try for free","btn.tryShort":"Start",
+      "btn.signup":"Sign up","btn.kaspi":"Pay with Kaspi QR",
+      "btn.allFeatures":"See all features in the app",
+
+      "prac.eyebrow":"Best practice","prac.h2":"Standout lessons from teachers",
+      "prac.lead":"See what the review of a strong lesson looks like: a short transcript excerpt, the analysis summary and a criteria-based score.",
+      "prac.boxText":"Two teachers from the pilot: a geography lesson in Kazakh and a Russian language lesson. Pick a teacher to open the review.",
+      "prac.open":"View best practice","prac.back":"Back","prac.close":"Close",
+      "prac.chooseTeacher":"Choose a teacher","prac.chooseLesson":"Choose a lesson",
+      "prac.pilot":"Pilot participant",
+      
+      
+      
+      
+      
+
+      "reg.title":"Free trial sign-up",
+      "reg.sub":"Fill in your details — access opens as soon as your phone number is confirmed.",
+      "reg.fio":"Full name","reg.iin":"IIN","reg.iinHint":"12 digits, as on your ID card",
+      "reg.phone":"Phone number","reg.phoneHint":"This is your login. The sign-in code is sent here.",
+      "reg.city":"City","reg.cityPick":"Choose a city","reg.errCity":"Choose a city",
+      "reg.user":"User type","reg.userPick":"Choose a user type","reg.errUser":"Choose a user type",
+      "reg.email":"E-mail","reg.subject":"Subject taught","reg.exp":"Experience, years","reg.cat":"Category",
+      "reg.catPick":"Choose a category","reg.cat0":"No category","reg.cat1":"Teacher-moderator",
+      "reg.cat2":"Teacher-expert","reg.cat3":"Teacher-researcher","reg.cat4":"Teacher-master",
+      "reg.demoNote":"This landing-page form is a prototype: nothing is submitted anywhere. Real sign-up happens in Smart Campus.",
+      "reg.getCode":"Get the code","reg.codeSent":"The code was sent to","reg.code":"SMS code",
+      "reg.confirm":"Confirm","reg.backEdit":"Edit details",
+      "reg.doneTitle":"Trial access is open",
+      "reg.doneText":"You get 3 lesson analyses within 30 days. Your login is your phone number.",
+      "reg.quotaAfter":"Once the 3 analyses are used up, uploading new lessons closes. Every report and recommendation you received stays available.",
+      "reg.go":"Go to the app",
+      "reg.errFio":"Enter your full name","reg.errIin":"Check the IIN — 12 digits, the checksum does not match",
+      "reg.errPhone":"Use the format +7 7XX XXX XX XX","reg.errEmail":"Check the e-mail address",
+      "reg.errSubject":"Enter the subject","reg.errExp":"Experience must be a number from 0 to 60",
+      "reg.errCat":"Choose a category","reg.errCode":"Enter the 4 digits from the SMS",
+
+      "hero.chip":"Make your next lesson even better",
+      "hero.h1":"Analyze your lesson with Smart Campus and get recommendations for your next class",
+      "hero.sub":"Record or upload a lesson. Smart Class automatically produces a transcript, analyzes the lesson against modern-lesson criteria and shows what already works well and what can be improved.",
+      "hero.note":"3 free lesson analyses",
+
+      "app.title":"Russian language — Lesson 12","app.desc":"Transcript, interaction analysis and criteria-based review","app.status":"ready",
+      "app.subject":"Subject","app.subjectV":"Russian language","app.class":"Class","app.classV":"6B","app.date":"Date","app.time":"Time",
+      "app.avaT":"T","app.avaS":"S2",
+      "app.tab1":"Transcript & media","app.tab2":"Lesson review","app.tab3":"Reflection",
+      "app.roleT":"Teacher","app.roleS":"Student 2",
+      "app.kindQ":"· Question","app.kindA":"· Student answer","app.kindP":"· Praise",
+      "app.msg1":"Everyone, write down today's topic. The world and the challenges of the 21st century.",
+      "app.msg2":"There are a lot of diseases now.",
+      "app.msg3":"That's right. What is that connected to?",
+      "app.statT":"Interaction analysis","app.statNote":"Share of teacher talk in total lesson time",
+      "app.statR1":"Utterances in transcript","app.statR2":"Open questions",
+
+      "nums.eyebrow":"Pilot results",
+      "nums.h2":"Smart Class already helps teachers analyze their lessons",
+      "nums.lead":"During the platform pilot:",
+      "nums.k1":"lessons analyzed","nums.k2":"teachers took part","nums.k3":"schools use Smart Class",
+      "nums.note":"The system has been piloted in real lessons and helps teachers get objective feedback after every class.",
+
+      "feat.eyebrow":"Features","feat.h2":"After the analysis you get",
+      "feat.lead":"Every report helps you look at the lesson from the outside and see which decisions to keep and what to change in the very next class.",
+      "feat.c1t":"The full picture","feat.c1d":"A transcript split by speaker, with timecodes.",
+      "feat.c2t":"Interaction analysis","feat.c2d":"Who spoke more, what questions were asked, how actively students took part.",
+      "feat.c3t":"Strengths of the lesson","feat.c3d":"The criteria you already meet successfully.",
+      "feat.c4t":"Recommendations","feat.c4d":"Concrete suggestions for improving your next lesson.",
+      "feat.c5t":"Progress history","feat.c5d":"Compare results across lessons and track your own growth.",
+      "feat.c6t":"Lesson vs. lesson plan","feat.c6d":"How closely the lesson followed your short-term plan.",
+
+      "uses.eyebrow":"Use cases","uses.h2":"What to use Smart Class for",
+      "uses.t1":"Lesson reflection","uses.d1":"Get objective feedback after every class.",
+      "uses.t2":"Certification prep","uses.d2":"Smart Class analyzes the lesson against criteria aligned with the official Lesson Observation Sheet (Order No. 73 of the Ministry of Education of Kazakhstan). The results can be used for self-assessment, certification prep and steady growth of professional competence.",
+      "uses.t3":"Sharper teaching craft","uses.d3":"Watch how your results change and improve the lesson from class to class.",
+      "uses.t4":"Working on weak spots","uses.d4":"Get recommendations and apply them in your very next lesson.",
+
+      "how.eyebrow":"Three steps","how.h2":"How it works",
+      "how.t1":"Sign up","how.d1":"Create a free account.",
+      "how.t2":"Record or upload a lesson","how.d2":"Use a recording from your phone or any other device.",
+      "how.t3":"Get the analysis","how.d3":"In a few minutes the system produces a full report with recommendations.",
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      "why.eyebrow":"Why teachers choose it","why.h2":"Why teachers choose Smart Class",
+      "why.1":"Objective feedback after every lesson.",
+      "why.2":"Analysis against modern-lesson criteria.",
+      "why.3":"A way to track professional progress.",
+      "why.4":"All your lessons in one place.",
+      "why.5":"Recommendations you can apply right away.",
+
+      "trial.eyebrow":"Free trial","trial.h2":"Try it for free","trial.listT":"What the trial includes",
+      "trial.i1":"3 free lesson analyses","trial.i2":"Full transcript",
+      "trial.i3":"Analysis against modern-lesson criteria","trial.i4":"Personal recommendations",
+      "trial.i5":"History of every analyzed lesson",
+      "trial.note":"Once the three analyses are used up you can't analyze new lessons, but every report and recommendation you already received stays available.",
+
+      "plans.eyebrow":"Pricing","plans.h2":"Start free, pay only if it fits",
+      "plans.lead":"One teacher — one subscription. No hidden fees and no auto-charges.",
+      "plans.note":"Payment is one-time — no money is charged automatically. The subscription activates as soon as the payment is confirmed.",
+      "plan.perMonth":"₸ / month","plan.perHalf":"₸ / 6 months",
+      "plan.f.report":"Full report for every lesson","plan.f.dynamics":"Trends and lesson comparison","plan.f.renew":"One-click renewal",
+      "plan.free.t":"Trial","plan.free.d":"To test the service on your own lessons, without pressure.",
+      "plan.free.price":"Free","plan.free.hint":"30 days from sign-up",
+      "plan.free.f1":"3 lesson analyses","plan.free.f2":"Full report for every lesson",
+      "plan.free.f3":"Personal account and history","plan.free.f4":"No payment required",
+      "plan.m30.t":"Monthly · 30 lessons","plan.m30.d":"If you teach one or two classes and don't review every lesson.",
+      "plan.m30.hint":"330 ₸ per lesson. One-time payment, no auto-charges","plan.m30.f1":"Recording and analysis of 30 lessons",
+      "plan.m50.t":"Monthly · 50 lessons","plan.m50.d":"If you review lessons regularly and teach several classes.",
+      "plan.m50.hint":"340 ₸ per lesson. One-time payment, no auto-charges","plan.m50.f1":"Recording and analysis of 50 lessons",
+      "plan.half.badge":"18% cheaper","plan.half.t":"Half-year · 50 lessons",
+      "plan.half.d":"For those who want to see growth across a school term.",
+      "plan.half.hint":"14 000 ₸ per month instead of 17 000",
+      "plan.half.f1":"Recording and analysis of 50 lessons a month","plan.half.f2":"Full access for 6 months",
+      "plan.half.f3":"Recording device included free","plan.half.f5":"Priority support",
+
+      "faq.eyebrow":"FAQ","faq.h2":"Frequently asked questions",
+      "faq.q1":"Can I use a recording from my phone?","faq.a1":"Yes. Just upload the lesson audio.",
+      "faq.q2":"Who can see my lessons?","faq.a2":"Only you have access to your lessons.",
+      "faq.q3":"How long does the analysis take?","faq.a3":"Usually a few minutes after the recording is uploaded.",
+      "faq.q4":"What happens when the trial ends?","faq.a4":"You keep access to every lesson already analyzed, but you can't analyze new recordings without a paid plan.",
+      "faq.q5":"Can I use the service without my school?","faq.a5":"Yes. Just sign up and start using Smart Class on your own.",
+      "faq.q6":"How does payment work?","faq.a6":"You pick a plan, scan the Kaspi QR in the Kaspi.kz app and confirm the payment. Access opens automatically once it's confirmed.",
+      "faq.q7":"Does the subscription auto-renew?","faq.a7":"No. It's a one-time payment with no auto-charges. When the term ends you renew in one click from your account.",
+
+      "final.h2":"Start with your first lesson",
+      "final.p":"Try Smart Class for free, get three lesson analyses and see how objective feedback helps you teach better.",
+      "final.tag":"Not just analyzing the lesson you taught — teaching the next one even better.",
+      "foot.offer":"Public offer","foot.support":"Support"
+    }
+  };
+
+  /* ------------------------------------------------------------
+     ЛУЧШАЯ ПРАКТИКА — данные уроков из Smart Campus.
+
+     Источник: карточки «Данные урока» в системе. SEL-аналитика и
+     блоки под ней намеренно не выводятся.
+
+     Транскрипт приведён фрагментом (начало урока) — полная запись
+     доступна в системе по кнопке под уроком.
+
+     Язык урока задаётся полем lang ("kk" или "ru"). Весь экран урока
+     показывается на языке урока: подписи разделов, роли говорящих,
+     типы реплик. Язык интерфейса на это не влияет — казахский урок
+     остаётся казахским, даже если сайт открыт на русском.
+     ------------------------------------------------------------ */
+
+  /* подписи внутри урока — по языку урока, а не интерфейса */
+  var LESSON_L = {
+    ru:{
+      name:"Русский", teacher:"Учитель", student:"Ученик",
+      q:"Вопрос", a:"Ответ ученика", p:"Похвала", c:"Критика",
+      subject:"Предмет", grade:"Класс", date:"Дата", time:"Время", status:"Статус", ready:"готово",
+      record:"Запись урока", replies:"Реплик в транскрипте",
+      evaluation:"Оценка урока",
+      speechRatio:"Соотношение речи учителя и участников", participants:"Участники",
+      langRatio:"Соотношение русской, казахской и английской речи",
+      ru:"Русская речь", kk:"Казахская речь", en:"Английская речь",
+      progress:"Общий прогресс по всем группам",
+      transcript:"Транскрипт — фрагмент начала урока",
+      legend:"вопрос учителя · ответ ученика · критика учителя · похвала учителя",
+      analysis:"Итоговый анализ", strengths:"Сильные стороны", improve:"Что нужно улучшить",
+      steps:"Направления развития и практические шаги",
+      hattie:"Свободный анализ по модели Джона Хэтти"
+    },
+    kk:{
+      name:"Қазақша", teacher:"Мұғалім", student:"Оқушы",
+      q:"Сұрақ", a:"Оқушының жауабы", p:"Мадақтау", c:"Сын",
+      subject:"Пән", grade:"Сынып", date:"Күні", time:"Уақыты", status:"Мәртебесі", ready:"дайын",
+      record:"Сабақ жазбасы", replies:"Транскриптегі реплика",
+      evaluation:"Сабақты бағалау",
+      speechRatio:"Мұғалім мен қатысушылар сөзінің арақатынасы", participants:"Қатысушылар",
+      langRatio:"Орыс, қазақ және ағылшын сөзінің арақатынасы",
+      ru:"Орыс тілі", kk:"Қазақ тілі", en:"Ағылшын тілі",
+      progress:"Барлық топтар бойынша жалпы прогресс",
+      transcript:"Транскрипт — сабақ басының үзіндісі",
+      legend:"мұғалімнің сұрағы · оқушының жауабы · мұғалімнің сыны · мұғалімнің мадақтауы",
+      analysis:"Қорытынды талдау", strengths:"Күшті жақтары", improve:"Жақсарту қажет тұстары",
+      steps:"Даму бағыттары мен практикалық қадамдар",
+      hattie:"Джон Хэтти моделі бойынша еркін талдау"
+    }
+  };
+
+  var PRACTICE = [
+    {
+      id:"rh", name:"Разхан Харлыгаш", initials:"РХ", subject:"География", grade:"8А",
+      lessons:[
+        {
+          id:"rh1", lang:"kk",
+          title:"География — Континенты",
+          topic:"Геоглобалистика",
+          subject:"География", grade:"8А", date:"2026-08-03", time:"09:00–10:00",
+          duration:"00:47:55", replies:102,
+          speech:{ teacher:70, participants:30 },
+          langMix:[{ code:"kk", value:100 }],
+          progress:75.0,
+          transcript:[
+            {role:"teacher", time:"00:04", type:"p", text:"Орындықтартындар ма? Жақсы балалар. Амандаспаймыз ба? Келе ғой, Нұреке тезірек. Арыныстар оқушылар. Отыра ғой, қалдарыңыз қалай? Негізінен сіздерге кешікпей келіңіздер деп өтінген едім, иә? Сабақ басталады деп. Біраз уақытқа кешіктіңіздер, бірақ қоңырау уақытында сол уақытты ұстай салайық жарай ма? Келістік па? Жақсы. Олай болса, балалар, қазір бізде соңғы сабақ негізі."},
+            {role:"teacher", time:"01:00", type:"q", text:"Жетпіс сегізінші параграф болу керек. Так, ең соңғы бізде тақырып бар геоглобалистика. Бүгін осы тақырып бойынша бізде бір сабақ жаңа сабағымыз өтіледі. Сабақ мақсаты бір рет танысып шығыңыздар сабақ мақсатымен. Яғни бүгінгі сабақта бізде қандай мақсат болады, Мұрасыл?"},
+            {role:"student", n:2, time:"01:58", type:"a", text:"Геоглобалистика таным үшін негізгі ұғымдарды түсіндіру және жаһандану мәселелері шеңберіндегі геоглобалистиканы өзіндік қалыптастыру."},
+            {role:"teacher", time:"02:08", type:"p", text:"Жақсы. Бізде балалар екі түрлі термин бар. Біреуі биобалистика, екіншісі геоглобалистика. Алдымен бұл тақырыппен сіздер теориялық ақпаратты алу үшін екі жүз қырық бесінші бетті ашыңыздар. Жетпіс сегізінші параграфты оқуға үш минут уақыт қоямын. Оқу барысында не істейміз? Білмейтін терминдеріңізді сұрай отырамыз."},
+            {role:"teacher", time:"05:49", type:"p", text:"Жақсы балалар. Уақытымыз аяқталды, иә? Бәріміз басымызды көтереміз. Берік тақтаға қараймыз. Так енді қараңыздар. Біз осыған дейін де үнемі осы әдіспен бөлініп жүреміз сой ма?"},
+            {role:"teacher", time:"06:00", type:"p", text:"Мен сыныптың төрт бұрышына төрт қағаз қойдым. Мұнда технология, саясат, экономика, мұнда экология және сұрағым мынандай. Жанағы біздің геоглобалистика осы салалардың қайсысына көбірек әсер етеді?"},
+            {role:"teacher", time:"07:00", type:null, text:"Сіз жаңа мәтінді оқыдыңыз. Енді осы сұраққа жауап беру үшін әркім қайсысына көбірек әсер етуі мүмкін, сол өзің таңдаған саланың біреуіне бара қойыңыздар шығып отырып. Технология, саясат, экономика, экология. Егер шешім шығарған болсаңыз, орнымыздан тұрып, өзің таңдаған бұрышқа барып тұрамыз."},
+            {role:"student", n:2, time:"07:31", type:"a", text:"Бір жерге болмайдыға?"},
+            {role:"teacher", time:"07:35", type:null, text:"Жоқ, қайсысы сұрақ геоглобалистика осы салалардың қайсысына көбірек әсер етеді дейді. Сіз қайсысы көбірек деп таңдайсыз, сол салаға барасыз."},
+            {role:"teacher", time:"08:01", type:"p", text:"Мен сыныпты көріп тұрмын. Бәріміз өзіміздің таңдауымызды таңдадық па? Сыныптың жалпы пікірі саясатта тұр. Так өз араларыңыздан қысқа ғана бір шешім шығу керек. Неге экологияны таңдадыңдар? Қысқа ғана шешімдерің."},
+            {role:"student", n:2, time:"08:59", type:"a", text:"Негізінен экологиялық мәселе шиеленісіп, айнымақ күшейіп айтылуы."},
+            {role:"student", n:2, time:"09:03", type:"a", text:"Мысалы, Арал теңізі. Осы мысалы, біріккен ұлттар ұйымы құрып, бір мысалы, резолюция шығарады. Соның әсерінен бізде кейбір саяси мәселелер шығып жатады. Мысалы, қазіргі заманда болған Армус шығанағы бойынша Біріккен ұлттар ұйымы өткен айда шешім шығарған."},
+            {role:"teacher", time:"12:16", type:"p", text:"Жақсы рахмет. Осы аңсар бастаған саясат саласын таңдағандардан үш артықшылық көрдім. Яғни үш балл қосып тұрмын сіздерге жақсы ма? Так екінші біздегі қарсы топ болып шыққан бұл экология саласын таңдағандар сіздерге сөз бір минут уақыт беріледі. Неге геоглобалистика экологияға көбірек зерттеу жасайды?"},
+            {role:"student", n:3, time:"12:43", type:"a", text:"Геоглобалистика ол елдердегі жаһандық мәселелерді зерттейтін ғылым. Яғни біздің ойымызша ең жаһандық мәселе бұл экологияға байланысты ол климаттың өзгеруі болсын. Себебі бұл бүкіл әлемге қатысты болады."}
+          ],
+          analysis:{
+            strengths:"Мұғалім оқушылардың сыни тұрғыдан ойлауын жүйелі түрде дамытады. Мысалы, «Неге экологияны таңдадыңдар?», «Қалай дәлелдейсіздер?» деген сұрақтар оқушыларды өз пікірлерін негіздеуге ынталандырады. Сонымен қатар, «Сұңқар қалқан» жобасы сияқты шығармашылық тапсырмалар арқылы оқушылардың заманауи технологияларды (ЖИ, дрон) пәндік мазмұнмен ұштастыру қабілеті жоғары бағаланды.",
+            improve:"Сабақтағы нұсқаулықтардың орындалуын тексеру (checking questions) бөлімі әлсіз. Мысалы, «Түсіндік па?» деген жабық сұрақтар көп, бірақ оқушының нұсқаулықты өз сөзімен қайталауы сирек кездеседі. Сонымен қатар, сыныптағы оқушылардың орташа сөйлеу ұзақтығын арттыру қажет, кейбір жауаптар өте қысқа.",
+            steps:[
+              "Нұсқаулықты тексеруді жақсарту: «Кім түсіндіргенімді қайталап береді?», «Осы тапсырманы орындаудың бірінші қадамы қандай?» деген ашық сұрақтарды қолданыңыз.",
+              "Оқушылардың жауабын тереңдету: «Бұл пікіріңді нақты дерекпен қалай толықтырасың?», «Сенің ойыңша, осы идеяның кемшілігі қандай болуы мүмкін?» сияқты follow-up сұрақтарын жүйелі қолданыңыз.",
+              "Оқушылардың өзара диалогын дамыту: «Сенің ойыңмен келісемін, бірақ...», «Сенің пікіріңде мынадай қарама-қайшылық бар ма?» деп оқушыларды бір-бірімен пікірталасқа түсіруге бағытталған модульдерді енгізіңіз."
+            ],
+            hattie:"Джон Хэттидің моделі бойынша мұғалімнің «реципрокты оқыту» (reciprocal teaching) элементтерін қолдануы, оқушылардың бір-бірімен өзара әрекеттесуі (peer learning) және «think-pair-share» стратегиясы жоғары нәтижелілікке әкеледі. Оқушылардың өздерінің танымдық процестерін бақылауы (metacognition) рефлексия кезеңінде анық байқалады."
+          }
+        }
+      ]
+    },
+    {
+      id:"td", name:"Дина Темиржанова", initials:"ДТ", subject:"Русский язык", grade:"8И",
+      lessons:[
+        {
+          id:"td1", lang:"ru",
+          title:"Русский язык — Урок №3",
+          topic:"Мир и проблемы двадцать первого века",
+          subject:"Русский язык", grade:"8И", date:"2026-08-05", time:"09:00–10:00",
+          duration:"00:40:09", replies:143,
+          speech:{ teacher:65, participants:35 },
+          langMix:[{ code:"ru", value:100 }],
+          progress:69.6,
+          transcript:[
+            {role:"teacher", time:"00:00", type:"p", text:"Итак, всем здравствуйте, ребята. Сегодня у нас с вами урок русского языка. Сегодня у нас с вами пятница, последний день учебной недели. Я вижу, что вы все устали, но совсем немного осталось до летних каникул. Итак, давайте мы с вами откроем свои тетради и учебники. Итак, ребята, пока вы записываете сегодняшнее число, посмотрите, пожалуйста, на слайд и подумайте, о чем же мы с вами сегодня будем говорить."},
+            {role:"teacher", time:"01:06", type:"p", text:"Асухан. О экологии. Об экологии. Хорошо. Алдиар. Мадиар. О загрязнениях. Так дальше. Загрязнение среды. Жансая. О глобальных проблемах. Отлично. Все верно, ребята. Что мы видим на иллюстрации? На первой иллюстрации это что у нас? Заводы, а именно газы, которые выходят из них. А на второй иллюстрации что мы видим? Мусор, да, который бросают люди, который не перерабатывается и вредит окружающей среде."},
+            {role:"teacher", time:"02:00", type:"q", text:"То есть, действительно, мы с вами сегодня будем говорить о проблемах двадцать первого века. Ребята, запишите тему сегодняшнего урока «Мир и проблемы двадцать первого века». Действительно, сегодня мы живем в двадцать первом веке, а это век высоких технологий, согласны? То есть огромные возможности, высокие технологии. Но одновременно с этим есть серьезные проблемы. Да, Айганым?"},
+            {role:"student", n:2, time:"02:33", type:"a", text:"Сейчас очень много болезней."},
+            {role:"teacher", time:"02:38", type:"p", text:"Все верно. С чем это связано, Айганым?"},
+            {role:"student", n:2, time:"02:41", type:"a", text:"Я точно не знаю, но я думаю, что это все из-за каких-то проблем с иммунитетом."},
+            {role:"teacher", time:"02:46", type:"p", text:"Хорошо. Все верно. А на сегодняшний день мир меняется, меняется очень быстро. То есть появляются новые изобретения, развивается Интернет, люди могут общаться друг с другом, общаться с человеком, который находится на другом конце света."},
+            {role:"teacher", time:"03:04", type:"p", text:"Но вместе с достижениями человечество сталкивается и с трудностями. Согласны? Вот сегодня мы с вами будем говорить как раз таки о мире, об изменениях, которые мы могли бы в него привнести. Давайте посмотрим на цели сегодняшнего урока. То есть зафиксируем цели в начале урока, чтобы в конце понять, смогли ли мы их реализовать. Что вы сегодня на уроке будете делать, ребята?"},
+            {role:"student", n:3, time:"03:57", type:"a", text:"Работать с текстами."},
+            {role:"teacher", time:"04:02", type:"p", text:"Обратите внимание: сравнивать особенности различных текстов с учетом композиции языковых особенностей. То есть сегодня на уроке мы будем действительно прогнозировать содержание текста по его вступлению, мы будем извлекать информацию из разных источников. Это будет видео, это будет текст, и будем сравнивать сплошной и не сплошной тексты. Итак, назовите, пожалуйста, одним словом двадцать первый век — это время, Айзере."},
+            {role:"student", n:3, time:"04:43", type:"a", text:"Страданий и мучений."},
+            {role:"teacher", time:"04:45", type:"q", text:"Так. Страданий и мучений. Почему, Асхат?"},
+            {role:"student", n:3, time:"04:48", type:"a", text:"Ну, не знаю. Потому что в двадцать первом веке полно детских смертей."},
+            {role:"teacher", time:"05:13", type:"p", text:"Отлично. То есть, действительно, двадцать первый век мы можем назвать веком технологий, веком Интернета, но также веком одиночества. Почему это век одиночества, ребята?"},
+            {role:"student", n:4, time:"06:04", type:"a", text:"Общаемся из дома, все через интернет. И часто мы забываем поддерживать связь в реальной жизни."}
+          ],
+          analysis:{
+            strengths:"Учитель эффективно вовлекает учащихся в обсуждение сложных глобальных проблем, используя личный опыт учеников и элементы сравнения. Положительно на учебный процесс влияет использование разнообразных форматов работы (парная работа, ролевая игра, анализ видео), что удерживает внимание класса и стимулирует мыслительную активность.",
+            improve:"Отсутствует этап формулировки критериев успеха для учащихся (ученики не озвучили, что именно будет считаться успешным результатом работы). Вопросы учителя часто носят закрытый характер, требующий простого перечисления, а не глубокого анализа, что ограничивает развитие критического мышления. Отсутствует этап индивидуальной рефлексии процесса обучения, внимание сфокусировано на содержании темы, а не на самооценке учебных навыков.",
+            steps:[
+              "Добавить этап сопоставления с критериями в середине урока. Рекомендация: чаще использовать фразы типа «Посмотрите на наши дескрипторы: выполнили ли мы задачу по сравнению текстов по всем пунктам? Где у нас возникли сложности?».",
+              "Усилить дискуссию вопросами, требующими доказательств. Рекомендация: после любого утверждения ученика задавать вопрос: «Какой факт из просмотренного видео подтверждает твой вывод?».",
+              "Углубить рефлексию. Рекомендация: завершать урок вопросом «Что сегодня помогло тебе выполнить задание лучше всего и что ты изменишь в своем подходе на следующем уроке?»."
+            ],
+            hattie:"Согласно модели Джона Хэтти, наиболее значимыми факторами прогресса учащихся являются ясные цели обучения и обратная связь. В данном уроке присутствуют постановка темы и целей, однако отсутствует четкое понимание учащимися критериев успешного достижения этих целей. Взаимодействие в парах и ролевые игры способствуют формированию глубоких знаний (Deep Learning), однако учителю следует сместить фокус с простого усвоения информации о проблемах на развитие метакогнитивных навыков, где ученики сами оценивают качество своего аргументирования и процесс поиска информации."
+          }
+        }
+      ]
+    }
+  ];
+
+  /* Города Казахстана: республиканского значения + областные центры */
+  var CITIES = [
+    { v:"astana",       ru:"Астана",              kk:"Астана",     en:"Astana" },
+    { v:"almaty",       ru:"Алматы",              kk:"Алматы",     en:"Almaty" },
+    { v:"shymkent",     ru:"Шымкент",             kk:"Шымкент",    en:"Shymkent" },
+    { v:"aktau",        ru:"Актау",               kk:"Ақтау",      en:"Aktau" },
+    { v:"aktobe",       ru:"Актобе",              kk:"Ақтөбе",     en:"Aktobe" },
+    { v:"atyrau",       ru:"Атырау",              kk:"Атырау",     en:"Atyrau" },
+    { v:"zhezkazgan",   ru:"Жезказган",           kk:"Жезқазған",  en:"Zhezkazgan" },
+    { v:"karaganda",    ru:"Караганда",           kk:"Қарағанды",  en:"Karaganda" },
+    { v:"kokshetau",    ru:"Кокшетау",            kk:"Көкшетау",   en:"Kokshetau" },
+    { v:"konaev",       ru:"Конаев",              kk:"Қонаев",     en:"Konaev" },
+    { v:"kostanay",     ru:"Костанай",            kk:"Қостанай",   en:"Kostanay" },
+    { v:"kyzylorda",    ru:"Кызылорда",           kk:"Қызылорда",  en:"Kyzylorda" },
+    { v:"pavlodar",     ru:"Павлодар",            kk:"Павлодар",   en:"Pavlodar" },
+    { v:"petropavl",    ru:"Петропавловск",       kk:"Петропавл",  en:"Petropavl" },
+    { v:"semey",        ru:"Семей",               kk:"Семей",      en:"Semey" },
+    { v:"taldykorgan",  ru:"Талдыкорган",         kk:"Талдықорған",en:"Taldykorgan" },
+    { v:"taraz",        ru:"Тараз",               kk:"Тараз",      en:"Taraz" },
+    { v:"turkestan",    ru:"Туркестан",           kk:"Түркістан",  en:"Turkestan" },
+    { v:"oral",         ru:"Уральск",             kk:"Орал",       en:"Oral" },
+    { v:"oskemen",      ru:"Усть-Каменогорск",    kk:"Өскемен",    en:"Oskemen" }
+  ];
+
+  /* Тип пользователя */
+  var USER_TYPES = [
+    { v:"binom",  ru:"УК BINOM",            kk:"BINOM ОҚ",           en:"BINOM education complex" },
+    { v:"farabi", ru:"УК Farabi",           kk:"Farabi ОҚ",          en:"Farabi education complex" },
+    { v:"school", ru:"Обычная школа",       kk:"Кәдімгі мектеп",     en:"Regular school" },
+    { v:"gos",    ru:"Государственная школа", kk:"Мемлекеттік мектеп", en:"State school" },
+    { v:"ksh",    ru:"КШ",                  kk:"КШ",                 en:"KSh" },
+    { v:"teacher",ru:"Обычный учитель",     kk:"Жеке мұғалім",       en:"Individual teacher" }
+  ];
+
+  var STORAGE_KEY = "sc-lang";
+  var DEFAULT_LANG = "ru";
+  var buttons = document.querySelectorAll(".lang button[data-lang]");
+  var descMeta = document.querySelector('meta[name="description"]');
+  var currentLang = DEFAULT_LANG;
+
+  function t(key){
+    var dict = DICT[currentLang] || DICT[DEFAULT_LANG];
+    return dict[key] || DICT[DEFAULT_LANG][key] || key;
+  }
+
+
+  function apply(lang){
+    var dict = DICT[lang] || DICT[DEFAULT_LANG];
+    currentLang = DICT[lang] ? lang : DEFAULT_LANG;
+
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var value = dict[el.getAttribute("data-i18n")];
+      if (typeof value === "string") el.textContent = value;
+    });
+
+    document.documentElement.lang = lang;
+    if (dict["meta.title"]) document.title = dict["meta.title"];
+    if (descMeta && dict["meta.desc"]) descMeta.setAttribute("content", dict["meta.desc"]);
+
+    buttons.forEach(function(btn){
+      btn.setAttribute("aria-pressed", String(btn.getAttribute("data-lang") === lang));
+    });
+
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+
+    fillSelect("f-city", CITIES,     dict["reg.cityPick"]);
+    fillSelect("f-user", USER_TYPES, dict["reg.userPick"]);
+
+    if (!modal.hidden) renderCurrent();   // подписи внутри модального окна тоже переводим
+  }
+
+  /* списки городов и типов пользователя — на языке интерфейса, выбор сохраняется */
+  function fillSelect(id, items, placeholder){
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    var keep = sel.value;
+    sel.innerHTML = '<option value="">' + (placeholder || "") + "</option>" +
+      items.map(function(it){
+        return '<option value="' + it.v + '">' + (it[currentLang] || it.ru) + "</option>";
+      }).join("");
+    if (keep) sel.value = keep;
+  }
+
+  function detect(){
+    var saved;
+    try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+    if (saved && DICT[saved]) return saved;
+
+    var nav = (navigator.language || "").toLowerCase();
+    if (nav.indexOf("kk") === 0) return "kk";
+    if (nav.indexOf("en") === 0) return "en";
+    return DEFAULT_LANG;
+  }
+
+  buttons.forEach(function(btn){
+    btn.addEventListener("click", function(){ apply(btn.getAttribute("data-lang")); });
+  });
+
+  /* ------------------------------------------------------------
+     ЛУЧШАЯ ПРАКТИКА — три экрана в одном окне:
+     список педагогов → уроки педагога → разбор урока
+     ------------------------------------------------------------ */
+  var modal   = document.getElementById("practice-modal");
+  var body    = document.getElementById("practice-body");
+  var titleEl = document.getElementById("practice-title");
+  var backBtn = document.getElementById("practice-back");
+  var view    = { level:"teachers", teacher:null, lesson:null };
+  var lastFocus = null;
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c];
+    });
+  }
+
+  function findTeacher(id){
+    for (var i=0;i<PRACTICE.length;i++) if (PRACTICE[i].id === id) return PRACTICE[i];
+    return null;
+  }
+  function findLesson(teacher, id){
+    for (var i=0;i<teacher.lessons.length;i++) if (teacher.lessons[i].id === id) return teacher.lessons[i];
+    return null;
+  }
+
+  function renderTeachers(){
+    titleEl.textContent = t("prac.chooseTeacher");
+    backBtn.hidden = true;
+    body.innerHTML =
+      '<div class="tcards">' +
+      PRACTICE.map(function(tc){
+        return '<button type="button" class="tcard" data-teacher="' + esc(tc.id) + '">' +
+                 '<span class="tcard__ava">' + esc(tc.initials) + '</span>' +
+                 '<span class="tcard__b">' +
+                   '<span class="tcard__n">' + esc(tc.name) + '</span>' +
+                   '<span class="tcard__m">' + esc(tc.subject) + ' · ' + esc(tc.grade) + '</span>' +
+                   '<span class="tcard__m">' + esc(t("prac.pilot")) + '</span>' +
+                 '</span>' +
+               '</button>';
+      }).join("") +
+      '</div>';
+  }
+
+  function renderLessons(teacher){
+    titleEl.textContent = teacher.name;
+    backBtn.hidden = false;
+    body.innerHTML =
+      '<div class="lesson__h" style="margin-top:0">' + esc(t("prac.chooseLesson")) + '</div>' +
+      '<div class="lcards">' +
+      teacher.lessons.map(function(ls){
+        var L = LESSON_L[ls.lang];
+        return '<button type="button" class="lcard" data-lesson="' + esc(ls.id) + '" lang="' + esc(ls.lang) + '">' +
+                 '<span class="lcard__b">' +
+                   '<span class="lcard__t">' + esc(ls.title) + '</span>' +
+                   '<span class="lcard__m">' + esc(ls.topic) + '</span>' +
+                   '<span class="lcard__m">' + esc(ls.grade) + ' · ' + esc(ls.date) + ' · ' + esc(ls.duration) + '</span>' +
+                   '<span class="lang-chip">' + esc(L.name) + '</span>' +
+                 '</span>' +
+               '</button>';
+      }).join("") +
+      '</div>';
+  }
+
+  function renderLesson(teacher, lesson){
+    var L = LESSON_L[lesson.lang] || LESSON_L.ru;   // все подписи — на языке урока
+
+    function field(k, v){
+      return '<div><div class="meta__k">' + esc(k) + '</div><div class="meta__v">' + esc(v) + '</div></div>';
+    }
+
+    titleEl.textContent = lesson.title;
+    backBtn.hidden = false;
+    body.innerHTML =
+      '<div lang="' + esc(lesson.lang) + '">' +
+
+      /* шапка урока — как карточка «Данные урока» в системе */
+      '<div class="lesson__top">' +
+        '<div class="lesson__topbar">' +
+          '<div>' +
+            '<div class="lesson__title">' + esc(lesson.title) + '</div>' +
+            '<div class="lesson__topic">' + esc(lesson.topic) + '</div>' +
+          '</div>' +
+          '<span class="pill">' + esc(L.ready) + '</span>' +
+        '</div>' +
+        '<div class="meta">' +
+          field(L.teacher, teacher.name) +
+          field(L.subject, lesson.subject) +
+          field(L.grade,   lesson.grade) +
+          field(L.date,    lesson.date) +
+        '</div>' +
+        '<div class="lesson__stats">' +
+          '<span>' + esc(L.time) + ': <b>' + esc(lesson.time) + '</b></span>' +
+          '<span>' + esc(L.record) + ': <b>' + esc(lesson.duration) + '</b></span>' +
+          '<span>' + esc(L.replies) + ': <b>' + lesson.replies + '</b></span>' +
+          '<span class="lang-chip">' + esc(L.name) + '</span>' +
+        '</div>' +
+      '</div>' +
+
+      /* оценка урока — соотношение речи, языки, общий прогресс */
+      '<div class="lesson__h">' + esc(L.evaluation) + '</div>' +
+      '<div class="sum">' +
+        '<div class="sum__box">' +
+          '<h4>' + esc(L.speechRatio) + '</h4>' +
+          '<div class="ring" style="background:conic-gradient(var(--brand) 0 ' + lesson.speech.teacher + '%,var(--green) ' + lesson.speech.teacher + '% 100%)">' +
+            '<span>' + lesson.speech.teacher + '%</span>' +
+          '</div>' +
+          '<div class="keys">' +
+            '<span><i class="dot dot--brand"></i>' + esc(L.teacher) + ' — ' + lesson.speech.teacher + '%</span>' +
+            '<span><i class="dot dot--green"></i>' + esc(L.participants) + ' — ' + lesson.speech.participants + '%</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="sum__box">' +
+          '<h4>' + esc(L.langRatio) + '</h4>' +
+          lesson.langMix.map(function(m){
+            return '<div class="bar-row">' +
+                     '<span class="bar-row__k">' + esc(L[m.code]) + '</span>' +
+                     '<span class="bar"><i style="width:' + m.value + '%"></i></span>' +
+                     '<b class="bar-row__v">' + m.value + '%</b>' +
+                   '</div>';
+          }).join("") +
+        '</div>' +
+      '</div>' +
+
+      '<div class="prog">' +
+        '<span class="prog__k">' + esc(L.progress) + '</span>' +
+        '<b class="prog__v">' + lesson.progress.toFixed(1) + '%</b>' +
+        '<span class="bar bar--wide"><i style="width:' + lesson.progress + '%"></i></span>' +
+      '</div>' +
+
+      /* транскрипт */
+      '<div class="lesson__h">' + esc(L.transcript) + '</div>' +
+      '<div class="lesson__card">' +
+        '<div class="legend">' + esc(L.legend) + '</div>' +
+        '<div class="scroll-box" tabindex="0">' +
+        lesson.transcript.map(function(l, i){
+          var who = l.role === "teacher" ? L.teacher : L.student + " " + l.n;
+          var kind = l.type ? ' · ' + esc(L[l.type]) : '';
+          return '<div class="line"' + (i === lesson.transcript.length - 1 ? ' style="margin-bottom:0"' : '') + '>' +
+                   '<span class="ava">' + esc(who.slice(0,1)) + '</span>' +
+                   '<span class="line__body">' +
+                     '<span class="line__head"><b>' + esc(who) + '</b> <time>' + esc(l.time) + '</time>' + kind + '</span>' +
+                     '<span class="bubble' + (l.type === "a" ? " bubble--answer" : "") + '">' + esc(l.text) + '</span>' +
+                   '</span>' +
+                 '</div>';
+        }).join("") +
+        '</div>' +
+      '</div>' +
+
+      /* итоговый анализ */
+      '<div class="lesson__h">' + esc(L.analysis) + '</div>' +
+      '<div class="sum">' +
+        '<div class="sum__box"><h4>' + esc(L.strengths) + '</h4><p>' + esc(lesson.analysis.strengths) + '</p></div>' +
+        '<div class="sum__box"><h4>' + esc(L.improve) + '</h4><p>' + esc(lesson.analysis.improve) + '</p></div>' +
+      '</div>' +
+
+      '<div class="lesson__h">' + esc(L.steps) + '</div>' +
+      '<div class="lesson__card"><ol class="steps-list">' +
+        lesson.analysis.steps.map(function(s){ return "<li>" + esc(s) + "</li>"; }).join("") +
+      '</ol></div>' +
+
+      '<div class="lesson__h">' + esc(L.hattie) + '</div>' +
+      '<div class="lesson__card">' + esc(lesson.analysis.hattie) + '</div>' +
+
+      '</div>';
+  }
+
+  function renderCurrent(){
+    if (view.level === "lesson"){
+      var tc = findTeacher(view.teacher);
+      renderLesson(tc, findLesson(tc, view.lesson));
+    } else if (view.level === "lessons"){
+      renderLessons(findTeacher(view.teacher));
+    } else {
+      renderTeachers();
+    }
+    body.scrollIntoView({ block:"nearest" });
+  }
+
+  function openModal(){
+    lastFocus = document.activeElement;
+    view = { level:"teachers", teacher:null, lesson:null };
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    renderCurrent();
+    document.getElementById("practice-close").focus();
+  }
+
+  function closeModal(){
+    modal.hidden = true;
+    document.body.style.overflow = "";
+    if (lastFocus) lastFocus.focus();
+  }
+
+  function goBack(){
+    if (view.level === "lesson"){ view.level = "lessons"; view.lesson = null; }
+    else if (view.level === "lessons"){ view.level = "teachers"; view.teacher = null; }
+    renderCurrent();
+  }
+
+  document.getElementById("practice-open").addEventListener("click", openModal);
+  document.getElementById("practice-close").addEventListener("click", closeModal);
+  backBtn.addEventListener("click", goBack);
+
+  modal.addEventListener("click", function(e){ if (e.target === modal) closeModal(); });
+
+  document.addEventListener("keydown", function(e){
+    if (modal.hidden) return;
+    if (e.key === "Escape") closeModal();
+  });
+
+  body.addEventListener("click", function(e){
+    var tBtn = e.target.closest("[data-teacher]");
+    if (tBtn){ view.level = "lessons"; view.teacher = tBtn.getAttribute("data-teacher"); renderCurrent(); return; }
+    var lBtn = e.target.closest("[data-lesson]");
+    if (lBtn){ view.level = "lesson"; view.lesson = lBtn.getAttribute("data-lesson"); renderCurrent(); }
+  });
+
+  /* ------------------------------------------------------------
+     РЕГИСТРАЦИЯ В ПРОБНОЙ ВЕРСИИ
+
+     Здесь только интерфейс и проверка ввода. Данные НИКУДА не
+     отправляются: боевая регистрация, отправка SMS-кода и учёт
+     квоты выполняются на стороне Smart Campus.
+
+     ВАЖНО про лимит «3 анализа»: считать его на клиенте нельзя —
+     любой счётчик в браузере обходится очисткой хранилища или
+     режимом инкогнито. Квота и блокировка ведутся на сервере,
+     привязанные к номеру телефона (логину) и ИИН.
+     ------------------------------------------------------------ */
+  var regModal = document.getElementById("reg-modal");
+  var step1 = document.getElementById("reg-step1");
+  var step2 = document.getElementById("reg-step2");
+  var step3 = document.getElementById("reg-step3");
+  var regLastFocus = null;
+
+  /* контрольный разряд ИИН РК */
+  function validIIN(v){
+    if (!/^\d{12}$/.test(v)) return false;
+    var d = v.split("").map(Number);
+    var w1 = [1,2,3,4,5,6,7,8,9,10,11];
+    var w2 = [3,4,5,6,7,8,9,10,11,1,2];
+    var sum = function(w){
+      var s = 0;
+      for (var i = 0; i < 11; i++) s += d[i] * w[i];
+      return s % 11;
+    };
+    var c = sum(w1);
+    if (c === 10) c = sum(w2);
+    return c !== 10 && c === d[11];
+  }
+
+  function digits(v){ return (v || "").replace(/\D/g, ""); }
+
+  /* +7 7XX XXX XX XX */
+  function validPhone(v){
+    var d = digits(v);
+    if (d.length === 11 && (d[0] === "8" || d[0] === "7")) return d[1] === "7";
+    return false;
+  }
+  function formatPhone(v){
+    var d = digits(v);
+    if (d.length === 11) d = d.slice(1);
+    return "+7 " + d.slice(0,3) + " " + d.slice(3,6) + " " + d.slice(6,8) + " " + d.slice(8,10);
+  }
+
+  function mark(name, ok){
+    var f = step1.querySelector('[data-for="' + name + '"]') || step2.querySelector('[data-for="' + name + '"]');
+    if (f) f.classList.toggle("is-bad", !ok);
+    return ok;
+  }
+
+  function val(id){ return (document.getElementById(id).value || "").trim(); }
+
+  step1.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    var checks = [
+      mark("fio",     val("f-fio").split(/\s+/).length >= 2 && val("f-fio").length >= 5),
+      mark("iin",     validIIN(digits(val("f-iin")))),
+      mark("phone",   validPhone(val("f-phone"))),
+      mark("email",   /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val("f-email"))),
+      mark("city",    val("f-city") !== ""),
+      mark("user",    val("f-user") !== ""),
+      mark("subject", val("f-subject").length >= 2),
+      mark("exp",     /^\d{1,2}$/.test(val("f-exp")) && +val("f-exp") <= 60),
+      mark("cat",     val("f-cat") !== "")
+    ];
+
+    if (checks.indexOf(false) !== -1){
+      var bad = step1.querySelector(".is-bad input, .is-bad select");
+      if (bad) bad.focus();
+      return;
+    }
+
+    /* здесь бэкенд создаёт заявку и отправляет код на номер */
+    document.getElementById("reg-phone-echo").textContent = formatPhone(val("f-phone"));
+    step1.hidden = true;
+    step2.hidden = false;
+    document.getElementById("f-code").focus();
+  });
+
+  step2.addEventListener("submit", function(e){
+    e.preventDefault();
+    if (!mark("code", /^\d{4}$/.test(val("f-code")))){
+      document.getElementById("f-code").focus();
+      return;
+    }
+    /* здесь бэкенд сверяет код, заводит аккаунт и открывает квоту 3 анализа */
+    step2.hidden = true;
+    step3.hidden = false;
+  });
+
+  document.getElementById("reg-edit").addEventListener("click", function(){
+    step2.hidden = true;
+    step1.hidden = false;
+  });
+
+  function openReg(){
+    regLastFocus = document.activeElement;
+    step1.hidden = false; step2.hidden = true; step3.hidden = true;
+    step1.querySelectorAll(".is-bad").forEach(function(f){ f.classList.remove("is-bad"); });
+    regModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    document.getElementById("f-fio").focus();
+  }
+  function closeReg(){
+    regModal.hidden = true;
+    document.body.style.overflow = "";
+    if (regLastFocus) regLastFocus.focus();
+  }
+
+  document.addEventListener("click", function(e){
+    var trigger = e.target.closest("[data-reg]");
+    if (trigger){ e.preventDefault(); openReg(); }
+  });
+
+  document.getElementById("reg-close").addEventListener("click", closeReg);
+  regModal.addEventListener("click", function(e){ if (e.target === regModal) closeReg(); });
+  document.addEventListener("keydown", function(e){
+    if (!regModal.hidden && e.key === "Escape") closeReg();
+  });
+
+  apply(detect());
+})();
+</script>
 
 </body>
 </html>
