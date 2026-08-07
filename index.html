@@ -455,6 +455,7 @@ p{margin:0}
   width:56px;height:56px;border-radius:50%;background:var(--green-soft);color:var(--green);
   display:grid;place-items:center;margin:0 auto 16px;
 }
+.done__ico--info{background:var(--brand-soft);color:var(--brand)}
 .done h3{font-size:19px;font-weight:750;margin-bottom:8px}
 .done p{color:var(--muted);font-size:15px;max-width:460px;margin:0 auto}
 .quota{
@@ -975,6 +976,7 @@ p{margin:0}
           <div class="field" data-for="user">
             <label for="f-user" data-i18n="reg.user">Пользователь</label>
             <select id="f-user" name="user"></select>
+            <small id="user-hint" hidden data-i18n="reg.orgHint">Для учебных комплексов и школ доступ открывает администратор: организация и педагоги должны быть загружены в АУП.</small>
             <span class="err" data-i18n="reg.errUser">Выберите тип пользователя</span>
           </div>
 
@@ -1003,7 +1005,7 @@ p{margin:0}
             <span class="err" data-i18n="reg.errCat">Выберите категорию</span>
           </div>
 
-          <p class="reg__note" data-i18n="reg.demoNote">Форма на лендинге — прототип: данные никуда не отправляются. Боевая регистрация выполняется в системе Smart Campus.</p>
+          <p class="reg__note" data-i18n="reg.demoNote">Форма на лендинге — прототип: данные никуда не отправляются. Регистрация ведёт в тестовую версию Smart Campus.</p>
 
           <div class="reg__actions">
             <button type="submit" class="btn btn--primary" data-i18n="reg.getCode">Получить код</button>
@@ -1026,6 +1028,23 @@ p{margin:0}
           </div>
         </div>
       </form>
+
+      <!-- Ветка для УК и школ: аккаунт заводит администратор через АУП -->
+      <div id="reg-step-org" hidden>
+        <div class="done">
+          <div class="done__ico done__ico--info">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+          </div>
+          <h3 data-i18n="reg.orgTitle">Доступ открывает администратор</h3>
+          <p data-i18n="reg.orgText">Педагоги учебных комплексов и школ заводятся в системе централизованно: организация и списки учителей загружаются через АУП. Самостоятельная регистрация для них не требуется.</p>
+          <p class="trial__note" style="margin:20px auto 0;max-width:520px;text-align:left" data-i18n="reg.orgNext">Если ваша организация уже в системе — войдите по номеру телефона. Если её нет, обратитесь к администратору вашей организации, чтобы вас добавили.</p>
+
+          <div class="reg__actions" style="justify-content:center;margin-top:22px">
+            <a href="https://smartcampus.test.wip.kz/login" class="btn btn--primary" data-i18n="btn.login">Войти</a>
+            <button type="button" class="reg__link" id="reg-edit-org" data-i18n="reg.backEdit">Изменить данные</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Шаг 3. Доступ открыт -->
       <div id="reg-step3" hidden>
@@ -1281,7 +1300,11 @@ p{margin:0}
       "reg.email":"E-mail","reg.subject":"Учитель предмета","reg.subjectPick":"Выберите предмет","reg.exp":"Стаж, лет","reg.cat":"Категория",
       "reg.catPick":"Выберите категорию","reg.cat0":"Без категории","reg.cat1":"Педагог-модератор",
       "reg.cat2":"Педагог-эксперт","reg.cat3":"Педагог-исследователь","reg.cat4":"Педагог-мастер",
-      "reg.demoNote":"Форма на лендинге — прототип: данные никуда не отправляются. Боевая регистрация выполняется в системе Smart Campus.",
+      "reg.demoNote":"Форма на лендинге — прототип: данные никуда не отправляются. Регистрация ведёт в тестовую версию Smart Campus.",
+      "reg.orgHint":"Для учебных комплексов и школ доступ открывает администратор: организация и педагоги должны быть загружены в АУП.",
+      "reg.orgTitle":"Доступ открывает администратор",
+      "reg.orgText":"Педагоги учебных комплексов и школ заводятся в системе централизованно: организация и списки учителей загружаются через АУП. Самостоятельная регистрация для них не требуется.",
+      "reg.orgNext":"Если ваша организация уже в системе — войдите по номеру телефона. Если её нет, обратитесь к администратору вашей организации, чтобы вас добавили.",
       "reg.getCode":"Получить код","reg.codeSent":"Код отправлен на номер","reg.code":"Код из SMS",
       "reg.confirm":"Подтвердить","reg.backEdit":"Изменить данные",
       "reg.doneTitle":"Пробный доступ открыт",
@@ -1424,7 +1447,11 @@ p{margin:0}
       "reg.email":"E-mail","reg.subject":"Пән мұғалімі","reg.subjectPick":"Пәнді таңдаңыз","reg.exp":"Өтілі, жыл","reg.cat":"Санаты",
       "reg.catPick":"Санатты таңдаңыз","reg.cat0":"Санатсыз","reg.cat1":"Педагог-модератор",
       "reg.cat2":"Педагог-сарапшы","reg.cat3":"Педагог-зерттеуші","reg.cat4":"Педагог-шебер",
-      "reg.demoNote":"Лендингтегі форма — прототип: деректер ешқайда жіберілмейді. Нақты тіркелу Smart Campus жүйесінде жүреді.",
+      "reg.demoNote":"Лендингтегі форма — прототип: деректер ешқайда жіберілмейді. Тіркелу Smart Campus-тің сынақ нұсқасына апарады.",
+      "reg.orgHint":"Оқу кешендері мен мектептерге қолжетімділікті әкімші ашады: ұйым мен педагогтер АБП-ға жүктелуі керек.",
+      "reg.orgTitle":"Қолжетімділікті әкімші ашады",
+      "reg.orgText":"Оқу кешендері мен мектептердің педагогтері жүйеге орталықтандырылған түрде енгізіледі: ұйым мен мұғалімдер тізімі АБП арқылы жүктеледі. Оларға өз бетінше тіркелу қажет емес.",
+      "reg.orgNext":"Ұйымыңыз жүйеде болса — телефон нөміріңізбен кіріңіз. Болмаса, сізді қосу үшін ұйым әкімшісіне хабарласыңыз.",
       "reg.getCode":"Код алу","reg.codeSent":"Код мына нөмірге жіберілді","reg.code":"SMS коды",
       "reg.confirm":"Растау","reg.backEdit":"Деректерді өзгерту",
       "reg.doneTitle":"Сынақ қолжетімділігі ашылды",
@@ -1567,7 +1594,11 @@ p{margin:0}
       "reg.email":"E-mail","reg.subject":"Subject taught","reg.subjectPick":"Choose a subject","reg.exp":"Experience, years","reg.cat":"Category",
       "reg.catPick":"Choose a category","reg.cat0":"No category","reg.cat1":"Teacher-moderator",
       "reg.cat2":"Teacher-expert","reg.cat3":"Teacher-researcher","reg.cat4":"Teacher-master",
-      "reg.demoNote":"This landing-page form is a prototype: nothing is submitted anywhere. Real sign-up happens in Smart Campus.",
+      "reg.demoNote":"This landing-page form is a prototype: nothing is submitted anywhere. Sign-up leads to the Smart Campus test environment.",
+      "reg.orgHint":"For education complexes and schools access is opened by an administrator: the organisation and its teachers must be uploaded through the admin panel.",
+      "reg.orgTitle":"Access is opened by an administrator",
+      "reg.orgText":"Teachers of education complexes and schools are added centrally: the organisation and its teacher lists are uploaded through the admin panel. They do not sign up themselves.",
+      "reg.orgNext":"If your organisation is already in the system, sign in with your phone number. If it is not, ask your organisation administrator to add you.",
       "reg.getCode":"Get the code","reg.codeSent":"The code was sent to","reg.code":"SMS code",
       "reg.confirm":"Confirm","reg.backEdit":"Edit details",
       "reg.doneTitle":"Trial access is open",
@@ -2181,7 +2212,13 @@ p{margin:0}
   var step1 = document.getElementById("reg-step1");
   var step2 = document.getElementById("reg-step2");
   var step3 = document.getElementById("reg-step3");
+  var stepOrg = document.getElementById("reg-step-org");
+  var userHint = document.getElementById("user-hint");
   var regLastFocus = null;
+
+  /* «Обычный учитель» регистрируется сам. Педагогов УК и школ
+     заводит администратор — организация грузится в АУП. */
+  function isSelfSignup(v){ return v === "teacher"; }
 
   /* контрольный разряд ИИН РК */
   function validIIN(v){
@@ -2242,11 +2279,24 @@ p{margin:0}
       return;
     }
 
-    /* здесь бэкенд создаёт заявку и отправляет код на номер */
+    /* УК и школы: аккаунт уже должен быть заведён администратором через АУП */
+    if (!isSelfSignup(val("f-user"))){
+      step1.hidden = true;
+      stepOrg.hidden = false;
+      return;
+    }
+
+    /* здесь бэкенд создаёт заявку в тестовой версии и отправляет код на номер */
     document.getElementById("reg-phone-echo").textContent = formatPhone(val("f-phone"));
     step1.hidden = true;
     step2.hidden = false;
     document.getElementById("f-code").focus();
+  });
+
+  /* подсказка про АУП появляется, как только выбран УК или школа */
+  document.getElementById("f-user").addEventListener("change", function(){
+    var v = this.value;
+    userHint.hidden = (v === "" || isSelfSignup(v));
   });
 
   step2.addEventListener("submit", function(e){
@@ -2265,9 +2315,15 @@ p{margin:0}
     step1.hidden = false;
   });
 
+  document.getElementById("reg-edit-org").addEventListener("click", function(){
+    stepOrg.hidden = true;
+    step1.hidden = false;
+    document.getElementById("f-user").focus();
+  });
+
   function openReg(){
     regLastFocus = document.activeElement;
-    step1.hidden = false; step2.hidden = true; step3.hidden = true;
+    step1.hidden = false; step2.hidden = true; step3.hidden = true; stepOrg.hidden = true;
     step1.querySelectorAll(".is-bad").forEach(function(f){ f.classList.remove("is-bad"); });
     regModal.hidden = false;
     document.body.style.overflow = "hidden";
