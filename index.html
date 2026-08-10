@@ -557,6 +557,33 @@ p{margin:0}
 }
 
 /* ============================================================
+   КОНТАКТЫ
+   ============================================================ */
+.contacts{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;margin-top:46px;align-items:start}
+.contacts__list{
+  list-style:none;padding:26px;margin:0;display:grid;gap:20px;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+}
+.contacts__list li{display:flex;gap:14px;align-items:flex-start}
+.contacts__ico{
+  width:40px;height:40px;border-radius:11px;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;flex:none;
+}
+.contacts__ico--wa{background:var(--green-soft);color:var(--green)}
+.contacts__b{display:flex;flex-direction:column;min-width:0}
+.contacts__k{font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-weight:700}
+.contacts__v{font-size:16.5px;font-weight:650;margin-top:3px;word-break:break-word}
+.contacts__v:hover{color:var(--brand-light)}
+.contacts__note{font-size:13.5px;color:var(--muted);margin-top:3px}
+
+.qr{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;
+}
+.qr__img{width:100%;max-width:190px;height:auto;border-radius:8px}
+.qr__cap{font-size:13px;color:var(--muted)}
+
+/* ============================================================
    FAQ
    ============================================================ */
 .faq{max-width:800px;margin:42px auto 0;display:grid;gap:10px}
@@ -618,7 +645,7 @@ p{margin:0}
   .plans{grid-template-columns:1fr}
   .plan h3,.plan__desc,.plan__hint{min-height:0}
   .nums{grid-template-columns:1fr}
-  .tcards,.sum,.form{grid-template-columns:1fr}
+  .tcards,.sum,.form,.contacts{grid-template-columns:1fr}
   .modal{padding:0}
   .modal__in{border-radius:0;min-height:100vh}
   .modal__body{padding:18px}
@@ -646,8 +673,7 @@ p{margin:0}
 <body>
 
 <!--
-  Куда ведут кнопки (стенд: https://smartcampus.test.wip.kz/)
-  Для боевого запуска заменить хост на https://smartcampus.kz/
+  Куда ведут кнопки (боевая платформа: https://smartcampus.kz/)
     «Войти»                          → /login
     «Попробовать бесплатно»          → / (корень сам редиректит на /login)
     «Зарегистрироваться»             → / — публичной страницы регистрации на сайте пока нет,
@@ -659,7 +685,7 @@ p{margin:0}
 <!-- ===================== ШАПКА ===================== -->
 <header class="header">
   <div class="wrap header__in">
-    <a href="https://smartcampus.test.wip.kz/" class="logo"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></a>
+    <a href="https://smartcampus.kz/" class="logo"><i>&lt;</i><b>smart&nbsp;campus</b><i>&gt;</i></a>
     <nav class="nav">
       <a href="#features" data-i18n="nav.features">Возможности</a>
       <a href="#how" data-i18n="nav.how">Как это работает</a>
@@ -673,7 +699,7 @@ p{margin:0}
       <button type="button" data-lang="en" aria-pressed="false"><span class="lbl-full">Eng</span><span class="lbl-short">EN</span></button>
     </div>
     <div class="header__cta">
-      <a href="https://smartcampus.test.wip.kz/login" class="btn btn--outline btn--sm" data-i18n="btn.login">Войти</a>
+      <a href="https://smartcampus.kz/login" class="btn btn--outline btn--sm" data-i18n="btn.login">Войти</a>
       <a href="#trial" class="btn btn--primary btn--sm" data-reg>
         <span class="lbl-full" data-i18n="btn.try">Попробовать бесплатно</span>
         <span class="lbl-short" data-i18n="btn.tryShort">Начать</span>
@@ -868,7 +894,7 @@ p{margin:0}
       </div>
       <div class="trial__side">
         <p class="trial__note" data-i18n="trial.note">После использования трёх анализов новые уроки анализировать нельзя, но все ранее полученные отчёты и рекомендации останутся доступны.</p>
-        <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary btn--wide" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
+        <a href="https://smartcampus.kz/" class="btn btn--primary btn--wide" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
       </div>
     </div>
   </div>
@@ -1085,7 +1111,7 @@ p{margin:0}
           <p class="trial__note" style="margin:20px auto 0;max-width:520px;text-align:left" data-i18n="reg.orgNext">Если ваша организация уже в системе — войдите по номеру телефона. Если её нет, обратитесь к администратору вашей организации, чтобы вас добавили.</p>
 
           <div class="reg__actions" style="justify-content:center;margin-top:22px">
-            <a href="https://smartcampus.test.wip.kz/login" class="btn btn--primary" data-i18n="btn.login">Войти</a>
+            <a href="https://smartcampus.kz/login" class="btn btn--primary" data-i18n="btn.login">Войти</a>
             <button type="button" class="reg__link" id="reg-edit-org" data-i18n="reg.backEdit">Изменить данные</button>
           </div>
         </div>
@@ -1107,7 +1133,7 @@ p{margin:0}
           <p style="font-size:13.5px" data-i18n="reg.quotaAfter">Когда 3 анализа закончатся, загрузка новых уроков закрывается. Все полученные отчёты и рекомендации остаются доступны.</p>
 
           <div class="center-cta">
-            <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary" data-i18n="reg.go">Перейти в систему</a>
+            <a href="https://smartcampus.kz/" class="btn btn--primary" data-i18n="reg.go">Перейти в систему</a>
           </div>
         </div>
       </div>
@@ -1137,7 +1163,7 @@ p{margin:0}
           <li data-i18n="plan.free.f3">Личный кабинет и история</li>
           <li data-i18n="plan.free.f4">Оплата не требуется</li>
         </ul>
-        <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline btn--wide" data-i18n="btn.signup" data-reg>Зарегистрироваться</a>
+        <a href="https://smartcampus.kz/" class="btn btn--outline btn--wide" data-i18n="btn.signup" data-reg>Зарегистрироваться</a>
       </div>
 
       <!-- Месячный, 30 уроков -->
@@ -1152,7 +1178,7 @@ p{margin:0}
           <li data-i18n="plan.f.dynamics">Динамика и сравнение уроков</li>
           <li data-i18n="plan.f.renew">Продление в один клик</li>
         </ul>
-        <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
+        <a href="https://smartcampus.kz/" class="btn btn--outline btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
       </div>
 
       <!-- Месячный, 50 уроков -->
@@ -1167,7 +1193,7 @@ p{margin:0}
           <li data-i18n="plan.f.dynamics">Динамика и сравнение уроков</li>
           <li data-i18n="plan.f.renew">Продление в один клик</li>
         </ul>
-        <a href="https://smartcampus.test.wip.kz/" class="btn btn--outline btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
+        <a href="https://smartcampus.kz/" class="btn btn--outline btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
       </div>
 
       <!-- Полугодовой, 50 уроков (рекомендуемый) -->
@@ -1184,7 +1210,7 @@ p{margin:0}
           <li data-i18n="plan.f.dynamics">Динамика и сравнение уроков</li>
           <li data-i18n="plan.half.f5">Приоритетная поддержка</li>
         </ul>
-        <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
+        <a href="https://smartcampus.kz/" class="btn btn--primary btn--wide" data-i18n="btn.kaspi">Оплатить через Kaspi QR</a>
       </div>
     </div>
 
@@ -1270,12 +1296,61 @@ p{margin:0}
   </div>
 </section>
 
+<!-- ===================== КОНТАКТЫ ===================== -->
+<section class="section" id="contacts">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="cont.eyebrow">Контакты</div>
+      <h2 class="h2" data-i18n="cont.h2">Остались вопросы? Напишите нам</h2>
+      <p class="lead" data-i18n="cont.lead">Ответим в WhatsApp или на почту, поможем с регистрацией и подбором тарифа.</p>
+    </div>
+
+    <div class="contacts">
+      <ul class="contacts__list">
+        <li>
+          <span class="contacts__ico contacts__ico--wa">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 21l2.1-4.9A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+          </span>
+          <span class="contacts__b">
+            <span class="contacts__k">WhatsApp</span>
+            <a class="contacts__v" href="https://wa.me/77717003468">+7 771 700 34 68</a>
+          </span>
+        </li>
+        <li>
+          <span class="contacts__ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          </span>
+          <span class="contacts__b">
+            <span class="contacts__k">E-mail</span>
+            <a class="contacts__v" href="mailto:smart.campus.kz@gmail.com">smart.campus.kz@gmail.com</a>
+          </span>
+        </li>
+        <li>
+          <span class="contacts__ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.2z"/></svg>
+          </span>
+          <span class="contacts__b">
+            <span class="contacts__k" data-i18n="cont.phone">Телефон</span>
+            <a class="contacts__v" href="tel:+77780105302">+7 (778) 010 53 02</a>
+            <span class="contacts__note">Карлыгаш Бримжанова</span>
+          </span>
+        </li>
+      </ul>
+
+      <div class="qr">
+        <svg class="qr__img" role="img" aria-label="QR: smartcampus.kz" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#000000" d="M4 4.5h7m1 0h3m1 0h2m1 0h1m2 0h1m1 0h1m1 0h7M4 5.5h1m5 0h1m1 0h1m1 0h4m4 0h2m2 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h1m4 0h2m4 0h2m1 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m2 0h3m2 0h4m1 0h1m2 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h1m5 0h2m2 0h2m1 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m1 0h5m1 0h1m1 0h1m1 0h1m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h1m5 0h1m1 0h1m3 0h1M6 12.5h3m1 0h1m1 0h1m1 0h1m5 0h1m1 0h2m1 0h3m2 0h3M6 13.5h1m4 0h4m1 0h6m4 0h3m3 0h1M4 14.5h1m1 0h1m2 0h2m1 0h1m4 0h1m1 0h1m1 0h1m3 0h6M4 15.5h1m1 0h4m2 0h5m6 0h1m1 0h5m1 0h1M4 16.5h2m3 0h2m4 0h4m2 0h3m1 0h1m1 0h1m2 0h3M4 17.5h4m5 0h1m1 0h3m2 0h1m2 0h4m1 0h2m1 0h2M5 18.5h1m1 0h2m1 0h1m1 0h8m1 0h2m1 0h2m1 0h1M4 19.5h4m4 0h1m1 0h2m1 0h1m1 0h3m1 0h1m2 0h1m1 0h2m1 0h1M4 20.5h1m1 0h2m1 0h3m1 0h2m2 0h2m2 0h1m2 0h2m1 0h1m1 0h2M4 21.5h1m3 0h1m2 0h7m1 0h1m1 0h1m1 0h6m2 0h2M4 22.5h1m1 0h3m1 0h1m4 0h1m5 0h1m2 0h1m1 0h1m1 0h2M4 23.5h1m2 0h2m2 0h2m2 0h1m1 0h1m2 0h1m2 0h1m2 0h1m1 0h2m1 0h2M4 24.5h1m2 0h1m1 0h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h6m1 0h1M12 25.5h2m1 0h2m1 0h1m2 0h4m3 0h2m2 0h1M4 26.5h7m3 0h2m7 0h2m1 0h1m1 0h1M4 27.5h1m5 0h1m2 0h2m1 0h4m1 0h4m3 0h2m1 0h2M4 28.5h1m1 0h3m1 0h1m1 0h1m3 0h5m3 0h8M4 29.5h1m1 0h3m1 0h1m1 0h2m2 0h2m3 0h1m1 0h3m1 0h1m1 0h2M4 30.5h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m2 0h8m1 0h1M4 31.5h1m5 0h1m2 0h1m3 0h2m5 0h1m1 0h1m1 0h2m1 0h1M4 32.5h7m2 0h1m2 0h2m1 0h2m2 0h1m1 0h2m1 0h3"/></svg>
+        <div class="qr__cap" data-i18n="cont.qr">Наведите камеру телефона — откроется smartcampus.kz</div>
+        <a class="btn btn--outline btn--sm" href="https://smartcampus.kz" data-i18n="cont.open">Открыть сайт</a>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- ===================== ФИНАЛЬНЫЙ ЭКРАН ===================== -->
 <section class="wrap" style="padding-top:24px">
   <div class="cta">
     <h2 data-i18n="final.h2">Начните с первого урока</h2>
     <p data-i18n="final.p">Попробуйте Smart Class бесплатно, получите три анализа уроков и оцените, как объективная обратная связь помогает совершенствовать преподавание.</p>
-    <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
+    <a href="https://smartcampus.kz/" class="btn btn--primary" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
     <p class="cta__tag" data-i18n="final.tag">Не просто анализировать прошедший урок, а провести следующий ещё лучше.</p>
   </div>
 </section>
@@ -1287,8 +1362,8 @@ p{margin:0}
     <div class="footer__links">
       <a href="#plans" data-i18n="nav.plans">Тарифы</a>
       <a href="#faq" data-i18n="nav.faq">Вопросы</a>
-      <a href="https://smartcampus.test.wip.kz/" data-i18n="foot.offer">Публичная оферта</a>
-      <a href="https://smartcampus.test.wip.kz/" data-i18n="foot.support">Поддержка</a>
+      <a href="https://smartcampus.kz/" data-i18n="foot.offer">Публичная оферта</a>
+      <a href="#contacts" data-i18n="foot.support">Поддержка</a>
     </div>
     <div>© 2026 Smart Campus</div>
   </div>
@@ -1443,6 +1518,9 @@ p{margin:0}
       "faq.q6":"Как проходит оплата?","faq.a6":"Вы выбираете тариф, сканируете Kaspi QR в приложении Kaspi.kz и подтверждаете платёж. После подтверждения подписка активируется автоматически.",
       "faq.q7":"Подписка продлевается сама?","faq.a7":"Нет. Это разовый платёж — автосписаний нет. Когда срок подходит к концу, вы продлеваете подписку в один клик из личного кабинета.",
 
+      "cont.eyebrow":"Контакты","cont.h2":"Остались вопросы? Напишите нам",
+      "cont.lead":"Ответим в WhatsApp или на почту, поможем с регистрацией и подбором тарифа.",
+      "cont.phone":"Телефон","cont.qr":"Наведите камеру телефона — откроется smartcampus.kz","cont.open":"Открыть сайт",
       "final.h2":"Начните с первого урока",
       "final.p":"Попробуйте Smart Class бесплатно, получите три анализа уроков и оцените, как объективная обратная связь помогает совершенствовать преподавание.",
       "final.tag":"Не просто анализировать прошедший урок, а провести следующий ещё лучше.",
@@ -1588,6 +1666,9 @@ p{margin:0}
       "faq.q6":"Төлем қалай жүреді?","faq.a6":"Тарифті таңдайсыз, Kaspi.kz қосымшасында Kaspi QR сканерлеп, төлемді растайсыз. Расталғаннан кейін жазылым автоматты түрде іске қосылады.",
       "faq.q7":"Жазылым өзі жаңарады ма?","faq.a7":"Жоқ. Бұл біржолғы төлем — автоматты шегерім жоқ. Мерзім аяқталғанда жазылымды жеке кабинеттен бір рет басып жаңартасыз.",
 
+      "cont.eyebrow":"Байланыс","cont.h2":"Сұрақтарыңыз бар ма? Бізге жазыңыз",
+      "cont.lead":"WhatsApp арқылы немесе поштаға жауап береміз, тіркелуге және тариф таңдауға көмектесеміз.",
+      "cont.phone":"Телефон","cont.qr":"Телефон камерасын бағыттаңыз — smartcampus.kz ашылады","cont.open":"Сайтты ашу",
       "final.h2":"Бірінші сабақтан бастаңыз",
       "final.p":"Smart Class-ті тегін көріп көріңіз, үш сабақ талдауын алыңыз және объективті кері байланыс сабақ беруді жетілдіруге қалай көмектесетінін бағалаңыз.",
       "final.tag":"Өткен сабақты жай талдау емес, келесісін одан да жақсы өткізу.",
@@ -1733,6 +1814,9 @@ p{margin:0}
       "faq.q6":"How does payment work?","faq.a6":"You pick a plan, scan the Kaspi QR in the Kaspi.kz app and confirm the payment. Access opens automatically once it's confirmed.",
       "faq.q7":"Does the subscription auto-renew?","faq.a7":"No. It's a one-time payment with no auto-charges. When the term ends you renew in one click from your account.",
 
+      "cont.eyebrow":"Contacts","cont.h2":"Any questions? Write to us",
+      "cont.lead":"We answer on WhatsApp or by e-mail and help with sign-up and choosing a plan.",
+      "cont.phone":"Phone","cont.qr":"Point your phone camera at it to open smartcampus.kz","cont.open":"Open the site",
       "final.h2":"Start with your first lesson",
       "final.p":"Try Smart Class for free, get three lesson analyses and see how objective feedback helps you teach better.",
       "final.tag":"Not just analyzing the lesson you taught — teaching the next one even better.",
