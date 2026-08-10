@@ -542,6 +542,7 @@ p{margin:0}
 .plan__price{font-size:30px;font-weight:750;margin:14px 0 4px;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
 .plan__price span{font-size:14px;font-weight:600;color:var(--muted)}
 .plan__hint{font-size:13px;color:var(--muted);min-height:42px}
+.plan__hint b{color:var(--ink);font-weight:700}
 .plan ul{list-style:none;padding:0;margin:20px 0;display:grid;gap:10px}
 .plan li{display:flex;gap:9px;font-size:14px;color:var(--muted)}
 .plan li::before{content:"✓";color:var(--green);font-weight:800;flex:none}
@@ -846,8 +847,35 @@ p{margin:0}
   </div>
 </section>
 
+<!-- ===================== БЛОК 8. ПРОБНАЯ ВЕРСИЯ ===================== -->
+<section class="section section--plain" id="trial">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="trial.eyebrow">Пробный период</div>
+      <h2 class="h2" data-i18n="trial.h2">Попробуйте бесплатно</h2>
+    </div>
+
+    <div class="trial">
+      <div>
+        <div class="trial__t" data-i18n="trial.listT">Что входит в пробную версию</div>
+        <ul>
+          <li data-i18n="trial.i1">3 бесплатных анализа уроков</li>
+          <li data-i18n="trial.i2">Полный транскрипт</li>
+          <li data-i18n="trial.i3">Анализ по критериям современного урока</li>
+          <li data-i18n="trial.i4">Персональные рекомендации</li>
+          <li data-i18n="trial.i5">История всех проанализированных уроков</li>
+        </ul>
+      </div>
+      <div class="trial__side">
+        <p class="trial__note" data-i18n="trial.note">После использования трёх анализов новые уроки анализировать нельзя, но все ранее полученные отчёты и рекомендации останутся доступны.</p>
+        <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary btn--wide" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== БЛОК 4. ДЛЯ ЧЕГО ИСПОЛЬЗОВАТЬ ===================== -->
-<section class="section section--plain">
+<section class="section">
   <div class="wrap">
     <div class="center">
       <div class="eyebrow" data-i18n="uses.eyebrow">Применение</div>
@@ -895,42 +923,8 @@ p{margin:0}
   </div>
 </section>
 
-<!-- ===================== БЛОК 5. КАК ЭТО РАБОТАЕТ ===================== -->
-<section class="section" id="how">
-  <div class="wrap">
-    <div class="center">
-      <div class="eyebrow" data-i18n="how.eyebrow">Три шага</div>
-      <h2 class="h2" data-i18n="how.h2">Как это работает</h2>
-    </div>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step__num">1</div>
-        <h3 data-i18n="how.t1">Зарегистрируйтесь</h3>
-        <p data-i18n="how.d1">Создайте бесплатный аккаунт
-        <div class="step__arrow">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step__num">2</div>
-        <h3 data-i18n="how.t2">Запишите или загрузите урок</h3>
-        <p data-i18n="how.d2">Используйте запись с телефона или другого устройства
-        <div class="step__arrow">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step__num">3</div>
-        <h3 data-i18n="how.t3">Получите анализ</h3>
-        <p data-i18n="how.d3">Через несколько минут система сформирует полный отчёт и рекомендации
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== ЛУЧШАЯ ПРАКТИКА ===================== -->
-<section class="section" id="practice">
+<section class="section section--plain" id="practice">
   <div class="wrap">
     <div class="center">
       <div class="eyebrow" data-i18n="prac.eyebrow">Лучшая практика</div>
@@ -1121,51 +1115,6 @@ p{margin:0}
   </div>
 </div>
 
-<!-- ===================== БЛОК 7. ПОЧЕМУ ВЫБИРАЮТ ===================== -->
-<section class="section">
-  <div class="wrap">
-    <div class="center">
-      <div class="eyebrow" data-i18n="why.eyebrow">Преимущества</div>
-      <h2 class="h2" data-i18n="why.h2">Почему педагоги выбирают Smart Class</h2>
-    </div>
-
-    <ul class="checks">
-      <li data-i18n="why.1">Объективная обратная связь после каждого урока</li>
-      <li data-i18n="why.2">Анализ по критериям современного урока</li>
-      <li data-i18n="why.3">Возможность отслеживать профессиональный прогресс</li>
-      <li data-i18n="why.4">История всех уроков в одном месте</li>
-      <li data-i18n="why.5">Рекомендации, которые можно применять сразу</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ===================== БЛОК 8. ПРОБНАЯ ВЕРСИЯ ===================== -->
-<section class="section section--plain" id="trial">
-  <div class="wrap">
-    <div class="center">
-      <div class="eyebrow" data-i18n="trial.eyebrow">Пробный период</div>
-      <h2 class="h2" data-i18n="trial.h2">Попробуйте бесплатно</h2>
-    </div>
-
-    <div class="trial">
-      <div>
-        <div class="trial__t" data-i18n="trial.listT">Что входит в пробную версию</div>
-        <ul>
-          <li data-i18n="trial.i1">3 бесплатных анализа уроков</li>
-          <li data-i18n="trial.i2">Полный транскрипт</li>
-          <li data-i18n="trial.i3">Анализ по критериям современного урока</li>
-          <li data-i18n="trial.i4">Персональные рекомендации</li>
-          <li data-i18n="trial.i5">История всех проанализированных уроков</li>
-        </ul>
-      </div>
-      <div class="trial__side">
-        <p class="trial__note" data-i18n="trial.note">После использования трёх анализов новые уроки анализировать нельзя, но все ранее полученные отчёты и рекомендации останутся доступны.</p>
-        <a href="https://smartcampus.test.wip.kz/" class="btn btn--primary btn--wide" data-i18n="btn.try" data-reg>Попробовать бесплатно</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== ТАРИФЫ ===================== -->
 <section class="section" id="plans">
   <div class="wrap">
@@ -1196,7 +1145,7 @@ p{margin:0}
         <h3 data-i18n="plan.m30.t">Месячный · 30 уроков</h3>
         <p class="plan__desc" data-i18n="plan.m30.d">Если ведёте один-два класса и разбираете не каждый урок.</p>
         <div class="plan__price">9 900 <span data-i18n="plan.perMonth">₸ / мес</span></div>
-        <div class="plan__hint" data-i18n="plan.m30.hint">330 ₸ за урок. Разовый платёж, автосписаний нет</div>
+        <div class="plan__hint"><b data-i18n="plan.m30.per">330 ₸ за урок</b> <span data-i18n="plan.once">Разовый платёж, автосписаний нет</span></div>
         <ul>
           <li class="is-key" data-i18n="plan.m30.f1">Запись и анализ 30 уроков</li>
           <li data-i18n="plan.f.report">Полный отчёт по каждому уроку</li>
@@ -1211,7 +1160,7 @@ p{margin:0}
         <h3 data-i18n="plan.m50.t">Месячный · 50 уроков</h3>
         <p class="plan__desc" data-i18n="plan.m50.d">Если разбираете уроки регулярно и ведёте несколько классов.</p>
         <div class="plan__price">17 000 <span data-i18n="plan.perMonth">₸ / мес</span></div>
-        <div class="plan__hint" data-i18n="plan.m50.hint">340 ₸ за урок. Разовый платёж, автосписаний нет</div>
+        <div class="plan__hint"><b data-i18n="plan.m50.per">340 ₸ за урок</b> <span data-i18n="plan.once">Разовый платёж, автосписаний нет</span></div>
         <ul>
           <li class="is-key" data-i18n="plan.m50.f1">Запись и анализ 50 уроков</li>
           <li data-i18n="plan.f.report">Полный отчёт по каждому уроку</li>
@@ -1246,8 +1195,42 @@ p{margin:0}
   </div>
 </section>
 
+<!-- ===================== БЛОК 5. КАК ЭТО РАБОТАЕТ ===================== -->
+<section class="section section--plain" id="how">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow" data-i18n="how.eyebrow">Три шага</div>
+      <h2 class="h2" data-i18n="how.h2">Как это работает</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step__num">1</div>
+        <h3 data-i18n="how.t1">Зарегистрируйтесь</h3>
+        <p data-i18n="how.d1">Создайте бесплатный аккаунт
+        <div class="step__arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__num">2</div>
+        <h3 data-i18n="how.t2">Запишите или загрузите урок</h3>
+        <p data-i18n="how.d2">Используйте запись с телефона или другого устройства
+        <div class="step__arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__num">3</div>
+        <h3 data-i18n="how.t3">Получите анализ</h3>
+        <p data-i18n="how.d3">Через несколько минут система сформирует полный отчёт и рекомендации
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== БЛОК 9. ЧАСТЫЕ ВОПРОСЫ ===================== -->
-<section class="section section--plain" id="faq">
+<section class="section" id="faq">
   <div class="wrap">
     <div class="center">
       <div class="eyebrow" data-i18n="faq.eyebrow">Вопросы</div>
@@ -1419,12 +1402,12 @@ p{margin:0}
       
       
 
-      "why.eyebrow":"Преимущества","why.h2":"Почему педагоги выбирают Smart Class",
-      "why.1":"Объективная обратная связь после каждого урока",
-      "why.2":"Анализ по критериям современного урока",
-      "why.3":"Возможность отслеживать профессиональный прогресс",
-      "why.4":"История всех уроков в одном месте",
-      "why.5":"Рекомендации, которые можно применять сразу",
+      
+      
+      
+      
+      
+      
 
       "trial.eyebrow":"Пробный период","trial.h2":"Попробуйте бесплатно","trial.listT":"Что входит в пробную версию",
       "trial.i1":"3 бесплатных анализа уроков","trial.i2":"Полный транскрипт",
@@ -1442,9 +1425,9 @@ p{margin:0}
       "plan.free.f1":"3 анализа уроков","plan.free.f2":"Полный отчёт по каждому уроку",
       "plan.free.f3":"Личный кабинет и история","plan.free.f4":"Оплата не требуется",
       "plan.m30.t":"Месячный · 30 уроков","plan.m30.d":"Если ведёте один-два класса и разбираете не каждый урок.",
-      "plan.m30.hint":"330 ₸ за урок. Разовый платёж, автосписаний нет","plan.m30.f1":"Запись и анализ 30 уроков",
+      "plan.m30.per":"330 ₸ за урок","plan.once":"Разовый платёж, автосписаний нет","plan.m30.f1":"Запись и анализ 30 уроков",
       "plan.m50.t":"Месячный · 50 уроков","plan.m50.d":"Если разбираете уроки регулярно и ведёте несколько классов.",
-      "plan.m50.hint":"340 ₸ за урок. Разовый платёж, автосписаний нет","plan.m50.f1":"Запись и анализ 50 уроков",
+      "plan.m50.per":"340 ₸ за урок","plan.m50.f1":"Запись и анализ 50 уроков",
       "plan.half.badge":"Выгоднее на 18%","plan.half.t":"Полугодовой · 50 уроков",
       "plan.half.d":"Для тех, кто хочет видеть рост за учебное полугодие.",
       "plan.half.hint":"14 000 ₸ в месяц вместо 17 000",
@@ -1564,12 +1547,12 @@ p{margin:0}
       
       
 
-      "why.eyebrow":"Артықшылықтары","why.h2":"Педагогтер Smart Class-ті неге таңдайды",
-      "why.1":"Әр сабақтан кейінгі объективті кері байланыс",
-      "why.2":"Заманауи сабақ критерийлері бойынша талдау",
-      "why.3":"Кәсіби өсуді бақылау мүмкіндігі",
-      "why.4":"Барлық сабақтардың тарихы бір жерде",
-      "why.5":"Бірден қолдануға болатын ұсыныстар",
+      
+      
+      
+      
+      
+      
 
       "trial.eyebrow":"Сынақ кезеңі","trial.h2":"Тегін көріп көріңіз","trial.listT":"Сынақ нұсқасына не кіреді",
       "trial.i1":"3 тегін сабақ талдауы","trial.i2":"Толық транскрипт",
@@ -1587,9 +1570,9 @@ p{margin:0}
       "plan.free.f1":"3 сабақ талдауы","plan.free.f2":"Әр сабақ бойынша толық есеп",
       "plan.free.f3":"Жеке кабинет және тарих","plan.free.f4":"Төлем қажет емес",
       "plan.m30.t":"Айлық · 30 сабақ","plan.m30.d":"Бір-екі сынып жүргізіп, әр сабақты талдамайтын болсаңыз.",
-      "plan.m30.hint":"Сабағы 330 ₸. Біржолғы төлем, автоматты шегерім жоқ","plan.m30.f1":"30 сабақты жазу және талдау",
+      "plan.m30.per":"Сабағы 330 ₸","plan.once":"Біржолғы төлем, автоматты шегерім жоқ","plan.m30.f1":"30 сабақты жазу және талдау",
       "plan.m50.t":"Айлық · 50 сабақ","plan.m50.d":"Сабақтарды жүйелі талдап, бірнеше сынып жүргізсеңіз.",
-      "plan.m50.hint":"Сабағы 340 ₸. Біржолғы төлем, автоматты шегерім жоқ","plan.m50.f1":"50 сабақты жазу және талдау",
+      "plan.m50.per":"Сабағы 340 ₸","plan.m50.f1":"50 сабақты жазу және талдау",
       "plan.half.badge":"18% тиімдірек","plan.half.t":"Жарты жылдық · 50 сабақ",
       "plan.half.d":"Оқу жартыжылдығындағы өсуді көргісі келетіндерге.",
       "plan.half.hint":"17 000-ның орнына айына 14 000 ₸",
@@ -1709,12 +1692,12 @@ p{margin:0}
       
       
 
-      "why.eyebrow":"Why teachers choose it","why.h2":"Why teachers choose Smart Class",
-      "why.1":"Objective feedback after every lesson",
-      "why.2":"Analysis against modern-lesson criteria",
-      "why.3":"A way to track professional progress",
-      "why.4":"All your lessons in one place",
-      "why.5":"Recommendations you can apply right away",
+      
+      
+      
+      
+      
+      
 
       "trial.eyebrow":"Free trial","trial.h2":"Try it for free","trial.listT":"What the trial includes",
       "trial.i1":"3 free lesson analyses","trial.i2":"Full transcript",
@@ -1732,9 +1715,9 @@ p{margin:0}
       "plan.free.f1":"3 lesson analyses","plan.free.f2":"Full report for every lesson",
       "plan.free.f3":"Personal account and history","plan.free.f4":"No payment required",
       "plan.m30.t":"Monthly · 30 lessons","plan.m30.d":"If you teach one or two classes and don't review every lesson.",
-      "plan.m30.hint":"330 ₸ per lesson. One-time payment, no auto-charges","plan.m30.f1":"Recording and analysis of 30 lessons",
+      "plan.m30.per":"330 ₸ per lesson","plan.once":"One-time payment, no auto-charges","plan.m30.f1":"Recording and analysis of 30 lessons",
       "plan.m50.t":"Monthly · 50 lessons","plan.m50.d":"If you review lessons regularly and teach several classes.",
-      "plan.m50.hint":"340 ₸ per lesson. One-time payment, no auto-charges","plan.m50.f1":"Recording and analysis of 50 lessons",
+      "plan.m50.per":"340 ₸ per lesson","plan.m50.f1":"Recording and analysis of 50 lessons",
       "plan.half.badge":"18% cheaper","plan.half.t":"Half-year · 50 lessons",
       "plan.half.d":"For those who want to see growth across a school term.",
       "plan.half.hint":"14 000 ₸ per month instead of 17 000",
